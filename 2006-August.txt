@@ -1,0 +1,1353 @@
+From chrg at sas.upenn.edu  Thu Aug 17 23:16:54 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Thu, 17 Aug 2006 17:16:54 -0400
+Subject: [Osxptb-dev] timing question
+Message-ID: <44E4DCC6.7010908@sas.upenn.edu>
+
+Hi everyone,
+    I've been trying to isolate a timing problem in a program I wrote 
+and, in the process, began looking at FlipTest to look at some basic 
+timing.  I found that if you make the test run for several seconds that 
+often you'll see large deviations from the frame rate on the magnitude 
+of  6-7 ms.  The times returned by Screen('Flip') however look normal.  
+These tests were all done with the priority set to the max, 
+AlwaysKillUpdate present, and in mirrored window mode.  What could be 
+the cause of these timing issues and do you guys think it may be 
+something core to the toolbox or Matlab?  Any input would be appreciated.
+
+    -Chris-
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Aug 18 01:35:24 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 18 Aug 2006 01:35:24 +0200
+Subject: [Osxptb-dev] timing question
+In-Reply-To: <44E4DCC6.7010908@sas.upenn.edu>
+References: <44E4DCC6.7010908@sas.upenn.edu>
+Message-ID: <44E4FD3C.9060901@tuebingen.mpg.de>
+
+The timing that 'Flip' returns is the correct one wrt. visual stimulus 
+onset. If display beamposition queries are supported (OS-X PowerPC all 
+gfx-cards and OS-X on Intel some gfx-cards), it uses some tricks to make 
+sure the returned timestamp is accurate in the submillisecond range. The 
+timing that GetSecs returns (as in FlipTest) is affected by operating 
+system scheduling jitter. Don't know what the cause is, but could be 
+some software running on your system (Spotlight Indexing, Virus 
+scanners, lots of other running Apps), or some Matlab issue. Which 
+Matlab version do you run? What system? Which gfx-card?
+
+-mario
+
+Christopher Broussard wrote:
+> Hi everyone,
+>     I've been trying to isolate a timing problem in a program I wrote 
+> and, in the process, began looking at FlipTest to look at some basic 
+> timing.  I found that if you make the test run for several seconds that 
+> often you'll see large deviations from the frame rate on the magnitude 
+> of  6-7 ms.  The times returned by Screen('Flip') however look normal.  
+> These tests were all done with the priority set to the max, 
+> AlwaysKillUpdate present, and in mirrored window mode.  What could be 
+> the cause of these timing issues and do you guys think it may be 
+> something core to the toolbox or Matlab?  Any input would be appreciated.
+> 
+>     -Chris-
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From chrg at sas.upenn.edu  Fri Aug 18 02:17:00 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Thu, 17 Aug 2006 20:17:00 -0400
+Subject: [Osxptb-dev] timing question
+In-Reply-To: <44E4FD3C.9060901@tuebingen.mpg.de>
+References: <44E4DCC6.7010908@sas.upenn.edu>
+	<44E4FD3C.9060901@tuebingen.mpg.de>
+Message-ID: <44E506FC.9060004@sas.upenn.edu>
+
+    I ran these tests with all other programs closed just to make sure 
+that one of them wasn't interfering.  I don't have a virus scanner, the 
+only thing I can imagine constantly doing stuff in the background would 
+be Spotlight.  I'm at home so I can't give you the exact specs of my 
+work computer, but I believe it is a dual G5 2GHz, with 2GB memory, and 
+a GeForce 6600 w/ 256MB VRAM.  The main goal of trying to figure all 
+this stuff out is to figure out why I get frame skips in the stimulus 
+I'm coding up.  I'm worried that Matlab is deciding to go out to lunch 
+and causing me to miss frames.
+    If it's possible, if any of you could run the FlipTest for a 
+duration of 8 seconds or so and do it several times, that would be great 
+so I could see if it's just my machine.  I think it was every 1 out 5 
+runs on average for me that have a timing blip.
+
+    -Chris-
+
+Mario Kleiner wrote:
+> The timing that 'Flip' returns is the correct one wrt. visual stimulus 
+> onset. If display beamposition queries are supported (OS-X PowerPC all 
+> gfx-cards and OS-X on Intel some gfx-cards), it uses some tricks to 
+> make sure the returned timestamp is accurate in the submillisecond 
+> range. The timing that GetSecs returns (as in FlipTest) is affected by 
+> operating system scheduling jitter. Don't know what the cause is, but 
+> could be some software running on your system (Spotlight Indexing, 
+> Virus scanners, lots of other running Apps), or some Matlab issue. 
+> Which Matlab version do you run? What system? Which gfx-card?
+>
+> -mario
+>
+> Christopher Broussard wrote:
+>> Hi everyone,
+>>     I've been trying to isolate a timing problem in a program I wrote 
+>> and, in the process, began looking at FlipTest to look at some basic 
+>> timing.  I found that if you make the test run for several seconds 
+>> that often you'll see large deviations from the frame rate on the 
+>> magnitude of  6-7 ms.  The times returned by Screen('Flip') however 
+>> look normal.  These tests were all done with the priority set to the 
+>> max, AlwaysKillUpdate present, and in mirrored window mode.  What 
+>> could be the cause of these timing issues and do you guys think it 
+>> may be something core to the toolbox or Matlab?  Any input would be 
+>> appreciated.
+>>
+>>     -Chris-
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+>
+>
+
+
+From denis.pelli at verizon.net  Fri Aug 18 09:08:48 2006
+From: denis.pelli at verizon.net (Denis Pelli)
+Date: Fri, 18 Aug 2006 03:08:48 -0400
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <44E4FD3C.9060901@tuebingen.mpg.de>
+References: <44E4DCC6.7010908@sas.upenn.edu>
+	<44E4FD3C.9060901@tuebingen.mpg.de>
+Message-ID: <0FCD82FB-6C60-4EE7-92F2-D25132406FC9@verizon.net>
+
+dear mario
+
+you say below that:
+> The timing that GetSecs returns (as in FlipTest) is affected by  
+> operating system scheduling jitter.
+
+oh dear. that's disappointing. I wrote GetSecs for OS9. It is based  
+on a Mac OS9 call, UpTime, that accesses a hardware counter inside  
+the PowerPC chip. Nothing ever interrupts that counter, so GetSecs  
+always gives reliable time under OS9. We accessed that count through  
+the Mac OS UpTime call, but it was my impression that a few lines of  
+machine code would have done as well.
+
+i could understand losing this capability with the Intel processor  
+since that processor may not have the counter. But it would be my  
+guess that all the powerpc chips have this counter and it seems a  
+great shame not to use it. Being able to time things accurately from  
+a high-level MATLAB program is invaluable. It allows users to test  
+the timing of everything.
+
+i googled UpTime (too many false hits) and AbsoluteToNanoseconds  
+(better) and found many pages devoted to this. It appears to me that  
+Apple has maintained support for this important call in Mac OS X.  
+Thus there appears to be no reason for us not to continue using it.
+
+However, Mario doesn't say whether the poor performance of GetSecs is  
+due to switching to a new call, or due to a change in the Apple  
+implementation of UpTime. It is conceivable that UpTime has been  
+ruined, but I hope not.
+
+If Apple has ruined UpTime by basing it on a less-reliable timer, I  
+suspect that we could still get the counter value from the processor  
+by a few lines of machine code. I don't know how to do that, but I  
+suspect it would be fairly easy to figure out from a Motorola  
+processor manual. It is likely that the necessary machine code would  
+depend on which processor chip the Macintosh is using, so that the  
+implementation of GetSecs would have to do a runtime check of which  
+processor it's running on and use the appropriate machine code.
+
+i think it would be valuable to make GetSecs reliable again, by  
+figuring out how to get access to this counter in the newest OSes and  
+processor chips. my guess is that it would be relatively easy.
+
+it seems likely that the relevant Apple discussion list would include  
+engineers that could give excellent pointers for how to get started,  
+if indeed UpTime is ruined.
+
+i've listed below the web pages about UpTime that seemed most  
+helpful. several are very recent.
+
+best
+
+denis
+
+
+http://developer.apple.com/documentation/Hardware/DeviceManagers/ 
+pci_srvcs/pci_cards_drivers/PCI_BOOK.199.html
+
+http://developer.apple.com/documentation/Carbon/Reference/ 
+Carbon_Spec_Porting/PCI_Card_Services.html
+http://developer.apple.com/technotes/tn/pdf/tn2006.pdf
+http://tuvix.apple.com/qa/qa2004/qa1398.html
+http://lists.apple.com/archives/perfoptimization-dev/2005/Oct/ 
+msg00040.html
+http://lists.apple.com/archives/Mt-smp/2003/Jan/msg00019.html
+http://www.meandmark.com/timing.pdf
+
+
+
+
+
+On Aug 17, 2006, at 7:35 PM, Mario Kleiner wrote:
+
+> The timing that 'Flip' returns is the correct one wrt. visual stimulus
+> onset. If display beamposition queries are supported (OS-X PowerPC all
+> gfx-cards and OS-X on Intel some gfx-cards), it uses some tricks to  
+> make
+> sure the returned timestamp is accurate in the submillisecond  
+> range. The
+> timing that GetSecs returns (as in FlipTest) is affected by operating
+> system scheduling jitter. Don't know what the cause is, but could be
+> some software running on your system (Spotlight Indexing, Virus
+> scanners, lots of other running Apps), or some Matlab issue. Which
+> Matlab version do you run? What system? Which gfx-card?
+>
+> -mario
+>
+> Christopher Broussard wrote:
+>> Hi everyone,
+>>     I've been trying to isolate a timing problem in a program I wrote
+>> and, in the process, began looking at FlipTest to look at some basic
+>> timing.  I found that if you make the test run for several seconds  
+>> that
+>> often you'll see large deviations from the frame rate on the  
+>> magnitude
+>> of  6-7 ms.  The times returned by Screen('Flip') however look  
+>> normal.
+>> These tests were all done with the priority set to the max,
+>> AlwaysKillUpdate present, and in mirrored window mode.  What could be
+>> the cause of these timing issues and do you guys think it may be
+>> something core to the toolbox or Matlab?  Any input would be  
+>> appreciated.
+>>
+>>     -Chris-
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+>
+>
+> -- 
+> *********************************************************************
+> Mario Kleiner
+> Max Planck Institute for Biological Cybernetics
+> Spemannstr. 38
+> 72076 Tuebingen
+> Germany
+>
+> e-mail: mario.kleiner at tuebingen.mpg.de
+> office: +49 (0)7071/601-742
+> fax:    +49 (0)7071/601-616
+> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+> *********************************************************************
+> "Debugging is twice as hard as writing the code in the first place.
+> Therefore, if you write the code as cleverly as possible, you are,
+> by definition, not smart enough to debug it." - Brian W. Kernighan
+>
+>
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060818/f2ee8349/attachment.html>
+
+From allen_ingling at mac.com  Fri Aug 18 15:43:10 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Fri, 18 Aug 2006 09:43:10 -0400
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <0FCD82FB-6C60-4EE7-92F2-D25132406FC9@verizon.net>
+References: <44E4DCC6.7010908@sas.upenn.edu>
+	<44E4FD3C.9060901@tuebingen.mpg.de>
+	<0FCD82FB-6C60-4EE7-92F2-D25132406FC9@verizon.net>
+Message-ID: <118D05AE-362B-4A78-8724-727EC2F31BBC@mac.com>
+
+
+On Aug 18, 2006, at 3:08 AM, Denis Pelli wrote:
+
+> dear mario
+>
+> you say below that:
+>> The timing that GetSecs returns (as in FlipTest) is affected by  
+>> operating system scheduling jitter.
+>
+> oh dear. that's disappointing. I wrote GetSecs for OS9. It is based  
+> on a Mac OS9 call, UpTime, that accesses a hardware counter inside  
+> the PowerPC chip. Nothing ever interrupts that counter, so GetSecs  
+> always gives reliable time under OS9. We accessed that count  
+> through the Mac OS UpTime call, but it was my impression that a few  
+> lines of machine code would have done as well.
+
+The system scheduler determines when the timer is read.  That is  
+independent of the precision of the timer itself.
+
+>
+> i could understand losing this capability with the Intel processor  
+> since that processor may not have the counter. But it would be my  
+> guess that all the powerpc chips have this counter and it seems a  
+> great shame not to use it. Being able to time things accurately  
+> from a high-level MATLAB program is invaluable. It allows users to  
+> test the timing of everything.
+>
+> i googled UpTime (too many false hits) and AbsoluteToNanoseconds  
+> (better) and found many pages devoted to this. It appears to me  
+> that Apple has maintained support for this important call in Mac OS  
+> X. Thus there appears to be no reason for us not to continue using it.
+
+GetSecs does use the high-precision hardware timer.
+
+>
+> However, Mario doesn't say whether the poor performance of GetSecs  
+> is due to switching to a new call, or due to a change in the Apple  
+> implementation of UpTime. It is conceivable that UpTime has been  
+> ruined, but I hope not....
+
+There is no problem with the timer.
+
+As for dealing with the jitter in the Darwin scheduler:  That can be  
+confined to set bounds.  Look at the parameters of the call which  
+sets "time constraint priority".  The limit of jitter is determined  
+by parameters to that call.
+
+The  "time constraint priority"  setting is reliable except for  
+problems with the sigsetjmp call in MATLAB setting kernel locks.
+
+best,
+
+Allen
+
+P.S.  I'll be out of town for a few days, so in case there is a  
+followup discussion, get back to everyone later.
+
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Aug 18 17:27:23 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 18 Aug 2006 17:27:23 +0200
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <118D05AE-362B-4A78-8724-727EC2F31BBC@mac.com>
+Message-ID: <web-22421092@tuebingen.mpg.de>
+
+Allen is right, i made an inaccurate statement. The
+precision of GetSecs itself is as good as on OS-9 on all
+platforms. All operating systems use a high-res hardware
+timer. I referred to the fact that there is a small random
+delay between onset of vertical retrace and Matlab resuming
+its execution, taking the GetSecs timestamp and such. 
+
+When running under realtime priority (Time constraint in
+OS-X language) this jitter/delay is usually below 1 msec
+(My machine: 1.6 Ghz single proc G5 roughly 200
+microseconds.) The update --> sigsetjmp problem is gone in
+10.4.7 due to improvements in Darwins kernel locking.
+However, there are other factors that influence the timing
+of a non-realtime general purpose system like OS-X and that
+can only be eliminated/limited by very careful software
+design and system setup, not by simply calling Priority()
+(which only tells the scheduler to prioritize execution of
+Matlab over all other processes). E.g., memory access: If
+the system runs low on memory and needs to page in/out data
+of the Matlab process to the swapfile, this will create
+multi-millisecond random delays. Or if one uses hardware
+with bad device drivers that introduce latencies and such.
+
+These, usually very seldom, timing spikes are noticed by a
+simple GetSecs measurement, but the Screen('Flip') command
+compensates for such stuff by use of the display rasterbeam
+position as an additional "video-locked" high precision
+timesource to correct the internal GetSecs timestamp
+appropriately. That is why 'Flip' always robustly reports
+true stimulus onset, whereas the standard Screen('Flip');
+t=GetSecs() method in FlipTest is affected by such random
+delays. So 'Flip' tells you about real stimulus onset, the
+discrepancy between 'Flip' timestamps and timestamps taken
+with GetSecs tells you something about the timing noise
+present in the execution of the Matlab code.
+
+All in all the PTB timing facilities should be at
+least/more robust and precise than the old PTB's one.
+
+This all still doesn't solve Christophers problems though.
+Such a machine as his one should have a much better timing,
+unless something is screwed.
+
+Sorry for the confusion & best,
+-mario
+
+
+On Fri, 18 Aug 2006 09:43:10 -0400
+ "Allen W. Ingling" <allen_ingling at mac.com> wrote:
+> 
+> On Aug 18, 2006, at 3:08 AM, Denis Pelli wrote:
+> 
+> > dear mario
+> >
+> > you say below that:
+> >> The timing that GetSecs returns (as in FlipTest) is
+> affected by  
+> >> operating system scheduling jitter.
+> >
+> > oh dear. that's disappointing. I wrote GetSecs for OS9.
+> It is based  
+> > on a Mac OS9 call, UpTime, that accesses a hardware
+> counter inside  
+> > the PowerPC chip. Nothing ever interrupts that counter,
+> so GetSecs  
+> > always gives reliable time under OS9. We accessed that
+> count  
+> > through the Mac OS UpTime call, but it was my
+> impression that a few  
+> > lines of machine code would have done as well.
+> 
+> The system scheduler determines when the timer is read.
+>  That is  
+> independent of the precision of the timer itself.
+> 
+> >
+> > i could understand losing this capability with the
+> Intel processor  
+> > since that processor may not have the counter. But it
+> would be my  
+> > guess that all the powerpc chips have this counter and
+> it seems a  
+> > great shame not to use it. Being able to time things
+> accurately  
+> > from a high-level MATLAB program is invaluable. It
+> allows users to  
+> > test the timing of everything.
+> >
+> > i googled UpTime (too many false hits) and
+> AbsoluteToNanoseconds  
+> > (better) and found many pages devoted to this. It
+> appears to me  
+> > that Apple has maintained support for this important
+> call in Mac OS  
+> > X. Thus there appears to be no reason for us not to
+> continue using it.
+> 
+> GetSecs does use the high-precision hardware timer.
+> 
+> >
+> > However, Mario doesn't say whether the poor performance
+> of GetSecs  
+> > is due to switching to a new call, or due to a change
+> in the Apple  
+> > implementation of UpTime. It is conceivable that UpTime
+> has been  
+> > ruined, but I hope not....
+> 
+> There is no problem with the timer.
+> 
+> As for dealing with the jitter in the Darwin scheduler:
+>  That can be  
+> confined to set bounds.  Look at the parameters of the
+> call which  
+> sets "time constraint priority".  The limit of jitter is
+> determined  
+> by parameters to that call.
+> 
+> The  "time constraint priority"  setting is reliable
+> except for  
+> problems with the sigsetjmp call in MATLAB setting kernel
+> locks.
+> 
+> best,
+> 
+> Allen
+> 
+> P.S.  I'll be out of town for a few days, so in case
+> there is a  
+> followup discussion, get back to everyone later.
+> 
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+
+From chrg at sas.upenn.edu  Fri Aug 18 17:38:06 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Fri, 18 Aug 2006 11:38:06 -0400
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <web-22421092@tuebingen.mpg.de>
+References: <web-22421092@tuebingen.mpg.de>
+Message-ID: <44E5DEDE.20207@sas.upenn.edu>
+
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060818/582de781/attachment.html>
+
+From mario.kleiner at tuebingen.mpg.de  Fri Aug 18 17:51:21 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 18 Aug 2006 17:51:21 +0200
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <44E5DEDE.20207@sas.upenn.edu>
+Message-ID: <web-22421977@tuebingen.mpg.de>
+
+Hmmm. Could you check in system settings all options
+somehow related to energy saving? I dimly remember that the
+processor settings had some switch to switch between
+performance, auto and energy saving or something like that.
+
+Maybe the system enters a low-energy processor sleep mode
+everytime the cpu is idle for a few milliseconds?
+
+Does anything change when changing the WaitSecs() interval,
+down to 1 ms?
+
+On Fri, 18 Aug 2006 11:38:06 -0400
+ Christopher Broussard <chrg at sas.upenn.edu> wrote:
+> 
+> 
+> 
+>   
+> 
+> 
+> &nbsp;&nbsp;&nbsp; While I don't doubt the accuracy of
+> Flip, my real concern is that
+> my system is pausing after a call to Flip.&nbsp; I also
+> made a short program
+> that does the same thing as TestFlip, but instead uses
+> WaitSecs and I
+> get pretty much identical behavior.&nbsp; I'm going to
+> run this on different
+> machines to see if it's just my hardware, but if it seems
+> to be Matlab
+> going out to lunch for whatever reason, this could be a
+> problem for
+> anyone trying to accurately time their stimulus and not
+> miss any frames.
+> 
+> &nbsp;&nbsp;&nbsp; -Chris-
+> 
+> Mario Kleiner wrote:
+> 
+>   Allen is right, i made an inaccurate statement. The
+> precision of GetSecs itself is as good as on OS-9 on all
+> platforms. All operating systems use a high-res hardware
+> timer. I referred to the fact that there is a small
+> random
+> delay between onset of vertical retrace and Matlab
+> resuming
+> its execution, taking the GetSecs timestamp and such. 
+> 
+> When running under realtime priority (Time constraint in
+> OS-X language) this jitter/delay is usually below 1 msec
+> (My machine: 1.6 Ghz single proc G5 roughly 200
+> microseconds.) The update --&gt; sigsetjmp problem is
+> gone in
+> 10.4.7 due to improvements in Darwins kernel locking.
+> However, there are other factors that influence the
+> timing
+> of a non-realtime general purpose system like OS-X and
+> that
+> can only be eliminated/limited by very careful software
+> design and system setup, not by simply calling Priority()
+> (which only tells the scheduler to prioritize execution
+> of
+> Matlab over all other processes). E.g., memory access: If
+> the system runs low on memory and needs to page in/out
+> data
+> of the Matlab process to the swapfile, this will create
+> multi-millisecond random delays. Or if one uses hardware
+> with bad device drivers that introduce latencies and
+> such.
+> 
+> These, usually very seldom, timing spikes are noticed by
+> a
+> simple GetSecs measurement, but the Screen('Flip')
+> command
+> compensates for such stuff by use of the display
+> rasterbeam
+> position as an additional "video-locked" high precision
+> timesource to correct the internal GetSecs timestamp
+> appropriately. That is why 'Flip' always robustly reports
+> true stimulus onset, whereas the standard Screen('Flip');
+> t=GetSecs() method in FlipTest is affected by such random
+> delays. So 'Flip' tells you about real stimulus onset,
+> the
+> discrepancy between 'Flip' timestamps and timestamps
+> taken
+> with GetSecs tells you something about the timing noise
+> present in the execution of the Matlab code.
+> 
+> All in all the PTB timing facilities should be at
+> least/more robust and precise than the old PTB's one.
+> 
+> This all still doesn't solve Christophers problems
+> though.
+> Such a machine as his one should have a much better
+> timing,
+> unless something is screwed.
+> 
+> Sorry for the confusion &amp; best,
+> -mario
+> 
+> 
+> On Fri, 18 Aug 2006 09:43:10 -0400
+>  "Allen W. Ingling" &lt;allen_ingling at mac.com&gt; wrote:
+>   
+>   
+>     On Aug 18, 2006, at 3:08 AM, Denis Pelli wrote:
+> 
+>     
+>     
+>       dear mario
+> 
+> you say below that:
+>       
+>       
+>         The timing that GetSecs returns (as in FlipTest)
+> is
+>         
+>       
+>     
+>     affected by  
+>     
+>     
+>       
+>         operating system scheduling jitter.
+>         
+>       
+>       oh dear. that's disappointing. I wrote GetSecs for
+> OS9.
+>       
+>     
+>     It is based  
+>     
+>     
+>       on a Mac OS9 call, UpTime, that accesses a hardware
+>       
+>     
+>     counter inside  
+>     
+>     
+>       the PowerPC chip. Nothing ever interrupts that
+> counter,
+>       
+>     
+>     so GetSecs  
+>     
+>     
+>       always gives reliable time under OS9. We accessed
+> that
+>       
+>     
+>     count  
+>     
+>     
+>       through the Mac OS UpTime call, but it was my
+>       
+>     
+>     impression that a few  
+>     
+>     
+>       lines of machine code would have done as well.
+>       
+>     
+>     The system scheduler determines when the timer is
+> read.
+>  That is  
+> independent of the precision of the timer itself.
+> 
+>     
+>     
+>       i could understand losing this capability with the
+>       
+>     
+>     Intel processor  
+>     
+>     
+>       since that processor may not have the counter. But
+> it
+>       
+>     
+>     would be my  
+>     
+>     
+>       guess that all the powerpc chips have this counter
+> and
+>       
+>     
+>     it seems a  
+>     
+>     
+>       great shame not to use it. Being able to time
+> things
+>       
+>     
+>     accurately  
+>     
+>     
+>       from a high-level MATLAB program is invaluable. It
+>       
+>     
+>     allows users to  
+>     
+>     
+>       test the timing of everything.
+> 
+> i googled UpTime (too many false hits) and
+>       
+>     
+>     AbsoluteToNanoseconds  
+>     
+>     
+>       (better) and found many pages devoted to this. It
+>       
+>     
+>     appears to me  
+>     
+>     
+>       that Apple has maintained support for this
+> important
+>       
+>     
+>     call in Mac OS  
+>     
+>     
+>       X. Thus there appears to be no reason for us not to
+>       
+>     
+>     continue using it.
+> 
+> GetSecs does use the high-precision hardware timer.
+> 
+>     
+>     
+>       However, Mario doesn't say whether the poor
+> performance
+>       
+>     
+>     of GetSecs  
+>     
+>     
+>       is due to switching to a new call, or due to a
+> change
+>       
+>     
+>     in the Apple  
+>     
+>     
+>       implementation of UpTime. It is conceivable that
+> UpTime
+>       
+>     
+>     has been  
+>     
+>     
+>       ruined, but I hope not....
+>       
+>     
+>     There is no problem with the timer.
+> 
+> As for dealing with the jitter in the Darwin scheduler:
+>  That can be  
+> confined to set bounds.  Look at the parameters of the
+> call which  
+> sets "time constraint priority".  The limit of jitter is
+> determined  
+> by parameters to that call.
+> 
+> The  "time constraint priority"  setting is reliable
+> except for  
+> problems with the sigsetjmp call in MATLAB setting kernel
+> locks.
+> 
+> best,
+> 
+> Allen
+> 
+> P.S.  I'll be out of town for a few days, so in case
+> there is a  
+> followup discussion, get back to everyone later.
+> 
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+>     
+>   
+>   
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+> 
+>   
+> 
+> 
+> 
+
+
+
+From chrg at sas.upenn.edu  Fri Aug 18 18:11:28 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Fri, 18 Aug 2006 12:11:28 -0400
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <web-22421977@tuebingen.mpg.de>
+References: <web-22421977@tuebingen.mpg.de>
+Message-ID: <44E5E6B0.7010307@sas.upenn.edu>
+
+I changed the processor performance to the highest in the energy savings 
+panel, but still no change.  I'm attaching the short script that I've 
+been using to test the timing.  If you could test the timing on your 
+computer and see if you have similar results that would be awesome.  You 
+may have to run it a few times to see the timing blips.
+
+    -Chris-
+
+Mario Kleiner wrote:
+> Hmmm. Could you check in system settings all options
+> somehow related to energy saving? I dimly remember that the
+> processor settings had some switch to switch between
+> performance, auto and energy saving or something like that.
+>
+> Maybe the system enters a low-energy processor sleep mode
+> everytime the cpu is idle for a few milliseconds?
+>
+> Does anything change when changing the WaitSecs() interval,
+> down to 1 ms?
+>
+> On Fri, 18 Aug 2006 11:38:06 -0400
+>  Christopher Broussard <chrg at sas.upenn.edu> wrote:
+>   
+>>
+>>   
+>>
+>>
+>> &nbsp;&nbsp;&nbsp; While I don't doubt the accuracy of
+>> Flip, my real concern is that
+>> my system is pausing after a call to Flip.&nbsp; I also
+>> made a short program
+>> that does the same thing as TestFlip, but instead uses
+>> WaitSecs and I
+>> get pretty much identical behavior.&nbsp; I'm going to
+>> run this on different
+>> machines to see if it's just my hardware, but if it seems
+>> to be Matlab
+>> going out to lunch for whatever reason, this could be a
+>> problem for
+>> anyone trying to accurately time their stimulus and not
+>> miss any frames.
+>>
+>> &nbsp;&nbsp;&nbsp; -Chris-
+>>
+>> Mario Kleiner wrote:
+>>
+>>   Allen is right, i made an inaccurate statement. The
+>> precision of GetSecs itself is as good as on OS-9 on all
+>> platforms. All operating systems use a high-res hardware
+>> timer. I referred to the fact that there is a small
+>> random
+>> delay between onset of vertical retrace and Matlab
+>> resuming
+>> its execution, taking the GetSecs timestamp and such. 
+>>
+>> When running under realtime priority (Time constraint in
+>> OS-X language) this jitter/delay is usually below 1 msec
+>> (My machine: 1.6 Ghz single proc G5 roughly 200
+>> microseconds.) The update --&gt; sigsetjmp problem is
+>> gone in
+>> 10.4.7 due to improvements in Darwins kernel locking.
+>> However, there are other factors that influence the
+>> timing
+>> of a non-realtime general purpose system like OS-X and
+>> that
+>> can only be eliminated/limited by very careful software
+>> design and system setup, not by simply calling Priority()
+>> (which only tells the scheduler to prioritize execution
+>> of
+>> Matlab over all other processes). E.g., memory access: If
+>> the system runs low on memory and needs to page in/out
+>> data
+>> of the Matlab process to the swapfile, this will create
+>> multi-millisecond random delays. Or if one uses hardware
+>> with bad device drivers that introduce latencies and
+>> such.
+>>
+>> These, usually very seldom, timing spikes are noticed by
+>> a
+>> simple GetSecs measurement, but the Screen('Flip')
+>> command
+>> compensates for such stuff by use of the display
+>> rasterbeam
+>> position as an additional "video-locked" high precision
+>> timesource to correct the internal GetSecs timestamp
+>> appropriately. That is why 'Flip' always robustly reports
+>> true stimulus onset, whereas the standard Screen('Flip');
+>> t=GetSecs() method in FlipTest is affected by such random
+>> delays. So 'Flip' tells you about real stimulus onset,
+>> the
+>> discrepancy between 'Flip' timestamps and timestamps
+>> taken
+>> with GetSecs tells you something about the timing noise
+>> present in the execution of the Matlab code.
+>>
+>> All in all the PTB timing facilities should be at
+>> least/more robust and precise than the old PTB's one.
+>>
+>> This all still doesn't solve Christophers problems
+>> though.
+>> Such a machine as his one should have a much better
+>> timing,
+>> unless something is screwed.
+>>
+>> Sorry for the confusion &amp; best,
+>> -mario
+>>
+>>
+>> On Fri, 18 Aug 2006 09:43:10 -0400
+>>  "Allen W. Ingling" &lt;allen_ingling at mac.com&gt; wrote:
+>>   
+>>   
+>>     On Aug 18, 2006, at 3:08 AM, Denis Pelli wrote:
+>>
+>>     
+>>     
+>>       dear mario
+>>
+>> you say below that:
+>>       
+>>       
+>>         The timing that GetSecs returns (as in FlipTest)
+>> is
+>>         
+>>       
+>>     
+>>     affected by  
+>>     
+>>     
+>>       
+>>         operating system scheduling jitter.
+>>         
+>>       
+>>       oh dear. that's disappointing. I wrote GetSecs for
+>> OS9.
+>>       
+>>     
+>>     It is based  
+>>     
+>>     
+>>       on a Mac OS9 call, UpTime, that accesses a hardware
+>>       
+>>     
+>>     counter inside  
+>>     
+>>     
+>>       the PowerPC chip. Nothing ever interrupts that
+>> counter,
+>>       
+>>     
+>>     so GetSecs  
+>>     
+>>     
+>>       always gives reliable time under OS9. We accessed
+>> that
+>>       
+>>     
+>>     count  
+>>     
+>>     
+>>       through the Mac OS UpTime call, but it was my
+>>       
+>>     
+>>     impression that a few  
+>>     
+>>     
+>>       lines of machine code would have done as well.
+>>       
+>>     
+>>     The system scheduler determines when the timer is
+>> read.
+>>  That is  
+>> independent of the precision of the timer itself.
+>>
+>>     
+>>     
+>>       i could understand losing this capability with the
+>>       
+>>     
+>>     Intel processor  
+>>     
+>>     
+>>       since that processor may not have the counter. But
+>> it
+>>       
+>>     
+>>     would be my  
+>>     
+>>     
+>>       guess that all the powerpc chips have this counter
+>> and
+>>       
+>>     
+>>     it seems a  
+>>     
+>>     
+>>       great shame not to use it. Being able to time
+>> things
+>>       
+>>     
+>>     accurately  
+>>     
+>>     
+>>       from a high-level MATLAB program is invaluable. It
+>>       
+>>     
+>>     allows users to  
+>>     
+>>     
+>>       test the timing of everything.
+>>
+>> i googled UpTime (too many false hits) and
+>>       
+>>     
+>>     AbsoluteToNanoseconds  
+>>     
+>>     
+>>       (better) and found many pages devoted to this. It
+>>       
+>>     
+>>     appears to me  
+>>     
+>>     
+>>       that Apple has maintained support for this
+>> important
+>>       
+>>     
+>>     call in Mac OS  
+>>     
+>>     
+>>       X. Thus there appears to be no reason for us not to
+>>       
+>>     
+>>     continue using it.
+>>
+>> GetSecs does use the high-precision hardware timer.
+>>
+>>     
+>>     
+>>       However, Mario doesn't say whether the poor
+>> performance
+>>       
+>>     
+>>     of GetSecs  
+>>     
+>>     
+>>       is due to switching to a new call, or due to a
+>> change
+>>       
+>>     
+>>     in the Apple  
+>>     
+>>     
+>>       implementation of UpTime. It is conceivable that
+>> UpTime
+>>       
+>>     
+>>     has been  
+>>     
+>>     
+>>       ruined, but I hope not....
+>>       
+>>     
+>>     There is no problem with the timer.
+>>
+>> As for dealing with the jitter in the Darwin scheduler:
+>>  That can be  
+>> confined to set bounds.  Look at the parameters of the
+>> call which  
+>> sets "time constraint priority".  The limit of jitter is
+>> determined  
+>> by parameters to that call.
+>>
+>> The  "time constraint priority"  setting is reliable
+>> except for  
+>> problems with the sigsetjmp call in MATLAB setting kernel
+>> locks.
+>>
+>> best,
+>>
+>> Allen
+>>
+>> P.S.  I'll be out of town for a few days, so in case
+>> there is a  
+>> followup discussion, get back to everyone later.
+>>
+>>
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+>>     
+>>   
+>>   
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> https://lists.berlios.de/mailman/listinfo/osxptb-dev
+>>
+>>   
+>>
+>>
+>>
+>>     
+>
+>   
+-------------- next part --------------
+An embedded and charset-unspecified text was scrubbed...
+Name: timetest.m
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060818/6ff6a24c/attachment.ksh>
+
+From chrg at sas.upenn.edu  Sat Aug 19 07:04:24 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Sat, 19 Aug 2006 01:04:24 -0400
+Subject: [Osxptb-dev] timing & UpTime
+In-Reply-To: <44E5E6B0.7010307@sas.upenn.edu>
+References: <web-22421977@tuebingen.mpg.de> <44E5E6B0.7010307@sas.upenn.edu>
+Message-ID: <44E69BD8.2040202@sas.upenn.edu>
+
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060819/51681693/attachment.html>
+
+From chrg at sas.upenn.edu  Sat Aug 19 07:10:44 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Sat, 19 Aug 2006 01:10:44 -0400
+Subject: [Osxptb-dev] javaaddpath
+Message-ID: <44E69D54.7010308@sas.upenn.edu>
+
+GetChar and CharAvail for OSX use Java rather than a typical mex file.  
+In those files is a call to AddPsychJavaPath, which in turn call 
+javaaddpath which is a built in Matlab function.  The crappy thing about 
+javaaddpath is that it makes an internal call to "clear java", which 
+trashes any globals or persistent variables that have been setup.  It 
+seems to me that it would be better if have users put the call to 
+AddPsychJavaPath in their Matlab startup script so that they aren't 
+wondering what happened to their globals or persistent variables.  Or if 
+there's a way to get Matlab to save the Java path we could put in some 
+call in the download script to set that up.  What do you guys think?
+
+    -Chris-
+
+
+From mario.kleiner at tuebingen.mpg.de  Tue Aug 29 03:07:21 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Tue, 29 Aug 2006 03:07:21 +0200
+Subject: [Osxptb-dev] PTB Download counting...
+In-Reply-To: <D9056DA7-F1FF-4A42-ADD7-38A1A7F1D726@verizon.net>
+References: <D9056DA7-F1FF-4A42-ADD7-38A1A7F1D726@verizon.net>
+Message-ID: <44F39349.8030303@tuebingen.mpg.de>
+
+Hi all,
+
+following my own advice, i've implemented some online-registration 
+mechanism, ready for internal testing.
+
+It works as follows:
+
+At the end of each successfull download or update of PTB, the 
+downloader/updater calls the PsychtoolboxPostInstallRoutine.m, which in 
+turn calls the function PsychtoolboxRegistration.m
+
+PsychtoolboxRegistration collects some info about the intalled PTB, 
+e.g., "stable" or "beta", "Matlab" or "Octave", Matlabversion, Operating 
+system (OS-X,Windows,Linux), update or download, date of transaction and 
+the MAC address of the primary network adapter as a unique identifier of 
+the computer. It then assembles some one-line string of this info and 
+sends it to our server, using the GPL'ed netcat utility, which is 
+available by default on any OS-X/Linux system and included in PTB for 
+M$-Windows. The script is robust against failing network connections and 
+such, so even if online registration fails, the user should be left with 
+a working working copy.
+
+In the managementtools subfolder of trunk you'll find the shell script 
+"psychregistrationserver.sh". It implements the most minimalistic server 
+that is conceivable. When started in a command window on the server 
+machine, it will listen on port 2000 of the machine and write all 
+registration info into a log file for later parsing.
+
+What one of you needs to do:
+
+1. Update to latest rev. of trunk.
+2. On the server machine (www.psychtoolbox.org ?), enable port 2000 for 
+incoming connections in the firewall settings of the machine.
+3. Start the psychregistrationserver.sh script, following the 
+instructions at the top of the file.
+4. Modify PsychtoolboxRegistration.m so it accesses the server machine 
+(currently set to "localhost" -> replace by e.g,. "www.psychtoolbox.org")
+
+5. Play around with it and see if it works. Customize the help text of 
+PsychtoolboxRegistration.m to your needs...
+
+-> You can select any port-number between 1025 and 65535, the number 
+2000 was an arbitrary choice, just make sure its not used by anything 
+else and the same port is given in server, firewall settings and M-File.
+
+-> Customize the server-script so it writes its log file somewhere else 
+than /tmp/ptbregistrationlog.txt
+
+-> This simple server is not robust against receiving corrupted or 
+invalid input or other unfriendly things, but we could replace it 
+anytime by some own implementation...
+
+The written log-file can be quickly parsed via some Unix commandline tools.
+
+Examples: (Assuming /tmp/ptblog is the log file)
+
+cut -d "<" -f 1-3,10 /tmp/ptblog | grep beta | uniq -c
+--> Count total number of 'beta' flavors used.
+
+cut -d "<" -f 1-3 /tmp/testlog | uniq -c
+--> Count total number of installed working copies.
+
+The MAC address (fields -f 1-3) is used to disambiguate multiple 
+downloads/updates from the same machine, so each installation is only 
+counted once.
+
+For more complex statistics, we could write parsers in Matlab.
+
+The stuff has been tested on Linux, OS-X 10.3.9, 10.4.7, Windows 2000/XP 
+with multiple Matlab versions, so it should work.
+
+Please give it a try, customize it etc. After some testing, we can merge 
+it into beta and stable.
+
+best,
+-mario
+
+
+
+Denis Pelli wrote:
+> dear david, chris, and mario
+> 
+> please welcome Roy Han, who will be working part time, in my lab, during 
+> August to enhance the Demos and Help text in the OSX Psychtoolbox. Roy 
+> is doing a Masters in Computer Science at Columbia, and has a background 
+> in Neural Science at NYU.
+> 
+> i'd like to bring up an item for discussion. (this is not related to 
+> Roy's work.)
+> 
+> we used to count downloads, and i think this is one of our more 
+> impressive stats. at present i have the impression that the berlios 
+> update system lacks download counting. mario and i have both lamented 
+> this, but haven't done anything about it.
+> 
+> i just read this in the FAQ page of a web site:
+> 
+> *Q:* Why do I need to register the beta to use the full functionality?
+> 
+> *A:* Firstly, this allows us to track the number of MySync users more 
+> accurately than download figures.
+> 
+> Secondly, it gives the registration system some exposure to the real world.
+> 
+> if we asked for an email address, to "register", the list of unique 
+> email addresses would be a much more accurate estimate of how many 
+> people have downloaded our software, since multiple downloads by the 
+> same person would be largely discounted. 
+> 
+> actually, instead of recording an email address, we could record the IP 
+> address of the computer requesting the download. this is just as useful 
+> and doesn't require bothering the user. we can harvest IP addresses for 
+> both installation and update. we may not need to distinguish.
+> 
+> Once we have the unique IP addresses, i think there are two summary 
+> statistics we'd like, to impress potential users and funding agencies:
+> 
+> 1. How many copies we've "sold". Total count of unique IP addresses 
+> harvested in all time.
+> 
+> 2. How many active users are there? Count the number of unique IP 
+> addresses harvested in the past 12 months.(We could restrict this to 
+> just Updates, on the grounds that perhaps we shouldn't count sites that 
+> only installed and never updated.)
+> 
+> Hmm. We might want both for internal consumption, to detect trends in 
+> usage, but unless things are going very badly the two numbers will be 
+> very similar, and 1 will be bigger than 2 so we probably will just 
+> report 1. So that is the goal i recommend:
+> 
+> Let's collect the IP address of every download/update, and count how 
+> many are unique.
+> 
+> i realize that keeping statistics is a diversion from developing the 
+> Psychtoolbox itself, but some stats have been very valuable in the past 
+> (especially the list of grants and papers that cite us), and the IP 
+> count cannot be generated at the last minute, so if something like this 
+> is possible it might be worth investing a bit of time into now.  i'm 
+> sure that what i'm suggesting is doable, but i don't know whether it'd 
+> be hard or easy. that would affect whether we'll want to do it.
+> 
+> (artists call this "documenting". in the era of happenings and 
+> installations, the event may leave no professionally-adequate trace 
+> unless someone makes an effort to record and document its occurrence.)
+> 
+> thoughts?
+> 
+> best
+> 
+> denis
+> 
+> Denis Pelli
+> Professor of Psychology and Neural Science
+> http://psych.nyu.edu/pelli/
+> 
+> 
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+

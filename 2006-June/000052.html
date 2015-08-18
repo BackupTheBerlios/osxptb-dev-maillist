@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] merging trunk into beta
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20merging%20trunk%20into%20beta&In-Reply-To=%3C4499E217.10303%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000051.html">
+   <LINK REL="Next"  HREF="000053.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] merging trunk into beta</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20merging%20trunk%20into%20beta&In-Reply-To=%3C4499E217.10303%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] merging trunk into beta">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Thu Jun 22 02:19:35 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000051.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+        <LI>Next message: <A HREF="000053.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allen,
+
+One more idea:
+
+we could add a little statement like &quot;Safe for beta&quot; to our SVN 
+log-messages to explicitely tell each other when a commit would be safe 
+for merge into beta, so there is no ambiguity if merging others code is 
+safe or not.
+
+E.g., revision 368 is safe for merge into beta, although the log message 
+may sound like this is experimental code. It is incomplete experimental 
+code, but it only affects Linux + Octave, so all the official Matlab 
+versions should be fine.
+
+So if you want to merge your latest GetChar improvements, go ahead :)
+
+ciao,
+-mario
+
+
+Allen W. Ingling wrote:
+&gt;<i> 
+</I>&gt;<i> Mario,
+</I>&gt;<i> 
+</I>&gt;<i> Ok thanks.  That all sounds sensible.
+</I>&gt;<i> 
+</I>&gt;<i> best,
+</I>&gt;<i> 
+</I>&gt;<i> Allen
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On Jun 21, 2006, at 11:43 AM, Mario Kleiner wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Allen,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> you can merge your changes whenever you want. With changes of  others 
+</I>&gt;&gt;<i> i'd say, read the associated log messages and decide if they  sound 
+</I>&gt;&gt;<i> like something that's safe to merge. One can merge a specific  subset 
+</I>&gt;&gt;<i> of changes via &quot;svn merge -r start:end trunk/ beta/&quot;  where  start is 
+</I>&gt;&gt;<i> the revision number of the first thing to merge, end the  one of the 
+</I>&gt;&gt;<i> last thing to include. When i merge from trunk i usually  try to merge 
+</I>&gt;&gt;<i> everything since the last merge into beta to make life  simple, i.e., 
+</I>&gt;&gt;<i> svn merge -r lastmergedrevision:HEAD trunk/ beta/
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I only omit (merge around) other peoples change if the log messages  
+</I>&gt;&gt;<i> sound like the changes could break functionality in beta, or they  are 
+</I>&gt;&gt;<i> not yet well tested.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My own rules are like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. Whatever is committed into trunk should at least compile and not  
+</I>&gt;&gt;<i> severely break functionality, so other developers can always update  
+</I>&gt;&gt;<i> from trunk and work on the code without having to fight bugs  
+</I>&gt;&gt;<i> introduced by others. -&gt; Either make small incremental commits or  
+</I>&gt;&gt;<i> commit consistent chunks.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -&gt; That's what you do as well.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2. Code merged into beta should be somewhat stable, as many people  
+</I>&gt;&gt;<i> use beta for real work -- which is encouraged, given that stable is  
+</I>&gt;&gt;<i> many month behind beta. It's ok if new features are merged into  beta 
+</I>&gt;&gt;<i> that don't break old features of beta, even if this new  features are 
+</I>&gt;&gt;<i> incomplete, work in progress, e.g., fine-tuning and  more debugging 
+</I>&gt;&gt;<i> needed, interface subject to change. Only code in  stable should not 
+</I>&gt;&gt;<i> change in functionality or interface (well more  functionality is 
+</I>&gt;&gt;<i> always good, but removing functionality, massive  incompatible change 
+</I>&gt;&gt;<i> to behaviour or interface are not good), as  people should be able to 
+</I>&gt;&gt;<i> rely on &quot;code working with stable at point  t still works with the 
+</I>&gt;&gt;<i> same behaviour at t + x month&quot;.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 3. I often commit &quot;mostly working, but not yet completely polished&quot;  
+</I>&gt;&gt;<i> features into beta to simplify merging, but i simply don't announce  
+</I>&gt;&gt;<i> them on the forum until i'm confident they are really ok.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> best,
+</I>&gt;&gt;<i> -mario
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Allen W. Ingling wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hi Mario,
+</I>&gt;&gt;&gt;<i> When can I merge the trunk into the beta fork?    Whenever I want?
+</I>&gt;&gt;&gt;<i> Others merging my own changes from trunk into beta should always  be  
+</I>&gt;&gt;&gt;<i> ok; That should not displace something working in beta with  
+</I>&gt;&gt;&gt;<i> something  unworking in trunk, because I commit stuff into trunk  in 
+</I>&gt;&gt;&gt;<i> chunks which  do not require subsequent commits to function.   At 
+</I>&gt;&gt;&gt;<i> least it is my  plan that what I put in trunk be complete  enough to 
+</I>&gt;&gt;&gt;<i> build and  execute, even if not feature-complete.
+</I>&gt;&gt;&gt;<i> So can I assume that others with write access to the repository  are  
+</I>&gt;&gt;&gt;<i> doing the same and that I can merge trunk into beta whenever?
+</I>&gt;&gt;&gt;<i> best,
+</I>&gt;&gt;&gt;<i>  Allen
+</I>&gt;&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;&gt;<i> Osxptb-dev mailing list
+</I>&gt;&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;&gt;&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/osxptb-dev">http://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> -- 
+</I>&gt;&gt;<i> *********************************************************************
+</I>&gt;&gt;<i> Mario Kleiner
+</I>&gt;&gt;<i> Max Planck Institute for Biological Cybernetics
+</I>&gt;&gt;<i> Spemannstr. 38
+</I>&gt;&gt;<i> 72076 Tuebingen
+</I>&gt;&gt;<i> Germany
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+</I>&gt;&gt;<i> office: +49 (0)7071/601-742
+</I>&gt;&gt;<i> fax:    +49 (0)7071/601-616
+</I>&gt;&gt;<i> www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+</I>&gt;&gt;<i> *********************************************************************
+</I>&gt;&gt;<i> &quot;Debugging is twice as hard as writing the code in the first place.
+</I>&gt;&gt;<i> Therefore, if you write the code as cleverly as possible, you are,
+</I>&gt;&gt;<i> by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Osxptb-dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/osxptb-dev">http://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+*********************************************************************
+&quot;Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000051.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+	<LI>Next message: <A HREF="000053.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] building targets of PTB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20building%20targets%20of%20PTB&In-Reply-To=%3CD06C2A8C-C8F6-4EC3-A7B8-F5032FA37A9A%40mac.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000039.html">
+   <LINK REL="Next"  HREF="000041.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] building targets of PTB</H1>
+    <B>Allen W. Ingling</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20building%20targets%20of%20PTB&In-Reply-To=%3CD06C2A8C-C8F6-4EC3-A7B8-F5032FA37A9A%40mac.com%3E"
+       TITLE="[Osxptb-dev] building targets of PTB">allen_ingling at mac.com
+       </A><BR>
+    <I>Tue Jun 13 22:15:27 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000039.html">[Osxptb-dev] building targets of PTB
+</A></li>
+        <LI>Next message: <A HREF="000041.html">[Osxptb-dev] building targets of PTB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>&gt;<i> Dear all,
+</I>&gt;<i>
+</I>&gt;<i> I've attempted to build a number of targets from the source code  
+</I>&gt;<i> (revision 348/363).
+</I>&gt;<i> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+</I>&gt;<i> anything to completion (compiling seems to go alright mostly)
+</I>&gt;<i>
+</I>&gt;<i> The errors I get are...
+</I>
+Hi Frans,
+
+I expect it would fix the problem to upgrade dev tools.  Even if not,  
+it is the correct starting point for diagnosis.  Additional comments  
+interspersed.
+
+&gt;<i> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+</I>&gt;<i> the former comes with 10.4
+</I>
+If you want gcc 2.95.2 it is available for Xcode 2.x under 10.4.  It  
+is a separate install.  Get the &quot;Xcode Legacy Tools&quot; package from  
+developer.apple.com.   (The free flavor of ADC membership allows  
+access to the developer downloads area.)
+
+All of the .mex targets should already be set to use gcc 3.3.  It is  
+a mystery to me why you found gcc 2.95.2 in the settings.  I have the  
+project open now and just examined the Screen target and it is  
+definitely set to gcc 3.3.
+
+&gt;<i> It somehow seems the frameworks can't be found (even though I did  
+</I>&gt;<i> specify their locations in the project settings).
+</I>
+That should be unnecessary.
+
+After upgrading tools, it might be best to start over with a fresh  
+copy of the project to exclude the changes which you have made.
+
+&gt;<i>  I am on 10.4.5
+</I>
+Should not be a problem,  but fyi 10.4.6 is out.
+
+&gt;<i> and using Xcode 2.1
+</I>
+Try Xcode Tools 2.2.1.  Also available from developer.apple.com.
+
+best,
+
+Allen
+
+
+
+
+
+
+
+
+
+
+
+
+On Jun 13, 2006, at 2:04 PM, Frans Cornelissen wrote:
+
+&gt;<i> Dear all,
+</I>&gt;<i>
+</I>&gt;<i> I've attempted to build a number of targets from the source code  
+</I>&gt;<i> (revision 348/363).
+</I>&gt;<i> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+</I>&gt;<i> anything to completion (compiling seems to go alright mostly)
+</I>&gt;<i>
+</I>&gt;<i> The errors I get are:
+</I>&gt;<i>
+</I>&gt;<i> gcc-3.3: No such file or directory
+</I>&gt;<i> gcc-3.3: ApplicationServices: No such file or directory
+</I>&gt;<i> gcc-3.3: No such file or directory
+</I>&gt;<i> gcc-3.3: Carbon: No such file or directory
+</I>&gt;<i>
+</I>&gt;<i> this goes on for a while, and than ends with:
+</I>&gt;<i>
+</I>&gt;<i> command /usr/bin/gcc-3.3 failed with exit code 1
+</I>&gt;<i>
+</I>&gt;<i> (I'll post some screen dumps that show the full (nearly identical)  
+</I>&gt;<i> error messages, both for eyelink and donothing targets, in a  
+</I>&gt;<i> seperate message)
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+</I>&gt;<i> the former comes with 10.4
+</I>&gt;<i>
+</I>&gt;<i> It somehow seems the frameworks can't be found (even though I did  
+</I>&gt;<i> specify their locations in the project settings). The paths are all  
+</I>&gt;<i> pointing to the right positions too.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Is there any obvious reason why this is going wrong and that I am  
+</I>&gt;<i> overlooking?
+</I>&gt;<i>
+</I>&gt;<i> Gr.
+</I>&gt;<i> Frans
+</I>&gt;<i>
+</I>&gt;<i> PS: I am on 10.4.5 and using Xcode 2.1
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -------------------------------------------
+</I>&gt;<i> Laboratory of Experimental Ophthalmology &amp; BCN NeuroImaging Centre,  
+</I>&gt;<i> School of Behavioural and Cognitive Neurosciences, University  
+</I>&gt;<i> Medical Centre Groningen,
+</I>&gt;<i> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+</I>&gt;<i> Email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/b609a6ec/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/b609a6ec/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000039.html">[Osxptb-dev] building targets of PTB
+</A></li>
+	<LI>Next message: <A HREF="000041.html">[Osxptb-dev] building targets of PTB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#40">[ date ]</a>
+              <a href="thread.html#40">[ thread ]</a>
+              <a href="subject.html#40">[ subject ]</a>
+              <a href="author.html#40">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

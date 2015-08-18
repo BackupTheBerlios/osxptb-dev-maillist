@@ -1,0 +1,163 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Xcode 3.2 compilation and Octave
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Xcode%203.2%20compilation%20and%20Octave&In-Reply-To=%3C4C69A5B1.2000907%40vanderbilt.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000093.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Xcode 3.2 compilation and Octave</H1>
+    <B>Jurnell Cockhren</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Xcode%203.2%20compilation%20and%20Octave&In-Reply-To=%3C4C69A5B1.2000907%40vanderbilt.edu%3E"
+       TITLE="[Osxptb-dev] Xcode 3.2 compilation and Octave">jurnell.cockhren at vanderbilt.edu
+       </A><BR>
+    <I>Mon Aug 16 22:55:13 CEST 2010</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000093.html">[Osxptb-dev] Xcode 3.2 compilation and Octave
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>  Mario,
+
+The Matlab &amp; Octave features are about equal. I found what I was looking 
+for (Keyboard input supplied through PsychHID).
+
+Concerning Xcode usage, in version 3.2 (not sure when it was added) 
+there's a setting to allow for backwards compatibility of project files 
+distinctly, &quot;Xcode 2.4-compatible.&quot; There's no rush though.
+
+Is there a list of outstanding bugs or unimplemented features somewhere?
+
+Jurnell
+
+
+On 8/15/10 6:10 PM, Mario Kleiner wrote:
+&gt;<i> On Aug 13, 2010, at 12:07 AM, Jurnell Cockhren wrote:
+</I>&gt;<i>
+</I>&gt;&gt;<i> Hey,
+</I>&gt;<i>
+</I>&gt;<i> Hi Jurnell
+</I>&gt;&gt;<i> I would like to look into ramping up the Octave support (just for OSX 
+</I>&gt;&gt;<i> for right now). But first I want to recompile a typical target like 
+</I>&gt;&gt;<i> 'GetSecs intel'. I used the project files in the 
+</I>&gt;&gt;<i> PsychSourceGL/Projects and they load just fine. I read the README 
+</I>&gt;&gt;<i> file in the PsychSourceGL and it stated:
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> What kind of support do you want to add? I thought we're mostly on 
+</I>&gt;<i> parity between Matlab and Octave wrt. features?
+</I>&gt;<i>
+</I>&gt;&gt;<i> &quot;B. If your MATLAB path is /Applications/SomethingElse where 
+</I>&gt;&gt;<i> SomethingElse names a version of MATLAB better than MATLAB701, then 
+</I>&gt;&gt;<i> either this file is out of date or the project itself is out of date. 
+</I>&gt;&gt;<i> Please send mail to the Psychtoolbox forum and we will correct it.&quot;
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> The readme's haven't been upated in years, so take everything in there 
+</I>&gt;<i> with a grain of salt.
+</I>&gt;<i>
+</I>&gt;&gt;<i> I'm using version 2010a (Xcode version 3.2 on snow leopard) and there 
+</I>&gt;&gt;<i> isn't a &quot;mexversion.c&quot; file located anywhere within the Matlab 
+</I>&gt;&gt;<i> application package. How do I go about compiling one of the Intel 
+</I>&gt;&gt;<i> targets? Also, I noticed that some of the OSX specific source files 
+</I>&gt;&gt;<i> (like
+</I>&gt;<i>
+</I>&gt;<i> The mexversion.c file has been removed around Matlab R2009, so it no 
+</I>&gt;<i> longer exists in your 2010a and is no longer needed for building 
+</I>&gt;<i> against the latest Matlab's. However, i still need it because i'm 
+</I>&gt;<i> building all versions of PTB against R2007a. The simplest method would 
+</I>&gt;<i> be for you to check in XCode where exactly that file is expected 
+</I>&gt;<i> within the Matlab folder and then simply create an empty mexversion.c 
+</I>&gt;<i> file to make the compiler happy.
+</I>&gt;<i>
+</I>&gt;<i> You also have to be careful with the XCode file. I still use XCode 2.4 
+</I>&gt;<i> under 10.4.11 Tiger for building and i doubt that xcode project files 
+</I>&gt;<i> from your 3.2 version are backwards compatible and useable by my old 
+</I>&gt;<i> xcode. If you make changes to the xcode project files then i'll 
+</I>&gt;<i> probably have to replicate those changes for the &quot;official xcode' 
+</I>&gt;<i> file, i.e., you must not commit your xcode project file into the svn.
+</I>&gt;<i>
+</I>&gt;<i> I plan to upgrade my development system to snow leopard and a modern 
+</I>&gt;<i> xcode sometime next spring after i'm done with writing my thesis. Then 
+</I>&gt;<i> we'll also have to see if it is possible to keep the powerpc platform 
+</I>&gt;<i> supported somehow or not. At the moment, given my limited time, 
+</I>&gt;<i> upgrading the official ptb to a modern xcode etc. is not possible. It 
+</I>&gt;<i> would break backward compatibility.
+</I>&gt;<i>
+</I>&gt;&gt;<i> 'Source/OSX/Screen/PsychMovieSupport.h') have a typo in the inclusion 
+</I>&gt;&gt;<i> of Quick Time headers.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Currently: #include&lt;Quicktime/Movies.h&gt;
+</I>&gt;&gt;<i> Should be: #include&lt;QuickTime/Movies.h&gt;
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Hmm, they compile just fine, so this is a minor issue, but thanks for 
+</I>&gt;<i> reporting.
+</I>&gt;<i>
+</I>&gt;<i> ciao,
+</I>&gt;<i> -mario
+</I>&gt;<i>
+</I>&gt;<i> *********************************************************************
+</I>&gt;<i> Mario Kleiner
+</I>&gt;<i> Max Planck Institute for Biological Cybernetics
+</I>&gt;<i> Spemannstr. 38
+</I>&gt;<i> 72076 Tuebingen
+</I>&gt;<i> Germany
+</I>&gt;<i>
+</I>&gt;<i> e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+</I>&gt;<i> office: +49 (0)7071/601-1623
+</I>&gt;<i> fax:    +49 (0)7071/601-616
+</I>&gt;<i> www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+</I>&gt;<i> *********************************************************************
+</I>&gt;<i> &quot;For a successful technology, reality must take precedence
+</I>&gt;<i> over public relations, for Nature cannot be fooled.&quot;
+</I>&gt;<i> (Richard Feynman)
+</I>&gt;<i>
+</I>
+-- 
+Jurnell Cockhren
+Systems Analyst/Programmer
+Vandervilt Vision Research Center
+521 Wilson Hall
+Phone: 615-343-9912
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000093.html">[Osxptb-dev] Xcode 3.2 compilation and Octave
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

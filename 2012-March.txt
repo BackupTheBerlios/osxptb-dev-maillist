@@ -1,0 +1,405 @@
+From bogus@does.not.exist.com  Wed Mar 14 15:57:03 2012
+From: bogus@does.not.exist.com ()
+Date: Wed, 14 Mar 2012 14:57:03 -0000
+Subject: No subject
+Message-ID: <mailman.0.1331737022.8437.osxptb-dev@lists.berlios.de>
+
+Silver we found out that the Trigger-input of FORP is
+detected by KbCheck as a press of the "t" key, but not the
+response buttons, so there must be a firmware solution.
+
+I assume the PsychHID('GetReport') function detects FORP
+actions because it samples the USB bus with high temporal
+resolution and buffers the results, but i'm not very
+familiar with that part of PsychHID, so...
+
+There's not much i could do about it at the moment as i
+have trouble recompiling the PsychHID part of PTB, but if
+my guess is correct then there is no need to do anything
+about it, except to provide a working GetChar or e-mail the
+manufacturer of FORP...
+
+Maybe you want to forward this e-mail to the FORP guys and
+ask them? I don't have the time at the moment - and i don't
+have the equipment to test anything or a strong "valued
+customer" relationship to them ;-)
+
+best,
+-mario
+
+
+From bogus@does.not.exist.com  Wed Mar 14 15:57:03 2012
+From: bogus@does.not.exist.com ()
+Date: Wed, 14 Mar 2012 14:57:03 -0000
+Subject: No subject
+Message-ID: <mailman.1.1331737022.8437.osxptb-dev@lists.berlios.de>
+
+WebSVN:
+http://svn.berlios.de/wsvn/osxptb
+
+The Berlios Subversion How To:
+http://developer.berlios.de/docman/display_doc.php?docid=3D394&group_id=3D2
+
+Online doc for Subversion:  http://svnbook.red-bean.com/
+
+David Brainard is the project admin, so he needs to add you to the list of
+developers.
+
+I'll comment more on the code when it's committed.
+
+Chris
+
+On 12/9/05, Daniel Sperka <djsperka at ucdavis.edu > wrote:
+>
+> Chris' and Mario's ideas sound good. I'm looking forward to getting my
+> hands on this stuff!
+>
+> Can somebody arrange for the developer accts soon? I'd very much
+> appreciate it! (Oh, and a little info like ip address, repository type
+> (SVN/CVS?) and which module(s) one requires to build. Thanks!
+>
+> Dan
+>
+> Chris Burns wrote:
+>
+> >All of the existing Eyelink Toolbox code uses the PsychScriptingGlue (an=
+d
+> >PsychError, and maybe some other code too), approximately 40+ source
+> files.
+> >It would take a lot of work to pull this apart and write the Matlab
+> >interface from scratch.  I'd like to continue using the Psych* functions=
+.
+> >They are very user friendly too!
+> >
+> >The "simple solution", adding the Eyelink Target and Source to the trunk=
+,
+> >would be ideal.   That's what I planned originally and the code exists i=
+n
+> >that format now.  I would only have to update my working copy, verify th=
+e
+> >code, commit and Daniel and Frans could begin using it.
+> >
+> >The Eyelink Branch idea was an attempt to include ETB in an out-of-sight
+> >out-of-mind way for the PTB team.  But if it's not an issue, than I'm
+> happy
+> >to not add that complexity to the process.
+> >
+> >I think everyone agrees with GPL-ing the code.  Frans already gave the O=
+K
+> >with his source. (presumably he speaks for the code even though Enno
+> >co-developed it?)  I'm ok with it, so we're all good.
+> >
+> >Chris
+> >
+> >On 12/9/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+> >
+> >
+> >>Hi,
+> >>
+> >>the only interfacing that is needed between ETB and PTB is the ability
+> >>of ETB to draw into a PTB onscreen window for eyeimage preview. If you'=
+d
+> >>just need this, short term you get it for free: After calling any Scree=
+n
+> >>command, e.g. Screen('DrawingFinished', win); the OpenGL context of
+> >>onscreen window 'win' is ready for drawing by e.g., ETB drawing code --
+> >>this is a side effect of the implementation and as such, coding mistake=
+s
+> >>in ETB's drawing code can affect PTB's behaviour. But i can add the
+> >>"proper" interface code with child-protection quickly (this weekend) if
+> >>you want...
+> >>
+> >>If you want to take advantage of more PTB features, e.g., the nice
+> >>Psychscripting-Glue implementation for interfacing with Matlab, then
+> >>your approach is good.
+> >>
+> >>But if you want to check-in ETB into the Berlios Psychtoolbox repositor=
+y
+> >>anyway (Which would make it automatically Open-Source under GPL
+> >>license!), you could just add the Eyelink.mexmac target to the standard
+> >>Psychtoolbox source-tree. Just add it to 'trunk' - No need to create
+> >>another branch. The different Mex targets don't interact with each othe=
+r
+> >>and i don't see how adding an Eyelink prototype to the 'trunk' could
+> >>affect the stability of PTB. It also doesn't affect development of othe=
+r
+> >>parts of PTB, as long as nobody except you tries to compile the Eyelink
+> >>target.
+> >>
+> >>So simple solution: Chris adds the current Eyelink-Target to PTB's
+> >>'trunk'. Daniel and Frans get a PTB developer account for the PTB
+> >>project (with the help of Chris and David Brainard). Frans & Daniel
+> >>check out the SVN source tree and we can continue developing both in
+> >>parallel with minimal maintenance & synchronization overhead :)
+> >>
+> >>What do you think?
+> >>-mario
+> >>
+> >>
+> >>Frans W. Cornelissen wrote:
+> >>
+> >>
+> >>>Chris,
+> >>>
+> >>>This sounds like an excellent (intermediate) solution. It would be nic=
+e
+> >>>if you could, at some point, provide some details as on how to get cod=
+e
+> >>>and submit revised code.
+> >>>Mario has provided some simple scripts for PTB download, but I haven't
+> >>>yet figured out how to get actual code.
+> >>>
+> >>>Gr.
+> >>>Frans
+> >>>
+> >>>
+> >>>Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+> >>>
+> >>>
+> >>>
+> >>>>I would like to propose a short-term solution for Eyelink Toolbox
+> >>>>development.  In a previous discussion, Mario proposed exposing some
+> >>>>of the PTB functionality externally, so other projects, like an ETB
+> >>>>project could use the PTB but without being part of the PTB project.
+> >>>>This is a great idea, but in the near-term, Frans, Daniel and I would
+> >>>>like to continue with the OSX port of the ETB.  If it's ok by the
+> >>>>group, I'd like for us to continue to piggy-back on the PTB project.
+> >>>>
+> >>>>Here's what I propose:  I'll create a new branch off the trunk, an
+> >>>>Eyelink branch.  This branch would ONLY contain the Eyelink source
+> >>>>files and a copy of the PsychToolbox.xcodeproj file, which includes
+> >>>>the Eyelink target.  All of the PTB source files are linked to the ne=
+w
+>
+> >>>>branch, so this does not create duplicate copies of the source.  Then
+> >>>>we can continue with the ETB development, merging in PTB updates to
+> >>>>benefit from bug-fixes and feature upgrades, but continue on a
+> >>>>separate development path which would not affect the PTB.  At a later
+> >>>>date, we could break the ETB off into a separate project or merge it
+> >>>>back into the PTB.  Either would be easily doable.
+> >>>>
+> >>>>Feedback?
+> >>>>
+> >>>>chris
+> >>>>
+> >>>>
+> >>>>
+> >>>>
+> >>>>
+> >>>--------------------------------------------------------
+> >>>Frans W.Cornelissen
+> >>>Laboratory for Experimental Ophthalmology
+> >>>    & BCN Neuro-imaging Center
+> >>>School of Behavioural and Cognitive Neurosciences
+> >>>University Medical Center Groningen
+> >>>University of Groningen
+> >>>PO Box 30.001
+> >>>9700 RB Groningen
+> >>>Nederland
+> >>>
+> >>>email: f.w.cornelissen at rug.nl
+> >>>Tel. LEO: +31 50 3614173 / 2510
+> >>>Tel. NIC: +31 50 363 8801 / 5111
+> >>>
+> >>>http://franswcornelissen.webhop.org/
+> >>>
+> >>>_______________________________________________
+> >>>Osxptb-dev mailing list
+> >>>Osxptb-dev at lists.berlios.de
+> >>> http://lists.berlios.de/mailman/listinfo/osxptb-de
+> >>>v
+> >>>
+> >>>
+> >>
+> >>
+> >>
+> >
+> >
+> >
+>
+> --
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Daniel J. Sperka, Ph. D.
+> Software Developer/Analyst
+> Center for Neuroscience
+> University of California, Davis
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>
+>
+
+------=_Part_10385_3901049.1134171292448
+Content-Type: text/html; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+
+Daniel,<br><br>We should wait for confirmation from David, Denis, and/or Al=
+len on this before checking this in.&nbsp; But here's some info:<br><br>It'=
+s a Subversion repository hosted on an Open Source site called BerliOS.&nbs=
+p; The project page is here:
+<br><a href=3D"http://developer.berlios.de/projects/osxptb/" target=3D"_bla=
+nk" onclick=3D"return top.js.OpenExtLink(window,event,this)">http://develop=
+er.berlios.de/projects/osxptb/</a><br><br>From there you can subscribe to t=
+he mailing lists and view the source.
+<br><br>WebSVN:<br><a href=3D"http://svn.berlios.de/wsvn/osxptb">http://svn=
+.berlios.de/wsvn/osxptb</a><br><br>The Berlios Subversion How To:<br><a hre=
+f=3D"http://developer.berlios.de/docman/display_doc.php?docid=3D394&amp;gro=
+up_id=3D2">
+http://developer.berlios.de/docman/display_doc.php?docid=3D394&amp;group_id=
+=3D2</a><br><br>Online doc for Subversion:&nbsp;=20
+<a href=3D"http://svnbook.red-bean.com/" target=3D"_blank" onclick=3D"retur=
+n top.js.OpenExtLink(window,event,this)">http://svnbook.red-bean.com/</a><b=
+r><br>David Brainard is the project admin, so he needs to add you to the li=
+st of developers.
+<br><br>I'll comment more on the code when it's committed.<br><br>Chris<br>=
+<br><div><span class=3D"gmail_quote">On 12/9/05, <b class=3D"gmail_senderna=
+me">Daniel Sperka</b> &lt;<a href=3D"mailto:djsperka at ucdavis.edu" target=3D=
+"_blank" onclick=3D"return top.js.OpenExtLink(window,event,this)">
+djsperka at ucdavis.edu
+</a>&gt; wrote:</span><blockquote class=3D"gmail_quote" style=3D"border-lef=
+t: 1px solid rgb(204, 204, 204); margin: 0pt 0pt 0pt 0.8ex; padding-left: 1=
+ex;">Chris' and Mario's ideas sound good. I'm looking forward to getting my
+<br>hands on this stuff!<br><br>Can somebody arrange for the developer acct=
+s soon? I'd very much<br>appreciate it! (Oh, and a little info like ip addr=
+ess, repository type<br>(SVN/CVS?) and which module(s) one requires to buil=
+d. Thanks!
+<br><br>Dan<br><br>Chris Burns wrote:<br><br>&gt;All of the existing Eyelin=
+k Toolbox code uses the PsychScriptingGlue (and<br>&gt;PsychError, and mayb=
+e some other code too), approximately 40+ source files.<br>&gt;It would tak=
+e a lot of work to pull this apart and write the Matlab
+<br>&gt;interface from scratch.&nbsp;&nbsp;I'd like to continue using the P=
+sych* functions.<br>&gt;They are very user friendly too!<br>&gt;<br>&gt;The=
+ &quot;simple solution&quot;, adding the Eyelink Target and Source to the t=
+runk,
+<br>
+&gt;would be ideal.&nbsp;&nbsp; That's what I planned originally and the co=
+de exists in<br>&gt;that format now.&nbsp;&nbsp;I would only have to update=
+ my working copy, verify the<br>&gt;code, commit and Daniel and Frans could=
+ begin using it.
+<br>&gt;<br>&gt;The Eyelink Branch idea was an attempt to include ETB in an=
+ out-of-sight<br>&gt;out-of-mind way for the PTB team.&nbsp;&nbsp;But if it=
+'s not an issue, than I'm happy<br>&gt;to not add that complexity to the pr=
+ocess.
+<br>&gt;<br>&gt;I think everyone agrees with GPL-ing the code.&nbsp;&nbsp;F=
+rans already gave the OK<br>&gt;with his source. (presumably he speaks for =
+the code even though Enno<br>&gt;co-developed it?)&nbsp;&nbsp;I'm ok with i=
+t, so we're all good.
+<br>&gt;<br>&gt;Chris<br>&gt;<br>&gt;On 12/9/05, Mario Kleiner &lt;<a href=
+=3D"mailto:mario.kleiner at tuebingen.mpg.de" target=3D"_blank" onclick=3D"ret=
+urn top.js.OpenExtLink(window,event,this)">mario.kleiner at tuebingen.mpg.de</=
+a>
+&gt; wrote:<br>&gt;<br>&gt;<br>&gt;&gt;Hi,<br>&gt;&gt;<br>&gt;&gt;the only =
+interfacing that is needed between ETB and PTB is the ability
+<br>&gt;&gt;of ETB to draw into a PTB onscreen window for eyeimage preview.=
+ If you'd<br>&gt;&gt;just need this, short term you get it for free: After =
+calling any Screen<br>&gt;&gt;command, e.g. Screen('DrawingFinished', win);=
+ the OpenGL context of
+<br>&gt;&gt;onscreen window 'win' is ready for drawing by e.g., ETB drawing=
+ code --<br>&gt;&gt;this is a side effect of the implementation and as such=
+, coding mistakes<br>&gt;&gt;in ETB's drawing code can affect PTB's behavio=
+ur. But i can add the
+<br>&gt;&gt;&quot;proper&quot; interface code with child-protection quickly=
+ (this weekend) if<br>&gt;&gt;you want...<br>&gt;&gt;<br>&gt;&gt;If you wan=
+t to take advantage of more PTB features, e.g., the nice<br>&gt;&gt;Psychsc=
+ripting-Glue implementation for interfacing with Matlab, then
+<br>&gt;&gt;your approach is good.<br>&gt;&gt;<br>&gt;&gt;But if you want t=
+o check-in ETB into the Berlios Psychtoolbox repository<br>&gt;&gt;anyway (=
+Which would make it automatically Open-Source under GPL<br>&gt;&gt;license!=
+), you could just add the=20
+Eyelink.mexmac target to the standard<br>&gt;&gt;Psychtoolbox source-tree. =
+Just add it to 'trunk' - No need to create<br>&gt;&gt;another branch. The d=
+ifferent Mex targets don't interact with each other<br>&gt;&gt;and i don't =
+see how adding an Eyelink prototype to the 'trunk' could
+<br>&gt;&gt;affect the stability of PTB. It also doesn't affect development=
+ of other<br>&gt;&gt;parts of PTB, as long as nobody except you tries to co=
+mpile the Eyelink<br>&gt;&gt;target.<br>&gt;&gt;<br>&gt;&gt;So simple solut=
+ion: Chris adds the current Eyelink-Target to PTB's
+<br>&gt;&gt;'trunk'. Daniel and Frans get a PTB developer account for the P=
+TB<br>&gt;&gt;project (with the help of Chris and David Brainard). Frans &a=
+mp; Daniel<br>&gt;&gt;check out the SVN source tree and we can continue dev=
+eloping both in
+<br>&gt;&gt;parallel with minimal maintenance &amp; synchronization overhea=
+d :)<br>&gt;&gt;<br>&gt;&gt;What do you think?<br>&gt;&gt;-mario<br>&gt;&gt=
+;<br>&gt;&gt;<br>&gt;&gt;Frans W. Cornelissen wrote:<br>&gt;&gt;<br>&gt;&gt=
+;
+<br>&gt;&gt;&gt;Chris,<br>&gt;&gt;&gt;<br>&gt;&gt;&gt;This sounds like an e=
+xcellent (intermediate) solution. It would be nice<br>&gt;&gt;&gt;if you co=
+uld, at some point, provide some details as on how to get code<br>&gt;&gt;&=
+gt;and submit revised code.
+<br>&gt;&gt;&gt;Mario has provided some simple scripts for PTB download, bu=
+t I haven't<br>&gt;&gt;&gt;yet figured out how to get actual code.<br>&gt;&=
+gt;&gt;<br>&gt;&gt;&gt;Gr.<br>&gt;&gt;&gt;Frans<br>&gt;&gt;&gt;<br>&gt;&gt;=
+&gt;
+<br>&gt;&gt;&gt;Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschre=
+ven:<br>&gt;&gt;&gt;<br>&gt;&gt;&gt;<br>&gt;&gt;&gt;<br>&gt;&gt;&gt;&gt;I w=
+ould like to propose a short-term solution for Eyelink Toolbox<br>&gt;&gt;&=
+gt;&gt;development.&nbsp;&nbsp;In a previous discussion, Mario proposed exp=
+osing some
+<br>&gt;&gt;&gt;&gt;of the PTB functionality externally, so other projects,=
+ like an ETB<br>&gt;&gt;&gt;&gt;project could use the PTB but without being=
+ part of the PTB project.<br>&gt;&gt;&gt;&gt;This is a great idea, but in t=
+he near-term, Frans, Daniel and I would
+<br>&gt;&gt;&gt;&gt;like to continue with the OSX port of the ETB.&nbsp;&nb=
+sp;If it's ok by the<br>&gt;&gt;&gt;&gt;group, I'd like for us to continue =
+to piggy-back on the PTB project.<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;&gt;He=
+re's what I propose:&nbsp;&nbsp;I'll create a new branch off the trunk, an
+<br>&gt;&gt;&gt;&gt;Eyelink branch.&nbsp;&nbsp;This branch would ONLY conta=
+in the Eyelink source<br>&gt;&gt;&gt;&gt;files and a copy of the PsychToolb=
+ox.xcodeproj file, which includes<br>&gt;&gt;&gt;&gt;the Eyelink target.&nb=
+sp;&nbsp;All of the PTB source files are linked to the new
+<br>&gt;&gt;&gt;&gt;branch, so this does not create duplicate copies of the=
+ source.&nbsp;&nbsp;Then<br>&gt;&gt;&gt;&gt;we can continue with the ETB de=
+velopment, merging in PTB updates to<br>&gt;&gt;&gt;&gt;benefit from bug-fi=
+xes and feature upgrades, but continue on a
+<br>&gt;&gt;&gt;&gt;separate development path which would not affect the PT=
+B.&nbsp;&nbsp;At a later<br>&gt;&gt;&gt;&gt;date, we could break the ETB of=
+f into a separate project or merge it<br>&gt;&gt;&gt;&gt;back into the PTB.=
+&nbsp;&nbsp;Either would be easily doable.
+<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;&gt;Feedback?<br>&gt;&gt;&gt;&gt;<br>&g=
+t;&gt;&gt;&gt;chris<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;=
+&gt;<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;&gt;<br>&gt;&gt;&gt;---------------=
+-----------------------------------------
+<br>&gt;&gt;&gt;Frans W.Cornelissen<br>&gt;&gt;&gt;Laboratory for Experimen=
+tal Ophthalmology<br>&gt;&gt;&gt;&nbsp;&nbsp;&nbsp;&nbsp;&amp; BCN Neuro-im=
+aging Center<br>&gt;&gt;&gt;School of Behavioural and Cognitive Neuroscienc=
+es<br>&gt;&gt;&gt;University Medical Center Groningen
+<br>&gt;&gt;&gt;University of Groningen<br>&gt;&gt;&gt;PO Box 30.001<br>&gt=
+;&gt;&gt;9700 RB Groningen<br>&gt;&gt;&gt;Nederland<br>&gt;&gt;&gt;<br>&gt;=
+&gt;&gt;email: <a href=3D"mailto:f.w.cornelissen at rug.nl" target=3D"_blank" =
+onclick=3D"return top.js.OpenExtLink(window,event,this)">
+f.w.cornelissen at rug.nl
+</a><br>&gt;&gt;&gt;Tel. LEO: +31 50 3614173 / 2510<br>&gt;&gt;&gt;Tel. NIC=
+: +31 50 363 8801 / 5111<br>&gt;&gt;&gt;<br>&gt;&gt;&gt;<a href=3D"http://f=
+ranswcornelissen.webhop.org/" target=3D"_blank" onclick=3D"return top.js.Op=
+enExtLink(window,event,this)">
+http://franswcornelissen.webhop.org/</a><br>
+&gt;&gt;&gt;<br>&gt;&gt;&gt;_______________________________________________=
+<br>&gt;&gt;&gt;Osxptb-dev mailing list<br>&gt;&gt;&gt;<a href=3D"mailto:Os=
+xptb-dev at lists.berlios.de" target=3D"_blank" onclick=3D"return top.js.OpenE=
+xtLink(window,event,this)">
+Osxptb-dev at lists.berlios.de</a><br>&gt;&gt;&gt;
+<a href=3D"http://lists.berlios.de/mailman/listinfo/osxptb-de" target=3D"_b=
+lank" onclick=3D"return top.js.OpenExtLink(window,event,this)">http://lists=
+.berlios.de/mailman/listinfo/osxptb-de</a><br>&gt;&gt;&gt;v<br>&gt;&gt;&gt;=
+<br>
+&gt;&gt;&gt;<br>&gt;&gt;<br>&gt;&gt;<br>&gt;&gt;<br>&gt;<br>&gt;<br>&gt;
+<br><br>--<br>=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D<br><br>Daniel J. Sperka, Ph. D.<br>Software Developer/Analyst<br>Center=
+ for Neuroscience<br>University of California, Davis<br><br>=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+<br><br><br></blockquote></div><br>
+
+
+------=_Part_10385_3901049.1134171292448--
+
+

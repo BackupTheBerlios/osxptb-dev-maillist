@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-July/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20osxptb%20--%20Do%20not%20run%20the%20convertlinefeeds%20script%0A%09again%21%21%21&In-Reply-To=%3C44C59DC3.9010408%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000076.html">
+   <LINK REL="Next"  HREF="000078.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20osxptb%20--%20Do%20not%20run%20the%20convertlinefeeds%20script%0A%09again%21%21%21&In-Reply-To=%3C44C59DC3.9010408%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Tue Jul 25 06:27:47 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000076.html">[Osxptb-dev] threading in Matlab
+</A></li>
+        <LI>Next message: <A HREF="000078.html">[Osxptb-dev] Updates from OS 9 version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Christopher Broussard wrote:
+&gt;<i> Hey Mario,
+</I>&gt;<i>    Sorry about that.  I saw that it had changed many files so I did a 
+</I>&gt;<i> diff on a few of the files and all I could see different was some 
+</I>&gt;<i> whitespace changes so I figured that maybe no one had run the script in 
+</I>&gt;<i> a long time.  The only reason I ran the script was because of a post to 
+</I>&gt;<i> the dev list that David sent me recommending that it be run.  Here is 
+</I>&gt;<i> the relevant quote:
+</I>&gt;<i> 
+</I>&gt;<i> &quot;please don't forget - before committing to subversion - to run the 
+</I>&gt;<i> scripts in /trunk/managementtools/convertlinefeeds.sh shell script over 
+</I>&gt;<i> your Sourcecode.&quot;
+</I>&gt;<i> 
+</I>&gt;<i> It might be a good idea to make a post to the dev forums with some 
+</I>
+Jap. I think the script needs some modification to be safe. It was 
+written before the M$-Windows port and is only needed if someone creates 
+code with the wrong linefeed mode set in XCode (needs to be Unix-Style). 
+Editing the files under M$-Windows creates characters that the script 
+does not handle properly, so it introduces lots of messy linefeeds...
+
+This needs some thoughts and testing before its useable again...
+
+&gt;<i> updated guidelines so no one makes the same mistake I did.  Also, no one 
+</I>&gt;<i> replied to my question about pthreads and Matlab compatibility.  Would 
+</I>&gt;<i> you be the one to ask about that or is there a resource on the web that 
+</I>&gt;<i> I can use to illuminate the subject?
+</I>
+Regarding the PThreads: Avoid multi-threading if you can!
+
+In theory, there is no fundamental reason why starting and managing our 
+own threads via the pthreads-API should cause trouble with Matlab. 
+Matlab doesn't know about our threads, and doesn't care.
+
+The one place were i introduced pthreads is for the asynchronous movie 
+loading under OS-X, because there is no other way to implement that 
+functionality and it seems to be a very useful feature.
+
+In practice, there are many reasons to avoid threads in PTB if the same 
+task can be solved in a single-threaded way:
+
+1. Multi-threaded programming is difficult: You can easily introduce a 
+lot of weird bugs that are very hard to fix. Locking issues, 
+race-conditions and such. That does not apply only to PTB, but to any 
+multi-threaded app.
+
+2. OpenGL is not thread-safe: You are not allowed to access the same 
+OpenGL context from multiple threads simultaneously, so you have to be 
+very careful with all OpenGL ops. This can even crash the whole desktop.
+
+3. Matlab or Octave is not thread-safe: You are not allowed to call any 
+Matlab/Octave function from a thread other than the main thread. This 
+rules out all functions in PsychScriptingGlue for accessing or returning 
+data from/to Matlab. All memory allocations via PsychMallocTemp() and 
+friends are bound to crash from your threads. Any kind of printf(), 
+fprintf() or errror output via PsychErrorExitMsg() and such will 
+possibly crash Matlab... You need to inspect each Psychtoolbox function 
+if it doesn't indirectly access Matlab...
+
+4. Threads have a limited stack-size, so allocating too much memory in 
+local variables of functions can crash, unless you know how to handle this.
+
+5. Some functions in some libraries are not thread-safe or reentrant, so 
+you need to know very well which functions are allowed and which not.
+
+6. Psychtoolbox itself is not thread-safe or reentrant. Its design 
+doesn't protect against parallelism in accessing internal data 
+structures or other ressources.
+
+7. Timing and priority issues: Specific pieces of PTB code, e.g., the 
+Screen('Flip') command depend on the fact that the main-thread gets all 
+the computation time it needs when it needs it. If you start parallel 
+threads inside PTB, they could steal cpu cycles from the main thread in 
+exactly the wrong moment and mess up stimulus timing.
+
+8. The multi-threading needs to work on OS-X, Linux and M$-Windows, each 
+of them has different scheduling behaviour...
+
+9. There are some weird interactions between Quicktime on OS-X (which is 
+highly multi-threaded) and Matlab when running with JVM: Playing some 
+movies can hang or crash Matlab in some situations. The reason is 
+unclear, except that it is threading related, i failed completely in 
+debugging it. The only thing i know is that running matlab in -nojvm 
+mode makes it reliable, probably because then a lot of Java related 
+threads don't run anymore.
+
+So all in all, its not impossible to use threads in PTB, but it is 
+pretty difficult and needs a lot of care if you want to do it. Although 
+i have a lot of experience with multi-threaded and realtime parallel 
+programming from many other projects, i'll try to avoid it in PTB 
+whenever i can.
+
+ciao,
+-mario
+
+
+&gt;<i> 
+</I>&gt;<i>    Thanks,
+</I>&gt;<i>    Chris
+</I>&gt;<i> 
+</I>&gt;<i> Mario Kleiner wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hello Christopher,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> your last commit when running the convertlinefeeds.sh script caused 
+</I>&gt;&gt;<i> massive breakage and loss of about 2 hours of my work. I think i 
+</I>&gt;&gt;<i> reverted your changes in the repository to make it workable again. You 
+</I>&gt;&gt;<i> will have to:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 1. svn update your working copy, possibly you will need to delete it 
+</I>&gt;&gt;<i> completely and check out a fresh copy if you get merge conflicts.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> 2. Readd and recommit the two new files that you added during revision 
+</I>&gt;&gt;<i> 400.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Please do not run this script without it being absolutely necessary! 
+</I>&gt;&gt;<i> It was only meant to repair severely broken files. When run, it screws 
+</I>&gt;&gt;<i> up the formatting of C source code which makes it pretty unreadable. 
+</I>&gt;&gt;<i> It also creates merge-conflicts which are very painful to resolve 
+</I>&gt;&gt;<i> manually. And it breaks the 'help' function of Matlab for affected 
+</I>&gt;&gt;<i> M-Files. I think the script needs some serious rework and testing 
+</I>&gt;&gt;<i> before it can be safely used again. It was my fault not putting big 
+</I>&gt;&gt;<i> warning messages into the script.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Also, if you see that a commit changes many files (via invocation of 
+</I>&gt;&gt;<i> &quot;svn status&quot; before committing), please double-check that they really 
+</I>&gt;&gt;<i> don't break anything before committing. Undoing small problems in a 
+</I>&gt;&gt;<i> single file is not a big issue, but undoing such massive changes is a 
+</I>&gt;&gt;<i> lot of work.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> thanks,
+</I>&gt;&gt;<i> -mario
+</I>&gt;&gt;<i>
+</I>
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+*********************************************************************
+&quot;Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000076.html">[Osxptb-dev] threading in Matlab
+</A></li>
+	<LI>Next message: <A HREF="000078.html">[Osxptb-dev] Updates from OS 9 version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

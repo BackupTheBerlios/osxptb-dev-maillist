@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Mailing lists and FORP's
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-November/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Mailing%20lists%20and%20FORP%27s&In-Reply-To=%3Cweb-15882904%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000007.html">
+   <LINK REL="Next"  HREF="000008.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Mailing lists and FORP's</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Mailing%20lists%20and%20FORP%27s&In-Reply-To=%3Cweb-15882904%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Mailing lists and FORP's">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Thu Nov 24 03:19:14 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000007.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+        <LI>Next message: <A HREF="000008.html">[Osxptb-dev] Re: VBL retrace? First Iteration on solution...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Frans,
+
+we have a new mailing-list for developer discussion on
+Berlios, i thought maybe you're interested in subscribing:
+
+&lt;<A HREF="http://developer.berlios.de/mail/?group_id=5064">http://developer.berlios.de/mail/?group_id=5064</A>&gt;
+
+Regarding your FORP bug. Michael Silver had the same issue.
+I suspect that its not a bug in KbCheck but correct
+behaviour with respect to a device that advertises itself
+as a regular keyboard but doesn't behave like a regular
+keyboard.
+
+(Completely unverified) Theory goes like this:
+
+A normal keyboard sends a &quot;key pressed&quot; event to the OS
+when a key is pressed down. It sends a &quot;key released&quot;
+event, when the key is finally released . The OS detects
+any temporal sequence of &quot;key X pressed&quot; followed by &quot;key X
+released&quot; as a single key stroke, maps it into the
+corresponding character and stores it in the event queue.
+This event queue is queried/polled by all normal
+applications like the Matlab command window or text
+editors, as well as the GetChar command of PTB.
+KbCheck/KbWait otoh always report the *current* state of
+all keys at query-time. So a key is reported as &quot;down&quot; in
+the time interval between the arrival of the &quot;key pressed&quot;
+event and the &quot;key released&quot; event.
+
+My assumption is that the FORP - on detection of a key
+press - sends a &quot;key pressed&quot; event, immediately followed
+by a &quot;key released&quot; event. It doesn't send the &quot;key
+released&quot; event when the key is really released, but
+before. This is convenient for a response button box to
+have this &quot;debouncing mechanism&quot; and should be handled
+properly by GetChar or Matlab or text editors, but KbCheck
+would pretty likely miss the short time-window between &quot;key
+press&quot; and &quot;key release&quot;...
+
+If this is really the case then KbCheck works properly
+although not as expected and GetChar should solve the FORP
+issue.
+
+So solution would be either:
+a) Use GetChar instead of KbCheck -- when GetChar works
+again.
+or
+b) Ask the manufacterer of FORP to extend their Firmware
+with a new mode of  operation to make FORP really behave
+like a keyboard.
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000007.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+	<LI>Next message: <A HREF="000008.html">[Osxptb-dev] Re: VBL retrace? First Iteration on solution...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#4">[ date ]</a>
+              <a href="thread.html#4">[ thread ]</a>
+              <a href="subject.html#4">[ subject ]</a>
+              <a href="author.html#4">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

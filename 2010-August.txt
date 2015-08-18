@@ -1,0 +1,155 @@
+From jurnell.cockhren at vanderbilt.edu  Fri Aug 13 00:07:20 2010
+From: jurnell.cockhren at vanderbilt.edu (Jurnell Cockhren)
+Date: Thu, 12 Aug 2010 17:07:20 -0500
+Subject: [Osxptb-dev] Xcode 3.2 compilation and Octave
+Message-ID: <4C647098.4080302@vanderbilt.edu>
+
+Hey,
+I would like to look into ramping up the Octave support (just for OSX 
+for right now). But first I want to recompile a typical target like 
+'GetSecs intel'. I used the project files in the PsychSourceGL/Projects 
+and they load just fine. I read the README file in the PsychSourceGL and 
+it stated:
+
+"B. If your MATLAB path is /Applications/SomethingElse where 
+SomethingElse names a version of MATLAB better than MATLAB701, then 
+either this file is out of date or the project itself is out of date. 
+Please send mail to the Psychtoolbox forum and we will correct it."
+
+I'm using version 2010a (Xcode version 3.2 on snow leopard) and there 
+isn't a "mexversion.c" file located anywhere within the Matlab 
+application package. How do I go about compiling one of the Intel 
+targets? Also, I noticed that some of the OSX specific source files 
+(like 'Source/OSX/Screen/PsychMovieSupport.h') have a typo in the 
+inclusion of Quick Time headers.
+
+Currently: #include<Quicktime/Movies.h>
+Should be: #include<QuickTime/Movies.h>
+
+Thanks,
+Jurnell
+
+-- 
+Jurnell Cockhren
+Systems Analyst/Programmer
+Vandervilt Vision Research Center
+521 Wilson Hall
+Phone: 615-343-9912
+
+
+
+From jurnell.cockhren at vanderbilt.edu  Mon Aug 16 22:55:13 2010
+From: jurnell.cockhren at vanderbilt.edu (Jurnell Cockhren)
+Date: Mon, 16 Aug 2010 15:55:13 -0500
+Subject: [Osxptb-dev] Xcode 3.2 compilation and Octave
+In-Reply-To: <DBAA6155-9A45-4E94-8E38-F5CDB9616EA9@tuebingen.mpg.de>
+References: <4C647098.4080302@vanderbilt.edu>
+	<DBAA6155-9A45-4E94-8E38-F5CDB9616EA9@tuebingen.mpg.de>
+Message-ID: <4C69A5B1.2000907@vanderbilt.edu>
+
+  Mario,
+
+The Matlab & Octave features are about equal. I found what I was looking 
+for (Keyboard input supplied through PsychHID).
+
+Concerning Xcode usage, in version 3.2 (not sure when it was added) 
+there's a setting to allow for backwards compatibility of project files 
+distinctly, "Xcode 2.4-compatible." There's no rush though.
+
+Is there a list of outstanding bugs or unimplemented features somewhere?
+
+Jurnell
+
+
+On 8/15/10 6:10 PM, Mario Kleiner wrote:
+> On Aug 13, 2010, at 12:07 AM, Jurnell Cockhren wrote:
+>
+>> Hey,
+>
+> Hi Jurnell
+>> I would like to look into ramping up the Octave support (just for OSX 
+>> for right now). But first I want to recompile a typical target like 
+>> 'GetSecs intel'. I used the project files in the 
+>> PsychSourceGL/Projects and they load just fine. I read the README 
+>> file in the PsychSourceGL and it stated:
+>>
+>
+> What kind of support do you want to add? I thought we're mostly on 
+> parity between Matlab and Octave wrt. features?
+>
+>> "B. If your MATLAB path is /Applications/SomethingElse where 
+>> SomethingElse names a version of MATLAB better than MATLAB701, then 
+>> either this file is out of date or the project itself is out of date. 
+>> Please send mail to the Psychtoolbox forum and we will correct it."
+>>
+>
+> The readme's haven't been upated in years, so take everything in there 
+> with a grain of salt.
+>
+>> I'm using version 2010a (Xcode version 3.2 on snow leopard) and there 
+>> isn't a "mexversion.c" file located anywhere within the Matlab 
+>> application package. How do I go about compiling one of the Intel 
+>> targets? Also, I noticed that some of the OSX specific source files 
+>> (like
+>
+> The mexversion.c file has been removed around Matlab R2009, so it no 
+> longer exists in your 2010a and is no longer needed for building 
+> against the latest Matlab's. However, i still need it because i'm 
+> building all versions of PTB against R2007a. The simplest method would 
+> be for you to check in XCode where exactly that file is expected 
+> within the Matlab folder and then simply create an empty mexversion.c 
+> file to make the compiler happy.
+>
+> You also have to be careful with the XCode file. I still use XCode 2.4 
+> under 10.4.11 Tiger for building and i doubt that xcode project files 
+> from your 3.2 version are backwards compatible and useable by my old 
+> xcode. If you make changes to the xcode project files then i'll 
+> probably have to replicate those changes for the "official xcode' 
+> file, i.e., you must not commit your xcode project file into the svn.
+>
+> I plan to upgrade my development system to snow leopard and a modern 
+> xcode sometime next spring after i'm done with writing my thesis. Then 
+> we'll also have to see if it is possible to keep the powerpc platform 
+> supported somehow or not. At the moment, given my limited time, 
+> upgrading the official ptb to a modern xcode etc. is not possible. It 
+> would break backward compatibility.
+>
+>> 'Source/OSX/Screen/PsychMovieSupport.h') have a typo in the inclusion 
+>> of Quick Time headers.
+>>
+>> Currently: #include<Quicktime/Movies.h>
+>> Should be: #include<QuickTime/Movies.h>
+>>
+>
+> Hmm, they compile just fine, so this is a minor issue, but thanks for 
+> reporting.
+>
+> ciao,
+> -mario
+>
+> *********************************************************************
+> Mario Kleiner
+> Max Planck Institute for Biological Cybernetics
+> Spemannstr. 38
+> 72076 Tuebingen
+> Germany
+>
+> e-mail: mario.kleiner at tuebingen.mpg.de
+> office: +49 (0)7071/601-1623
+> fax:    +49 (0)7071/601-616
+> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+> *********************************************************************
+> "For a successful technology, reality must take precedence
+> over public relations, for Nature cannot be fooled."
+> (Richard Feynman)
+>
+
+-- 
+Jurnell Cockhren
+Systems Analyst/Programmer
+Vandervilt Vision Research Center
+521 Wilson Hall
+Phone: 615-343-9912
+
+
+

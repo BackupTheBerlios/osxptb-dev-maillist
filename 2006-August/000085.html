@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] timing &amp; UpTime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20timing%20%26%20UpTime&In-Reply-To=%3Cweb-22421092%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000084.html">
+   <LINK REL="Next"  HREF="000086.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] timing &amp; UpTime</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20timing%20%26%20UpTime&In-Reply-To=%3Cweb-22421092%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] timing &amp; UpTime">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Aug 18 17:27:23 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000084.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+        <LI>Next message: <A HREF="000086.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Allen is right, i made an inaccurate statement. The
+precision of GetSecs itself is as good as on OS-9 on all
+platforms. All operating systems use a high-res hardware
+timer. I referred to the fact that there is a small random
+delay between onset of vertical retrace and Matlab resuming
+its execution, taking the GetSecs timestamp and such. 
+
+When running under realtime priority (Time constraint in
+OS-X language) this jitter/delay is usually below 1 msec
+(My machine: 1.6 Ghz single proc G5 roughly 200
+microseconds.) The update --&gt; sigsetjmp problem is gone in
+10.4.7 due to improvements in Darwins kernel locking.
+However, there are other factors that influence the timing
+of a non-realtime general purpose system like OS-X and that
+can only be eliminated/limited by very careful software
+design and system setup, not by simply calling Priority()
+(which only tells the scheduler to prioritize execution of
+Matlab over all other processes). E.g., memory access: If
+the system runs low on memory and needs to page in/out data
+of the Matlab process to the swapfile, this will create
+multi-millisecond random delays. Or if one uses hardware
+with bad device drivers that introduce latencies and such.
+
+These, usually very seldom, timing spikes are noticed by a
+simple GetSecs measurement, but the Screen('Flip') command
+compensates for such stuff by use of the display rasterbeam
+position as an additional &quot;video-locked&quot; high precision
+timesource to correct the internal GetSecs timestamp
+appropriately. That is why 'Flip' always robustly reports
+true stimulus onset, whereas the standard Screen('Flip');
+t=GetSecs() method in FlipTest is affected by such random
+delays. So 'Flip' tells you about real stimulus onset, the
+discrepancy between 'Flip' timestamps and timestamps taken
+with GetSecs tells you something about the timing noise
+present in the execution of the Matlab code.
+
+All in all the PTB timing facilities should be at
+least/more robust and precise than the old PTB's one.
+
+This all still doesn't solve Christophers problems though.
+Such a machine as his one should have a much better timing,
+unless something is screwed.
+
+Sorry for the confusion &amp; best,
+-mario
+
+
+On Fri, 18 Aug 2006 09:43:10 -0400
+ &quot;Allen W. Ingling&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">allen_ingling at mac.com</A>&gt; wrote:
+&gt;<i> 
+</I>&gt;<i> On Aug 18, 2006, at 3:08 AM, Denis Pelli wrote:
+</I>&gt;<i> 
+</I>&gt;<i> &gt; dear mario
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; you say below that:
+</I>&gt;<i> &gt;&gt; The timing that GetSecs returns (as in FlipTest) is
+</I>&gt;<i> affected by  
+</I>&gt;<i> &gt;&gt; operating system scheduling jitter.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; oh dear. that's disappointing. I wrote GetSecs for OS9.
+</I>&gt;<i> It is based  
+</I>&gt;<i> &gt; on a Mac OS9 call, UpTime, that accesses a hardware
+</I>&gt;<i> counter inside  
+</I>&gt;<i> &gt; the PowerPC chip. Nothing ever interrupts that counter,
+</I>&gt;<i> so GetSecs  
+</I>&gt;<i> &gt; always gives reliable time under OS9. We accessed that
+</I>&gt;<i> count  
+</I>&gt;<i> &gt; through the Mac OS UpTime call, but it was my
+</I>&gt;<i> impression that a few  
+</I>&gt;<i> &gt; lines of machine code would have done as well.
+</I>&gt;<i> 
+</I>&gt;<i> The system scheduler determines when the timer is read.
+</I>&gt;<i>  That is  
+</I>&gt;<i> independent of the precision of the timer itself.
+</I>&gt;<i> 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; i could understand losing this capability with the
+</I>&gt;<i> Intel processor  
+</I>&gt;<i> &gt; since that processor may not have the counter. But it
+</I>&gt;<i> would be my  
+</I>&gt;<i> &gt; guess that all the powerpc chips have this counter and
+</I>&gt;<i> it seems a  
+</I>&gt;<i> &gt; great shame not to use it. Being able to time things
+</I>&gt;<i> accurately  
+</I>&gt;<i> &gt; from a high-level MATLAB program is invaluable. It
+</I>&gt;<i> allows users to  
+</I>&gt;<i> &gt; test the timing of everything.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; i googled UpTime (too many false hits) and
+</I>&gt;<i> AbsoluteToNanoseconds  
+</I>&gt;<i> &gt; (better) and found many pages devoted to this. It
+</I>&gt;<i> appears to me  
+</I>&gt;<i> &gt; that Apple has maintained support for this important
+</I>&gt;<i> call in Mac OS  
+</I>&gt;<i> &gt; X. Thus there appears to be no reason for us not to
+</I>&gt;<i> continue using it.
+</I>&gt;<i> 
+</I>&gt;<i> GetSecs does use the high-precision hardware timer.
+</I>&gt;<i> 
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt; However, Mario doesn't say whether the poor performance
+</I>&gt;<i> of GetSecs  
+</I>&gt;<i> &gt; is due to switching to a new call, or due to a change
+</I>&gt;<i> in the Apple  
+</I>&gt;<i> &gt; implementation of UpTime. It is conceivable that UpTime
+</I>&gt;<i> has been  
+</I>&gt;<i> &gt; ruined, but I hope not....
+</I>&gt;<i> 
+</I>&gt;<i> There is no problem with the timer.
+</I>&gt;<i> 
+</I>&gt;<i> As for dealing with the jitter in the Darwin scheduler:
+</I>&gt;<i>  That can be  
+</I>&gt;<i> confined to set bounds.  Look at the parameters of the
+</I>&gt;<i> call which  
+</I>&gt;<i> sets &quot;time constraint priority&quot;.  The limit of jitter is
+</I>&gt;<i> determined  
+</I>&gt;<i> by parameters to that call.
+</I>&gt;<i> 
+</I>&gt;<i> The  &quot;time constraint priority&quot;  setting is reliable
+</I>&gt;<i> except for  
+</I>&gt;<i> problems with the sigsetjmp call in MATLAB setting kernel
+</I>&gt;<i> locks.
+</I>&gt;<i> 
+</I>&gt;<i> best,
+</I>&gt;<i> 
+</I>&gt;<i> Allen
+</I>&gt;<i> 
+</I>&gt;<i> P.S.  I'll be out of town for a few days, so in case
+</I>&gt;<i> there is a  
+</I>&gt;<i> followup discussion, get back to everyone later.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Osxptb-dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">https://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000084.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+	<LI>Next message: <A HREF="000086.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#85">[ date ]</a>
+              <a href="thread.html#85">[ thread ]</a>
+              <a href="subject.html#85">[ subject ]</a>
+              <a href="author.html#85">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

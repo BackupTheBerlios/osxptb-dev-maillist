@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Updates from OS 9 version
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-July/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Updates%20from%20OS%209%20version&In-Reply-To=%3CA6DF9CCA-6C59-4B87-A504-958A83A27FAE%40psych.upenn.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000077.html">
+   <LINK REL="Next"  HREF="000079.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Updates from OS 9 version</H1>
+    <B>David Brainard</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Updates%20from%20OS%209%20version&In-Reply-To=%3CA6DF9CCA-6C59-4B87-A504-958A83A27FAE%40psych.upenn.edu%3E"
+       TITLE="[Osxptb-dev] Updates from OS 9 version">brainard at psych.upenn.edu
+       </A><BR>
+    <I>Fri Jul 28 18:04:34 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000077.html">[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!
+</A></li>
+        <LI>Next message: <A HREF="000079.html">[Osxptb-dev] Updates from OS 9 version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#78">[ date ]</a>
+              <a href="thread.html#78">[ thread ]</a>
+              <a href="subject.html#78">[ subject ]</a>
+              <a href="author.html#78">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>		
+Hi,
+
+Chris B. and I have gone through with a file compare utility and  
+moved a bunch of MATLAB code from the OS 9 version into the OS X  
+version.  I think this gets most of the non-display stuff imported  
+and up to date.  I am about to switch my OS/X machines over to point  
+at the OS X version, so if there are any omissions that we use in our  
+calculations we'll find them and fix them.  A list of the changes is  
+below.  Chris will shortly move these into the trunk on Berlios (some  
+are done already).  Then we'd like to push them over to the beta  
+version.  I'll leave Chris and Mario to work out the protocol for  
+doing that.
+
+I did notice going through that there are a lot of demos and tests  
+that don't have corresponding entries in the Contents.m files.  I'd  
+encourage anyone adding or subtracting files to try to keep the  
+Contents files up to date -- they are very helpful in the long run,  
+but less so if they are inaccurate.
+
+Denis, looking over the demo and test folders reinforces my  
+enthusiasm for seeing if the core grant will spring for someone whose  
+job is simply to convert, clean, and document demos and tests.
+
+Best,
+
+David
+
+**************
+
+Updated OSX version from OS9 by copying file over
+   PsychOneLiners/AreStructsEqualOnFields.m
+   PsychCal/CalibrateMonDrvr.m
+   PsychColorimetric/ComputeDKL_M.m
+   PsychColorimetric/SplineCmf.m
+   PsychColorimetricData/PsychColorimetricMatFiles: Contents.m
+   PsychColorimetricData/PsychColorimetric: Contents.m
+
+Added to OS/X version
+   Only in PsychCal: DropCalBits.m
+   Only in PsychColorimetricData/PsychColorimetricMatFiles: B_vrhel.mat
+   Only in PsychColorimetricData/PsychColorimetricMatFiles:  
+sur_vrhel.mat
+
+Deleted from OS/X version, don't need for new programs
+   PsychCal/PsychCalObsolete
+
+Edited
+   PsychDemos: Contents.m
+   PsychDemos: StressQuickTimeOSX
+   PsychFiles: Contents.m
+   PsychTests: Contents.m
+
+Changed name
+   PsychDemos: stressQuickTimeOSX -&gt; StressQuickTimeOSX
+
+Added to OS/X version
+   Only in PsychDemos: IsomerizationsInDishDemo.m
+   Only in PsychDemos: IsomerizationsInEyeDemo.m
+   Only in PsychDemos: NomogramDemo.m
+   Only in PsychDemos: ValetonVanNorrenDemo.m
+   Only in PsychDemos: FitGammaDemo.m
+   Only in PsychDemos: DKLDemo.m
+   Only in PsychFiles: ReadStructsFromText.m
+   Only in PsychFiles: WriteStructsToText.m
+   Only in PsychFiles: LiteralUnderscore.m
+   Only in PsychFiles: FindFolder.m
+   Only in PsychTests: FitCumNormYNTest.m
+   Only in PsychTests: FitWeibullTAFCTest.m
+   Only in PsychTests: FitWeibullYNTest.m
+   Only in PsychTests: LabLuvTest.m
+   Only in PsychTests: OSAUCSTest.m
+   Only in PsychTests: PupilDiameterTest.m
+   Only in PsychTests: StructsFileTest.m
+   Only in PsychTests: TrolandTest.m
+   Only in PsychTests: WavelengthSamplingTest.m
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000077.html">[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!
+</A></li>
+	<LI>Next message: <A HREF="000079.html">[Osxptb-dev] Updates from OS 9 version
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#78">[ date ]</a>
+              <a href="thread.html#78">[ thread ]</a>
+              <a href="subject.html#78">[ subject ]</a>
+              <a href="author.html#78">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

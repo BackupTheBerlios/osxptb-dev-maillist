@@ -1,0 +1,400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Stimulus timestamps, stimulus timing and such for PTB-OSX
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Stimulus%20timestamps%2C%20stimulus%20timing%20and%20such%20for%20PTB-OSX&In-Reply-To=%3C43D6EA7E.1010507%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000033.html">
+   <LINK REL="Next"  HREF="000035.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Stimulus timestamps, stimulus timing and such for PTB-OSX</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Stimulus%20timestamps%2C%20stimulus%20timing%20and%20such%20for%20PTB-OSX&In-Reply-To=%3C43D6EA7E.1010507%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Stimulus timestamps, stimulus timing and such for PTB-OSX">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Wed Jan 25 04:03:26 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000033.html">[Osxptb-dev] eyelink toolbox OSX
+</A></li>
+        <LI>Next message: <A HREF="000035.html">[Osxptb-dev] NEW: Improved OS-9 compatibility, Offscreen windows et al., M$-Windows port of OpenGL Psychtoolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello Richard,
+
+this is a long and detailled answer. I CC it to the developer 
+mailing-list for documentation and to Christopher Taylor. I also CC 
+David Jones because he seems to be especially interested in accurate 
+stimulus timing, so this e-mail may give him enough technical details to 
+understand this aspect of the implemetation.
+
+Here we go...
+
+Richard Murray wrote:
+&gt;&gt;<i> The second is your implementation of glm_swapbuffers() in
+</I>&gt;&gt;<i> your &quot;minimalistic Psychtoolbox&quot;: The way you collect
+</I>&gt;&gt;<i> timestamps for buffer-swaps will not work reliably.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Hi, Mario.  I've got a question about this.  I find that if I just  run 
+</I>&gt;<i> through a loop that does nothing but call aglSwapBuffers, it  takes 
+</I>&gt;<i> about one second to loop 60 times.  So apparently my program is  not 
+</I>&gt;<i> just sending a &quot;swap-buffer&quot; signal to the graphics card, and  
+</I>&gt;<i> continuing along its way.  Somewhere, it's pausing to wait for the  
+</I>&gt;<i> vertical retrace.  If it's not pausing at aglSwapBuffers, it's hard  to 
+</I>&gt;<i> imagine where else it might be pausing, which makes me think that  
+</I>&gt;<i> getting a timestamp immediately after aglSwapBuffers should be OK.
+</I>&gt;<i> 
+</I>&gt;<i> Can you explain again why this won't work?
+</I>&gt;<i> 
+</I>&gt;<i> Is it that the first aglSwapBuffers command just sends the swap- buffer 
+</I>&gt;<i> signal and then continues on, but the second aglSwapBuffers  command has 
+</I>&gt;<i> to wait until the first swap-buffer signal has been acted  on?
+</I>
+Short answer: Yes, that's the reason.
+
+Long answer:  Let me explain in a *lot* of detail...
+
+For any OpenGL application at the level of the gfx-driver and hardware 
+roughly this happens:
+
+OpenGL calls are translated by the gfx-driver into sequences of simpler 
+low-level commands that the gfx-hardware directly understands. These 
+commands are put into a queue (of limited capacity) and then your C-code 
+continues execution: The graphics driver - and therefore execution of 
+your C-code - only blocks/pauses if either a glFinish() command has been 
+submitted ( in this case the driver waits for a hardware interrupt from 
+the gfx-card until it continues), or if the command queue is full.
+
+The gfx-hardware automatically dequeues and processes low-level commands 
+when they are available in the queue, in parallel to and independent of 
+the rest of the system.
+
+Conceptually, a mapping may look like this:
+
+OpenGL-Code:            Graphics hardware command stream tokens:
+1. aglswapbuffers()     1.1. WAIT_FOR_ENGINE_IDLE
+                         1.2. TRIGGER_PAGEFLIP (in sync with VBL)
+
+2. OpenGL-drawing cmd.  2.1  3D_LOWLEVEL_CMD_x
+                         2.2  3D_LOWLEVEL_CMD_y
+                         ...
+4. glFinish()           4.1  WAIT_FOR_ENGINE_IDLE
+                         4.2  SEND_INTERRUPT_TO_HOST
+
+WAIT_FOR_ENGINE_IDLE tells the gfx-hardware to complete all preceding 
+drawing commands in the queue before continuation of stream-parsing.
+
+TRIGGER_PAGEFLIP tells the hardware to prepare and trigger/enable a 
+bufferswap on next retrace, but immediately continue stream-parsing 
+after preparation, unless a bufferswap from an earlier TRIGGER_PAGEFLIP 
+is still pending -- then it has to pause until that request is 
+processed. If VBL-syncing is disabled, it won't wait for retrace but 
+flip the buffers immediately, of course...
+
+3D_LOWLEVEL_CMDs are just submitted to the lower-level hardware and 
+processed by it -- there is a lot of parallelism in a modern graphics 
+processor at many different levels, that's why modern 400$ gfx-cards 
+often have the computing horsepower of more than 10 high-end G5's. This 
+drawing commands only have to pause/wait if a bufferswap is pending, 
+because until swap-completion, the backbuffer is not ready for drawing a 
+new stimulus...
+
+SEND_INTERRUPT_TO_HOST -- sends a hardware interrupt to the host 
+computer so the gfx-driver gets signalled about some event and can react 
+properly.
+
+Now you can see some examples and how they may behave timing-wise in 
+your C-Code:
+
+t1=getsecs();
+for i=1 to 1000
+glm_swapbuffers;
+end;
+tswap = (getsecs - t1)/1000;
+
+Possibly hundreds of WAIT_FOR_ENGINE_IDLE, TRIGGER_PAGEFLIP pairs can 
+get submitted into the queue in a fraction of a second, until the queue 
+is full and your C-Code will have to block. The gfx-hardware just eats 
+the WAIT_FOR_ENGINE_IDLE in zero-time, because you didn't submit drawing 
+commands so the drawing engine is idle all the time. Normally it would 
+ensure that the stimulus is completely finished drawing before 
+displaying it onscreen. The first TRIGGER_PAGEFLIP will take nearly zero 
+time, because it just signals/prepares the bufferswap without waiting 
+for it to complete, but the next TRIGGER_PAGEFLIP will pause the 
+hardware until the previously triggered swap is completed, and so on... 
+--&gt; The queue gets emptied at a rate of say 60 command-pairs per second 
+on a 60 Hz display, so the code above will report an execution time of 
+getsecs - t1 = 999*16.6ms, because your C code blocks for dozens of 
+seconds until the queue is ready again - or it stutters along when a bit 
+of space becomes available in the queue --&gt; Seems like one call took 
+16.6 ms...
+
+--&gt; Average swap rate is 60 Hz, but only averaged over all frames!
+
+How your code really behaves, depends on the size of your gfx-command 
+queue, the exact version/type of operating system and the gfx-driver 
+version. Earlier OS-X versions behaved differently than current ones, 
+NVidia can behave different from ATI, M$-Windows or Linux differs... -- 
+Some implementations limit the number of SwapBuffer commands that can be 
+submitted without pausing to something like 2 - This is to prevent 
+applications from running too far ahead in time with respect to the 
+display refresh, because that could cause problems for interactive 
+applications. On some M$-Windows machines one can even configure this 
+maximum drawahead count... The current OS-X 10.4.4 on my NVidia hardware 
+seems to limit this to two calls, your machine may do the same, but 
+older OS versions behaved differently...
+
+Case 2: Use of glFinish()
+
+for i=1:1000
+   glm_swapbuffers;
+   glFinish();
+   tonset=getsecs()
+end;
+
+Sequence is now 
+1.WAIT_FOR_ENGINE_IDLE-&gt;2.TRIGGER_PAGEFLIP-&gt;3.WAIT_FOR_ENGINE_IDLE-&gt;SENDINTERRUPTTOHOST-&gt;...
+
+1. is free as above, 2. is free as above, 3. is free as above, 4. will 
+send the interrupt to immediately unblock your code which was waiting 
+for the interrupt in glFinish(), so the first loop iteration will 
+execute in nearly zero time. The following loop iterations are 
+different: Following TRIGGER_PAGEFLIPs will block until swap-completion, 
+so the SENDINTERRUPTTOHOST commands will delay until swap-completion, so 
+your C-code will block in glFinish() until swap happens. All except the 
+first loop iteration will show proper durations of 16.6 ms aka 60 Hz.
+
+Problem is: In a typical psychophysics script, you don't draw &amp; swap at 
+*each single* monitor refresh interval (unless you do fast periodic 
+animation) but possibly at a rate of only every n'th interval or even 
+after a waiting time of hundreds of Milliseconds. Whenever the pause 
+between two aglSwapBuffers() is bigger than one monitor refresh 
+interval, the TRIGGER_PAGEFLIP won't have to block until VBL so 
+glFinish() will not wait for glm_swapbuffers to complete. ---&gt; Very 
+puzzling 'tonset' stimulus presentation timestamps, not related to the 
+expected values or to the real stimulus timing...
+
+
+--&gt; aglSwapBuffers aka TRIGGER_PAGEFLIP is not a reliable general way to 
+synchronize your *code* or Matlab to the VBL, not even with glFinish(), 
+although it guarantees a perfectly synced stimulus onset, just not any 
+meaningful robust timestamps related to that...
+
+The solution that PTB uses and that should always work in the expected 
+way on any OpenGL system, aka block code execution until the bufferswap 
+really happened:
+
+for i=1:1000
+   glm_swapbuffers;
+   glBegin(GL_POINTS)
+   glVertex2i(10,10);
+   glEnd;
+   glFinish;
+   tonset=getsecs()
+end;
+
+This translates into something like:
+
+1. aglswapbuffers()     1.1. WAIT_FOR_ENGINE_IDLE
+                         1.2. TRIGGER_PAGEFLIP (in sync with VBL)
+
+2. glBegin(GL_POINTS)   2.0  3D_PRIMITIVE_SELECT_POINTS
+    glVertexi(10,10)     2.1  3D_VERTEX_SUBMIT_C2_INT32_(10,10)
+    glEnd()              2.2  3D_PRIMITIVE_END
+                         ...
+4. glFinish()           4.1  WAIT_FOR_ENGINE_IDLE
+                         4.2  SEND_INTERRUPT_TO_HOST
+
+5. Driver waits for Interrupt from gfx-hardware, aka pauses in 
+glFinish() until IRQ arrived, then returns control to your code.
+
+6. Take timestamp.
+
+
+So 1.1, 1.2 excecute in nearly zero time as in examples above, but 2.1 
+is a drawing command, so it *has* to wait until the bufferswap has 
+really happened before the backbuffer is ready for use and it continue 
+execution. 4.1 will be nearly zero time as drawing a single pixel via 
+glVertex() takes only a fraction of a microsecond. 4.2 will send the 
+interrupt which wakes up your code -&gt; glFinish() returns -&gt; timestamp is 
+taken. --&gt; You'll always get a timestamp related to the real bufferswap.
+
+The only remaining source of timestamp jitter is the delay between 
+receiving the hardware interrupt by the graphics driver and the 
+continuation of your code by the operating system in response to the 
+interrupt. This scheduling jitter depends on many events in the system - 
+usually it is in the sub-millisecond range if Priority() and Rush() are 
+used properly on a well prepared system, but it can jump up to multiple 
+milliseconds occasionally. On OS-X the Psychtoolbox uses a trick to 
+account for the jitter and correct the timestamp to the true time of VBL 
+onset:
+
+When taking the timestamp, we query the rasterbeam-position of the 
+display via CGDisplayBeamposition(cgdisplayid). As we therefore know the 
+number of scanlines the beam travelled since VBL onset and the total 
+height of the display in scanlines and the duration of one monitor 
+refresh interval, we can compute the time elapsed since VBL onset aka 
+bufferswap. We subtract this time from our getsecs() timestamp to get 
+the true onset time. --&gt; This gives you submillisecond precision... -- 
+On my machine e.g., average jitter reduces from 150 microseconds to 10 
+microseconds and any multi-millisecond spikes disappear.
+
+We have a lot of code in Screen('OpenWindow') to calibrate this whole 
+mechanism and perform all kinds of paranoid timing-checks to make sure 
+this beast works properly.
+
+Bufferswaps in sync with VBL are performed in sub-microsecond time on 
+any gfx-hardware, because a bufferswap just swaps the values of two 
+memory address registers in the gfx-hardware, basically two memory 
+pointers into VRAM memory: One points to the start of the memory buffer 
+which holds the current image for display scanout (frontbuffer), the 
+other one points to the start of the memory buffer to which the drawing 
+engine directs its pixel writes (backbuffer)... --&gt; Only about 8 Bytes 
+need to be copied, not multi-megabyte image buffers or multi-kilobyte 
+CLUTS for CLUT animation. And this exchange is handled by logic 
+circuitry in the hardware, independent of the operating system and its 
+drivers - and the associated delays...
+
+That's why TRIGGER_PAGEFLIP is fast: Exchange content of two hardware 
+registers to prepare the swap and then set a single trigger-bit in the 
+hardware to enable the swapping circuitry in the hardware...
+
+
+Another interesting issue for high-performance rendering is the role of 
+glFlush() and glFinish():
+
+Each glFinish() and each aglSwapBuffers() call first executes an 
+implicit glFlush() before doing the stuff mentioned above...
+
+glFlush() flushes the command stream to the hardware. Technically the 
+OpenGL command queue is implemented as a linked list of a fixed number 
+of fixed size command buffers (DMA buffers). The gfx-driver, when 
+executing your OpenGL commands, queues up a batch of commands until such 
+a buffer is completely full. Then it signals the gfx-hardware to 
+automatically fetch this buffer from system RAM memory into local VRAM 
+memory via DMA transfers and to start processing that buffer in parallel 
+as explained above. The hardware will signal completion of a command 
+buffer to the driver via another hardware interrupt, so the OS can do 
+other stuff in the meantime...
+
+So, normally OpenGL commands are submitted in batches to the hardware, 
+one DMA buffer a time. This is done for efficiency reasons, but it can 
+have one unfriendly impact on stimulus presentation timing. If you only 
+submit a few OpenGL commands per drawn frame, because your stim is 
+relatively simple, then it may happen that the buffer is not filled up 
+completely by your few commands. In this case the gfx-hardware will not 
+immmediately execute your drawing commands but stay idle until either 
+aglSwapBuffers() enforces transmission of a partially filled buffer or a 
+system timer runs out that will enforce a pipeline flush every so and so 
+many hundred milliseconds if the buffers don't fill up.
+
+-&gt; Effectively it can happen that the gfx hardware doesn't process your 
+drawing commands until just before the stimulus onset deadline, then 
+starts drawing way too late and miss the next retrace (=your deadline) 
+because it can't finish before the deadline although there would have 
+been plenty of time for drawing the stimulus if it had started in time!
+
+You can intersperse glFlush() calls into your code to enforce early 
+start of processing in such cases, making optimal use of the parallelism 
+between main processor and graphics processor.
+
+Problem is: Each glFlush will submit one command buffer and the system 
+only has a limited number of them. Using too many glFlush()'es can cause 
+the system to run out of free buffers, so your code will block until 
+buffers become available again -- now the CPU is idle and you lose 
+performance! That's why Apple doesn't recommend use of glFlush() - it 
+can degrade performance if used in the wrong way.
+
+So here is what we did for Psychtoolbox:
+
+Whenever Screen('Flip', windowPtr [, when]) is called with a stimulus 
+onset deadline 'when' greater than zero, this means: Flip at the first 
+vertical retrace after system time 'when', instead of next retrace...
+
+If 'when' is sufficiently far in the future (aka not the next retrace), 
+we first call glFlush() to trigger immediate start of rendering of all 
+enqueued drawing commands, then we go to sleep until short before the 
+deadline, releasing the CPU for other processes in the system. GPU 
+executes our drawing commands, CPU executes system tasks like 
+sound-output, keyboard and mouse checks, queries to DAQ or other I/O 
+devices, whatever is needed to keep the system running well...
+
+Shortly before the deadline we wake up and do the swapbuffers(), 
+glVertex, glFinish() call so the gfx-hardware can lock onto onset of 
+next retrace and do a perfectly timed bufferswap.
+
+--&gt; This gives good parallelism/performance by default.
+
+If a user wants to draw a very demanding stimulus, he can lay out his 
+code for optimal performance:
+
+1. First the drawing commands that translate into OpenGL commands.
+2. Then a call to Screen('DrawingFinished') which is nothing else than 
+an explicit call to glFlush() to trigger immediate drawing of the stimulus.
+3. Then all other Matlab code, e.g., keyboard checks and such -- this is 
+now executed in parallel to stimulus drawing on the gfx-card.
+4. Then the Flip - call...
+
+--&gt; This can make a difference when demanding stimuli are drawn, 
+although i would guess that modern gfx-hardware will handle most stimuli 
+easily without such tricks.
+
+Everything i explained is only an approximation of what really happens. 
+The examples are based on what i learned during studies of 
+computer-graphics and graphics-hardware and by having a close look at 
+the Opensource ATI graphics driver for Linux + technical doc you can 
+find on OS-X's and Linux internals. The exact implementation differs for 
+each model of gfx-card / OS out there and is confidential information, 
+so the details are in the dark unless you have very special connections 
+to ATI, Apple or NVidia ...
+
+Don't know if this info will be useful for you, but in case you need it...
+
+I wrote this down in so much detail for the other developers, because 
+the source-code documentation doesn't explain this stuff in enough 
+detail. At some point we may use this e-mail as a draft for proper 
+technical documentation of PTB's inner working.
+
+Best,
+-mario
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000033.html">[Osxptb-dev] eyelink toolbox OSX
+</A></li>
+	<LI>Next message: <A HREF="000035.html">[Osxptb-dev] NEW: Improved OS-9 compatibility, Offscreen windows et al., M$-Windows port of OpenGL Psychtoolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#34">[ date ]</a>
+              <a href="thread.html#34">[ thread ]</a>
+              <a href="subject.html#34">[ subject ]</a>
+              <a href="author.html#34">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

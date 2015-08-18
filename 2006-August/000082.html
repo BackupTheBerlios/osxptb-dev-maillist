@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] timing question
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20timing%20question&In-Reply-To=%3C44E506FC.9060004%40sas.upenn.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000081.html">
+   <LINK REL="Next"  HREF="000083.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] timing question</H1>
+    <B>Christopher Broussard</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20timing%20question&In-Reply-To=%3C44E506FC.9060004%40sas.upenn.edu%3E"
+       TITLE="[Osxptb-dev] timing question">chrg at sas.upenn.edu
+       </A><BR>
+    <I>Fri Aug 18 02:17:00 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000081.html">[Osxptb-dev] timing question
+</A></li>
+        <LI>Next message: <A HREF="000083.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#82">[ date ]</a>
+              <a href="thread.html#82">[ thread ]</a>
+              <a href="subject.html#82">[ subject ]</a>
+              <a href="author.html#82">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>    I ran these tests with all other programs closed just to make sure 
+that one of them wasn't interfering.  I don't have a virus scanner, the 
+only thing I can imagine constantly doing stuff in the background would 
+be Spotlight.  I'm at home so I can't give you the exact specs of my 
+work computer, but I believe it is a dual G5 2GHz, with 2GB memory, and 
+a GeForce 6600 w/ 256MB VRAM.  The main goal of trying to figure all 
+this stuff out is to figure out why I get frame skips in the stimulus 
+I'm coding up.  I'm worried that Matlab is deciding to go out to lunch 
+and causing me to miss frames.
+    If it's possible, if any of you could run the FlipTest for a 
+duration of 8 seconds or so and do it several times, that would be great 
+so I could see if it's just my machine.  I think it was every 1 out 5 
+runs on average for me that have a timing blip.
+
+    -Chris-
+
+Mario Kleiner wrote:
+&gt;<i> The timing that 'Flip' returns is the correct one wrt. visual stimulus 
+</I>&gt;<i> onset. If display beamposition queries are supported (OS-X PowerPC all 
+</I>&gt;<i> gfx-cards and OS-X on Intel some gfx-cards), it uses some tricks to 
+</I>&gt;<i> make sure the returned timestamp is accurate in the submillisecond 
+</I>&gt;<i> range. The timing that GetSecs returns (as in FlipTest) is affected by 
+</I>&gt;<i> operating system scheduling jitter. Don't know what the cause is, but 
+</I>&gt;<i> could be some software running on your system (Spotlight Indexing, 
+</I>&gt;<i> Virus scanners, lots of other running Apps), or some Matlab issue. 
+</I>&gt;<i> Which Matlab version do you run? What system? Which gfx-card?
+</I>&gt;<i>
+</I>&gt;<i> -mario
+</I>&gt;<i>
+</I>&gt;<i> Christopher Broussard wrote:
+</I>&gt;&gt;<i> Hi everyone,
+</I>&gt;&gt;<i>     I've been trying to isolate a timing problem in a program I wrote 
+</I>&gt;&gt;<i> and, in the process, began looking at FlipTest to look at some basic 
+</I>&gt;&gt;<i> timing.  I found that if you make the test run for several seconds 
+</I>&gt;&gt;<i> that often you'll see large deviations from the frame rate on the 
+</I>&gt;&gt;<i> magnitude of  6-7 ms.  The times returned by Screen('Flip') however 
+</I>&gt;&gt;<i> look normal.  These tests were all done with the priority set to the 
+</I>&gt;&gt;<i> max, AlwaysKillUpdate present, and in mirrored window mode.  What 
+</I>&gt;&gt;<i> could be the cause of these timing issues and do you guys think it 
+</I>&gt;&gt;<i> may be something core to the toolbox or Matlab?  Any input would be 
+</I>&gt;&gt;<i> appreciated.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>     -Chris-
+</I>&gt;&gt;<i> _______________________________________________
+</I>&gt;&gt;<i> Osxptb-dev mailing list
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">https://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000081.html">[Osxptb-dev] timing question
+</A></li>
+	<LI>Next message: <A HREF="000083.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#82">[ date ]</a>
+              <a href="thread.html#82">[ thread ]</a>
+              <a href="subject.html#82">[ subject ]</a>
+              <a href="author.html#82">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

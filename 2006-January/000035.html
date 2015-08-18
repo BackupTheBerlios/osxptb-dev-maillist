@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] NEW: Improved OS-9 compatibility, Offscreen windows et al., M$-Windows port of OpenGL Psychtoolbox
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20NEW%3A%20Improved%20OS-9%20compatibility%2C%20Offscreen%20windows%20et%20al.%2C%0A%20M%24-Windows%20port%20of%20OpenGL%20Psychtoolbox&In-Reply-To=%3Cweb-17239718%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000034.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] NEW: Improved OS-9 compatibility, Offscreen windows et al., M$-Windows port of OpenGL Psychtoolbox</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20NEW%3A%20Improved%20OS-9%20compatibility%2C%20Offscreen%20windows%20et%20al.%2C%0A%20M%24-Windows%20port%20of%20OpenGL%20Psychtoolbox&In-Reply-To=%3Cweb-17239718%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] NEW: Improved OS-9 compatibility, Offscreen windows et al., M$-Windows port of OpenGL Psychtoolbox">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Tue Jan 31 03:41:38 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000034.html">[Osxptb-dev] Stimulus timestamps, stimulus timing and such for PTB-OSX
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hello all,
+
+the beta-branch of OS-X Psychtoolbox has
+received a massive update with lots of new
+experimental features:
+
+- Support for Offscreen windows is back:
+
+  Screen('OpenOffscreenWindow'),
+  and Screen('CopyWindow')
+  are back and should mostly behave like
+  they did in the past.
+
+  Drawing to Offscreen windows is possible
+  again.
+
+  Offscreen windows are implemented as
+  OpenGL textures, just like the textures that
+  you can create via Screen('MakeTexture'),
+  therefore you can mostly use Textures and
+  Offscreen windows interchangeably, e.g,
+  draw an Offscreen window via the 'DrawTexture'
+  function...
+
+* Some kind of compatibility mode to the old
+  drawing model of the MacOS-9 PTB has been
+  added. If you add the following line:
+
+  Screen('Preference','EmulateOldPTB',1)
+
+  to the top of your script (before any other Screen-
+  call), then PTB tries to behave like the old PTB.
+
+  The Screen('WaitBlanking') command then works
+  again and all drawing commands take effect
+  immediately...
+
+Please use this new features only if you either
+need to draw to Offscreen windows, or if you are
+absolutely unable to port OS-9 code to OS-X. Do
+not use it for writing new code!!!
+
+-&gt; Speed and efficiency of drawing in OS-9 mode
+will be significantly lower than in OS-X mode.
+
+-&gt; Memory consumption may be much higher.
+
+-&gt; Stimulus presentation timing of the new
+Screen('Flip') command is much more robust
+and accurate than with the old WaitBlanking method.
+Stimulus onset with 'Flip' is guaranteed to be well-
+defined (down to the microsecond level) and
+tear-free, whereas no such guarantees can be
+made at all for the old WaitBlanking method.
+
+-&gt; A huge number of new features as demonstrated
+by some of the PsychDemos is only possible when
+not using compatibility mode.
+
+-&gt; This code hasn't received much testing, so it
+may contain serious bugs. Support for
+compatibility mode is a *very low* priority for me.
+If you find problems, feel free to report them but
+i won't make a commitment to fix any of the
+reported problems in a short period of time (or
+to fix them at all). If this proves to be too
+troublesome, it will be removed again.
+
+-&gt; So if you are a user of the old OS-9 PTB,
+you may give it a try. If it works, it works, if it
+doesn't it doesn't. Feel free to report the problems
+and try to provide fixes for simple problems yourself.
+
+What definitely doesn't work is any kind of CLUT
+animation for now.
+
+If you find that this release breaks any of your
+existing OS-X code, please report it immediately.
+Keeping OS-X PTB well working is a much higher
+priority.
+
+Finally, beta contains the initial release of the
+OpenGL Psychtoolbox for Microsoft Windows.
+
+This is a hybrid of the old and new PTB:
+
+All M-Files are identical to the OS-X PTB.
+The Screen - Mex file is ported from the OS-X
+PTB. All other Mex-files are identical to the ones
+in the old Windows Psychtoolbox 2.54...
+
+Screen is mostly feature compatible to the
+Screen command in OS-X with the following
+exceptions:
+
+* Quicktime movie playback support is not
+available until Apple manages to provide
+a decent Quicktime-7 SDK for Windows
+instead of the brain-damage that they
+currently ship.
+
+* Multi display support is limited. PTB can't
+detect secondary displays of a multi-display
+setup yet, but if &quot;Desktop spanning&quot; is enabled,
+it can make use of a 2nd display for stereo-
+display purpose. Just run &quot;StereoDemo(4)&quot; to
+see how stereo-configurations are supported.
+Read message 4147 for info on how to do this
+on NVidia gfx-cards.
+
+* CLUT animation is not yet possible, so
+CLUTDemoOSX won't work, but linearizing
+or gamma-correcting displays is possible. See
+&quot;Screen LoadNormalizedGammaTable?&quot; for
+explanation.
+
+* Matlab version 5,6 and 7 should work.
+
+Transition from old WinPTB to the new one will
+be gradually. So if you are happy with your
+current Win 2.54 setup, stick to it. If you want
+to use one of the new features, give the beta
+a try... This is a beta release, so it will certainly
+contain some bugs that will take time to fix...
+
+What else is new in this beta - release?
+
+The flicker-test sheet has been removed which
+used to show up on dual-display setups. It
+used to confuse and annoy users. You can
+find a new PerceptualVBLSyncTest.m test in
+the PsychTest folder which is a good replacement.
+
+
+Download works as follows:
+
+If you already have the &quot;UpdatePsychtoolbox&quot; script,
+then just follow its instructions.
+
+If you are a new would-be user of 'beta', please
+download:
+
+&lt;<A HREF="http://www.kyb.tuebingen.mpg.de/bu/people/kleinerm/ptbosx/DownloadPsychtoolbox.m">http://www.kyb.tuebingen.mpg.de/bu/people/kleinerm/ptbosx/DownloadPsychtoolbox.m</A>&gt;
+
+Put it into your Matlab path, type
+&quot;help DownloadPsychtoolbox&quot; and follow the
+instructions. Make sure to finally invoke
+the script with the flavor argument set to
+'beta' ...
+
+
+Again, 'beta' contains experimental code for
+integration into future official releases, so
+test carefully, use with caution, don't bet
+on it working out of the box flawlessly...
+
+Good luck,
+-mario
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000034.html">[Osxptb-dev] Stimulus timestamps, stimulus timing and such for PTB-OSX
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#35">[ date ]</a>
+              <a href="thread.html#35">[ thread ]</a>
+              <a href="subject.html#35">[ subject ]</a>
+              <a href="author.html#35">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] merging trunk into beta
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20merging%20trunk%20into%20beta&In-Reply-To=%3C44996906.9010801%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000048.html">
+   <LINK REL="Next"  HREF="000051.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] merging trunk into beta</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20merging%20trunk%20into%20beta&In-Reply-To=%3C44996906.9010801%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] merging trunk into beta">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Wed Jun 21 17:43:02 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000048.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+        <LI>Next message: <A HREF="000051.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Allen,
+
+you can merge your changes whenever you want. With changes of others i'd 
+say, read the associated log messages and decide if they sound like 
+something that's safe to merge. One can merge a specific subset of 
+changes via &quot;svn merge -r start:end trunk/ beta/&quot;  where start is the 
+revision number of the first thing to merge, end the one of the last 
+thing to include. When i merge from trunk i usually try to merge 
+everything since the last merge into beta to make life simple, i.e., svn 
+merge -r lastmergedrevision:HEAD trunk/ beta/
+
+I only omit (merge around) other peoples change if the log messages 
+sound like the changes could break functionality in beta, or they are 
+not yet well tested.
+
+My own rules are like:
+
+1. Whatever is committed into trunk should at least compile and not 
+severely break functionality, so other developers can always update from 
+trunk and work on the code without having to fight bugs introduced by 
+others. -&gt; Either make small incremental commits or commit consistent 
+chunks.
+
+-&gt; That's what you do as well.
+
+2. Code merged into beta should be somewhat stable, as many people use 
+beta for real work -- which is encouraged, given that stable is many 
+month behind beta. It's ok if new features are merged into beta that 
+don't break old features of beta, even if this new features are 
+incomplete, work in progress, e.g., fine-tuning and more debugging 
+needed, interface subject to change. Only code in stable should not 
+change in functionality or interface (well more functionality is always 
+good, but removing functionality, massive incompatible change to 
+behaviour or interface are not good), as people should be able to rely 
+on &quot;code working with stable at point t still works with the same 
+behaviour at t + x month&quot;.
+
+3. I often commit &quot;mostly working, but not yet completely polished&quot; 
+features into beta to simplify merging, but i simply don't announce them 
+on the forum until i'm confident they are really ok.
+
+best,
+-mario
+
+
+Allen W. Ingling wrote:
+&gt;<i> 
+</I>&gt;<i> Hi Mario,
+</I>&gt;<i> 
+</I>&gt;<i> When can I merge the trunk into the beta fork?    Whenever I want?
+</I>&gt;<i> 
+</I>&gt;<i> Others merging my own changes from trunk into beta should always be  ok; 
+</I>&gt;<i> That should not displace something working in beta with something  
+</I>&gt;<i> unworking in trunk, because I commit stuff into trunk in chunks which  
+</I>&gt;<i> do not require subsequent commits to function.  At least it is my  plan 
+</I>&gt;<i> that what I put in trunk be complete enough to build and  execute, even 
+</I>&gt;<i> if not feature-complete.
+</I>&gt;<i> 
+</I>&gt;<i> So can I assume that others with write access to the repository are  
+</I>&gt;<i> doing the same and that I can merge trunk into beta whenever?
+</I>&gt;<i> 
+</I>&gt;<i> best,
+</I>&gt;<i> 
+</I>&gt;<i>  Allen
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Osxptb-dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/osxptb-dev">http://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+*********************************************************************
+&quot;Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000048.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+	<LI>Next message: <A HREF="000051.html">[Osxptb-dev] merging trunk into beta
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Xcode 3.2 compilation and Octave
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2010-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Xcode%203.2%20compilation%20and%20Octave&In-Reply-To=%3C4C647098.4080302%40vanderbilt.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000094.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Xcode 3.2 compilation and Octave</H1>
+    <B>Jurnell Cockhren</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Xcode%203.2%20compilation%20and%20Octave&In-Reply-To=%3C4C647098.4080302%40vanderbilt.edu%3E"
+       TITLE="[Osxptb-dev] Xcode 3.2 compilation and Octave">jurnell.cockhren at vanderbilt.edu
+       </A><BR>
+    <I>Fri Aug 13 00:07:20 CEST 2010</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000094.html">[Osxptb-dev] Xcode 3.2 compilation and Octave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hey,
+I would like to look into ramping up the Octave support (just for OSX 
+for right now). But first I want to recompile a typical target like 
+'GetSecs intel'. I used the project files in the PsychSourceGL/Projects 
+and they load just fine. I read the README file in the PsychSourceGL and 
+it stated:
+
+&quot;B. If your MATLAB path is /Applications/SomethingElse where 
+SomethingElse names a version of MATLAB better than MATLAB701, then 
+either this file is out of date or the project itself is out of date. 
+Please send mail to the Psychtoolbox forum and we will correct it.&quot;
+
+I'm using version 2010a (Xcode version 3.2 on snow leopard) and there 
+isn't a &quot;mexversion.c&quot; file located anywhere within the Matlab 
+application package. How do I go about compiling one of the Intel 
+targets? Also, I noticed that some of the OSX specific source files 
+(like 'Source/OSX/Screen/PsychMovieSupport.h') have a typo in the 
+inclusion of Quick Time headers.
+
+Currently: #include&lt;Quicktime/Movies.h&gt;
+Should be: #include&lt;QuickTime/Movies.h&gt;
+
+Thanks,
+Jurnell
+
+-- 
+Jurnell Cockhren
+Systems Analyst/Programmer
+Vandervilt Vision Research Center
+521 Wilson Hall
+Phone: 615-343-9912
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000094.html">[Osxptb-dev] Xcode 3.2 compilation and Octave
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#93">[ date ]</a>
+              <a href="thread.html#93">[ thread ]</a>
+              <a href="subject.html#93">[ subject ]</a>
+              <a href="author.html#93">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

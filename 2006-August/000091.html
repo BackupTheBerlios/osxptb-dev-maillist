@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] PTB Download counting...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20PTB%20Download%20counting...&In-Reply-To=%3C44F39349.8030303%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000090.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] PTB Download counting...</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20PTB%20Download%20counting...&In-Reply-To=%3C44F39349.8030303%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] PTB Download counting...">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Tue Aug 29 03:07:21 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000090.html">[Osxptb-dev] javaaddpath
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+following my own advice, i've implemented some online-registration 
+mechanism, ready for internal testing.
+
+It works as follows:
+
+At the end of each successfull download or update of PTB, the 
+downloader/updater calls the PsychtoolboxPostInstallRoutine.m, which in 
+turn calls the function PsychtoolboxRegistration.m
+
+PsychtoolboxRegistration collects some info about the intalled PTB, 
+e.g., &quot;stable&quot; or &quot;beta&quot;, &quot;Matlab&quot; or &quot;Octave&quot;, Matlabversion, Operating 
+system (OS-X,Windows,Linux), update or download, date of transaction and 
+the MAC address of the primary network adapter as a unique identifier of 
+the computer. It then assembles some one-line string of this info and 
+sends it to our server, using the GPL'ed netcat utility, which is 
+available by default on any OS-X/Linux system and included in PTB for 
+M$-Windows. The script is robust against failing network connections and 
+such, so even if online registration fails, the user should be left with 
+a working working copy.
+
+In the managementtools subfolder of trunk you'll find the shell script 
+&quot;psychregistrationserver.sh&quot;. It implements the most minimalistic server 
+that is conceivable. When started in a command window on the server 
+machine, it will listen on port 2000 of the machine and write all 
+registration info into a log file for later parsing.
+
+What one of you needs to do:
+
+1. Update to latest rev. of trunk.
+2. On the server machine (www.psychtoolbox.org ?), enable port 2000 for 
+incoming connections in the firewall settings of the machine.
+3. Start the psychregistrationserver.sh script, following the 
+instructions at the top of the file.
+4. Modify PsychtoolboxRegistration.m so it accesses the server machine 
+(currently set to &quot;localhost&quot; -&gt; replace by e.g,. &quot;www.psychtoolbox.org&quot;)
+
+5. Play around with it and see if it works. Customize the help text of 
+PsychtoolboxRegistration.m to your needs...
+
+-&gt; You can select any port-number between 1025 and 65535, the number 
+2000 was an arbitrary choice, just make sure its not used by anything 
+else and the same port is given in server, firewall settings and M-File.
+
+-&gt; Customize the server-script so it writes its log file somewhere else 
+than /tmp/ptbregistrationlog.txt
+
+-&gt; This simple server is not robust against receiving corrupted or 
+invalid input or other unfriendly things, but we could replace it 
+anytime by some own implementation...
+
+The written log-file can be quickly parsed via some Unix commandline tools.
+
+Examples: (Assuming /tmp/ptblog is the log file)
+
+cut -d &quot;&lt;&quot; -f 1-3,10 /tmp/ptblog | grep beta | uniq -c
+--&gt; Count total number of 'beta' flavors used.
+
+cut -d &quot;&lt;&quot; -f 1-3 /tmp/testlog | uniq -c
+--&gt; Count total number of installed working copies.
+
+The MAC address (fields -f 1-3) is used to disambiguate multiple 
+downloads/updates from the same machine, so each installation is only 
+counted once.
+
+For more complex statistics, we could write parsers in Matlab.
+
+The stuff has been tested on Linux, OS-X 10.3.9, 10.4.7, Windows 2000/XP 
+with multiple Matlab versions, so it should work.
+
+Please give it a try, customize it etc. After some testing, we can merge 
+it into beta and stable.
+
+best,
+-mario
+
+
+
+Denis Pelli wrote:
+&gt;<i> dear david, chris, and mario
+</I>&gt;<i> 
+</I>&gt;<i> please welcome Roy Han, who will be working part time, in my lab, during 
+</I>&gt;<i> August to enhance the Demos and Help text in the OSX Psychtoolbox. Roy 
+</I>&gt;<i> is doing a Masters in Computer Science at Columbia, and has a background 
+</I>&gt;<i> in Neural Science at NYU.
+</I>&gt;<i> 
+</I>&gt;<i> i'd like to bring up an item for discussion. (this is not related to 
+</I>&gt;<i> Roy's work.)
+</I>&gt;<i> 
+</I>&gt;<i> we used to count downloads, and i think this is one of our more 
+</I>&gt;<i> impressive stats. at present i have the impression that the berlios 
+</I>&gt;<i> update system lacks download counting. mario and i have both lamented 
+</I>&gt;<i> this, but haven't done anything about it.
+</I>&gt;<i> 
+</I>&gt;<i> i just read this in the FAQ page of a web site:
+</I>&gt;<i> 
+</I>&gt;<i> *Q:* Why do I need to register the beta to use the full functionality?
+</I>&gt;<i> 
+</I>&gt;<i> *A:* Firstly, this allows us to track the number of MySync users more 
+</I>&gt;<i> accurately than download figures.
+</I>&gt;<i> 
+</I>&gt;<i> Secondly, it gives the registration system some exposure to the real world.
+</I>&gt;<i> 
+</I>&gt;<i> if we asked for an email address, to &quot;register&quot;, the list of unique 
+</I>&gt;<i> email addresses would be a much more accurate estimate of how many 
+</I>&gt;<i> people have downloaded our software, since multiple downloads by the 
+</I>&gt;<i> same person would be largely discounted. 
+</I>&gt;<i> 
+</I>&gt;<i> actually, instead of recording an email address, we could record the IP 
+</I>&gt;<i> address of the computer requesting the download. this is just as useful 
+</I>&gt;<i> and doesn't require bothering the user. we can harvest IP addresses for 
+</I>&gt;<i> both installation and update. we may not need to distinguish.
+</I>&gt;<i> 
+</I>&gt;<i> Once we have the unique IP addresses, i think there are two summary 
+</I>&gt;<i> statistics we'd like, to impress potential users and funding agencies:
+</I>&gt;<i> 
+</I>&gt;<i> 1. How many copies we've &quot;sold&quot;. Total count of unique IP addresses 
+</I>&gt;<i> harvested in all time.
+</I>&gt;<i> 
+</I>&gt;<i> 2. How many active users are there? Count the number of unique IP 
+</I>&gt;<i> addresses harvested in the past 12 months.(We could restrict this to 
+</I>&gt;<i> just Updates, on the grounds that perhaps we shouldn't count sites that 
+</I>&gt;<i> only installed and never updated.)
+</I>&gt;<i> 
+</I>&gt;<i> Hmm. We might want both for internal consumption, to detect trends in 
+</I>&gt;<i> usage, but unless things are going very badly the two numbers will be 
+</I>&gt;<i> very similar, and 1 will be bigger than 2 so we probably will just 
+</I>&gt;<i> report 1. So that is the goal i recommend:
+</I>&gt;<i> 
+</I>&gt;<i> Let's collect the IP address of every download/update, and count how 
+</I>&gt;<i> many are unique.
+</I>&gt;<i> 
+</I>&gt;<i> i realize that keeping statistics is a diversion from developing the 
+</I>&gt;<i> Psychtoolbox itself, but some stats have been very valuable in the past 
+</I>&gt;<i> (especially the list of grants and papers that cite us), and the IP 
+</I>&gt;<i> count cannot be generated at the last minute, so if something like this 
+</I>&gt;<i> is possible it might be worth investing a bit of time into now.  i'm 
+</I>&gt;<i> sure that what i'm suggesting is doable, but i don't know whether it'd 
+</I>&gt;<i> be hard or easy. that would affect whether we'll want to do it.
+</I>&gt;<i> 
+</I>&gt;<i> (artists call this &quot;documenting&quot;. in the era of happenings and 
+</I>&gt;<i> installations, the event may leave no professionally-adequate trace 
+</I>&gt;<i> unless someone makes an effort to record and document its occurrence.)
+</I>&gt;<i> 
+</I>&gt;<i> thoughts?
+</I>&gt;<i> 
+</I>&gt;<i> best
+</I>&gt;<i> 
+</I>&gt;<i> denis
+</I>&gt;<i> 
+</I>&gt;<i> Denis Pelli
+</I>&gt;<i> Professor of Psychology and Neural Science
+</I>&gt;<i> <A HREF="http://psych.nyu.edu/pelli/">http://psych.nyu.edu/pelli/</A>
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+*********************************************************************
+&quot;Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000090.html">[Osxptb-dev] javaaddpath
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#91">[ date ]</a>
+              <a href="thread.html#91">[ thread ]</a>
+              <a href="subject.html#91">[ subject ]</a>
+              <a href="author.html#91">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

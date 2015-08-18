@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] PsychCopyInCharArg missing?
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20PsychCopyInCharArg%20missing%3F&In-Reply-To=%3CA172FAB4-0CEC-400B-AF0E-19F3E09F52DA%40mac.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000054.html">
+   <LINK REL="Next"  HREF="000062.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] PsychCopyInCharArg missing?</H1>
+    <B>Allen W. Ingling</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20PsychCopyInCharArg%20missing%3F&In-Reply-To=%3CA172FAB4-0CEC-400B-AF0E-19F3E09F52DA%40mac.com%3E"
+       TITLE="[Osxptb-dev] PsychCopyInCharArg missing?">allen_ingling at mac.com
+       </A><BR>
+    <I>Sat Jun 24 05:56:36 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000054.html">[Osxptb-dev] PsychCopyInCharArg missing?
+</A></li>
+        <LI>Next message: <A HREF="000062.html">[Osxptb-dev] svn GUI's
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jun 22, 2006, at 5:20 PM, Frans Cornelissen wrote:
+
+
+&gt;<i> I need to pass a char to my (eyelink) function &quot;SendButtonPress&quot;..  
+</I>&gt;<i> but there appears to be no PsychCopyInCharArg.. I now see that  
+</I>&gt;<i> &quot;screendrawtext&quot; uses &quot;PsychAllocInCharArg&quot; to obtain a string.
+</I>
+Hi Frans,
+
+PsychAllocInCharArg() is indeed the correct  function to use for that  
+purpose.
+
+
+&gt;<i> The accompanying text suggests that there may an issue with using  
+</I>&gt;<i> this function (allocation of memory that isn't used).
+</I>
+Are you referring to the following comment appearing above the  
+definition of PsychAllocInCharArg() in PsychScriptingGlue.cc?
+
+This function violates the rule for AllocIn fuctions that if the  
+argument is optional and absent we allocate
+space.  That turns out to be an unuseful feature anyway, so we should  
+probably get rid of it.
+
+If so, there should be no cause for concern.  It only means that if  
+the caller in the MATLAB environment does not pass an argument then  
+PsychAllocInCharArg does not allocate memory to hold the non-existent  
+argument.  For other PsychAlloc* functions which do allocate memory  
+when no argument is present there is still no leak because the memory  
+is automatically freed when the thread exits the mex function and  
+returns to MATLAB.
+
+Note that a pointer to memory allocated by PsychAllocInCharArg upon  
+entering into the mex file remains valid only until the thread exits  
+the mex function; The pointer to input values received from the  
+previous call to a mex function is invalid upon reentry to the mex  
+function.  If between invocations of your mex file you need to retain  
+the contents of memory holding an input argument, then copy those  
+contents to memory which the mex file owns.  In this respect, the  
+Psych Scripting Glue and MATLAB mex APIs are the same.
+
+best,
+
+Allen
+
+
+
+
+
+
+On Jun 22, 2006, at 5:20 PM, Frans Cornelissen wrote:
+
+&gt;<i> Hi,
+</I>&gt;<i>
+</I>&gt;<i> While developing for the EyelinkToolbox, I appear to have run into  
+</I>&gt;<i> a problem.
+</I>&gt;<i> I need to pass a char to my (eyelink) function &quot;SendButtonPress&quot;,  
+</I>&gt;<i> that communicates key presses to the eyelink system,
+</I>&gt;<i> but there appears to be no PsychCopyInCharArg.
+</I>&gt;<i> When I use PsychCopyInIntArg i get an error stating I am not  
+</I>&gt;<i> passing the correct type of argument.
+</I>&gt;<i>
+</I>&gt;<i> Any suggestion on how to tackle this?
+</I>&gt;<i>
+</I>&gt;<i> I now see that &quot;screendrawtext&quot; uses &quot;PsychAllocInCharArg&quot; to  
+</I>&gt;<i> obtain a string.
+</I>&gt;<i> Should I use this also for passing a single char?
+</I>&gt;<i> The accompanying text suggests that there may an issue with using  
+</I>&gt;<i> this function (allocation of memory that isn't used). Would this  
+</I>&gt;<i> result in a serious memory loop when used frequently in a loop?
+</I>&gt;<i>
+</I>&gt;<i> Thanks for any information.
+</I>&gt;<i> gr.
+</I>&gt;<i> frans
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -------------------------------------------
+</I>&gt;<i> Laboratory of Experimental Ophthalmology &amp; BCN NeuroImaging Centre,  
+</I>&gt;<i> School of Behavioural and Cognitive Neurosciences, University  
+</I>&gt;<i> Medical Centre Groningen,
+</I>&gt;<i> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+</I>&gt;<i> Email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/c168a4fc/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/c168a4fc/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000054.html">[Osxptb-dev] PsychCopyInCharArg missing?
+</A></li>
+	<LI>Next message: <A HREF="000062.html">[Osxptb-dev] svn GUI's
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#57">[ date ]</a>
+              <a href="thread.html#57">[ thread ]</a>
+              <a href="subject.html#57">[ subject ]</a>
+              <a href="author.html#57">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

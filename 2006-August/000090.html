@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] javaaddpath
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-August/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20javaaddpath&In-Reply-To=%3C44E69D54.7010308%40sas.upenn.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000089.html">
+   <LINK REL="Next"  HREF="000091.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] javaaddpath</H1>
+    <B>Christopher Broussard</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20javaaddpath&In-Reply-To=%3C44E69D54.7010308%40sas.upenn.edu%3E"
+       TITLE="[Osxptb-dev] javaaddpath">chrg at sas.upenn.edu
+       </A><BR>
+    <I>Sat Aug 19 07:10:44 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000089.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+        <LI>Next message: <A HREF="000091.html">[Osxptb-dev] PTB Download counting...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>GetChar and CharAvail for OSX use Java rather than a typical mex file.  
+In those files is a call to AddPsychJavaPath, which in turn call 
+javaaddpath which is a built in Matlab function.  The crappy thing about 
+javaaddpath is that it makes an internal call to &quot;clear java&quot;, which 
+trashes any globals or persistent variables that have been setup.  It 
+seems to me that it would be better if have users put the call to 
+AddPsychJavaPath in their Matlab startup script so that they aren't 
+wondering what happened to their globals or persistent variables.  Or if 
+there's a way to get Matlab to save the Java path we could put in some 
+call in the download script to set that up.  What do you guys think?
+
+    -Chris-
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000089.html">[Osxptb-dev] timing &amp; UpTime
+</A></li>
+	<LI>Next message: <A HREF="000091.html">[Osxptb-dev] PTB Download counting...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#90">[ date ]</a>
+              <a href="thread.html#90">[ thread ]</a>
+              <a href="subject.html#90">[ subject ]</a>
+              <a href="author.html#90">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

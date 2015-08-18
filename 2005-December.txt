@@ -1,0 +1,1981 @@
+From djsperka at ucdavis.edu  Tue Dec  6 21:25:56 2005
+From: djsperka at ucdavis.edu (Daniel Sperka)
+Date: Tue, 06 Dec 2005 12:25:56 -0800
+Subject: [Osxptb-dev] Re: OSX Eyelink Toolbox
+In-Reply-To: <F77FE242-5CAE-11DA-B580-000393D48314@rug.nl>
+References: <764e38540511221709y6cc2a8dcsaf9dd2a25592e0f1@mail.gmail.com> <web-15882453@tuebingen.mpg.de> <764e38540511231813k220d4592o47347ec3ae3cb245@mail.gmail.com> <F77FE242-5CAE-11DA-B580-000393D48314@rug.nl>
+Message-ID: <4395F3D4.3070304@ucdavis.edu>
+
+Hi -
+
+I'm just checking in to see where the Eyelink Toolbox for OSX now 
+resides. We have an interest in helping, and using, the ETB. We can 
+definitely contribute testing, and possibly contribute development as well.
+
+Has ETB made it into a source code repository somewhere? If so, what's 
+the ip?
+
+Many thanks, we're looking forward to participating!
+
+Dan
+
+
+
+
+Frans W. Cornelissen wrote:
+
+> Dear all,
+>
+> I'm occupied with other things right now but here some short answers:
+>
+> 1. Eyelink should best be a different project. Makes it easier to  
+> manage/develop, etc. It's really only using a few interface functions  
+> from PTB (and of course should interface seamlessly with the graphics).
+>
+> 2. No problem with it becoming open source (officially). I always  
+> considered it that way anyway.
+>
+>>>> Am i correct that the only connection is the
+>>>> need to display live-video from the eye-camera in a PTB
+>>>> Onscreen window, e.g., for tracker setup and calibration?
+>>>
+>
+> 3. Getting access to the onscreen window is indeed the only thing 
+> that  is needed. At least that was our goal with the new version (the 
+> old  version used many routines of the videotoolbox that were also  
+> hard-linked into the code. Not ideal)
+>
+> Our idea was that eyelink would fill some buffer with the  
+> eye/calibration-image data, and that we would use Screen's 'putimage'  
+> function to display this matrix as an image. This would remove need 
+> for  any actual graphics routines in eyelink.
+>
+> hope this helps for now. back Friday afternoon.
+>
+> gr.
+> frans
+>
+>
+>
+> Op 24-nov-05 om 3:13 heeft Chris Burns het volgende geschreven:
+>
+>> osxptb-dev,
+>>
+>> This sounds like a good idea and certainly Screen and PTB are already
+>> quite large.  We should think through what should and should not be
+>> included in the project.  My apologies for lumping the Eyelink Toolbox
+>> and Psych Toolboxes together, I tend to see them in the same realm.
+>> (CoderGuy, not VisionGuy.)  Frans should weigh in on this and David
+>> brought up some very good points also.
+>>
+>> You are correct on the ETB interface requirements to PTB.  However,
+>> the PTB has a lot of really useful wrappers around the Matlab
+>> routines.  I've developed a few Mex functions in the past, Matlab is a
+>> temper-mental beast, the PTB made coding very easy!  The PsychError,
+>> PsychHelp, PsychScripting... all very nice to work with.  So, could
+>> this be folded into a PsychFramework?
+>>
+>> Mario, regarding that ETB interface... I'm in a VSS-abstract crunch
+>> right now and have all but one of the eyelink functions I need working
+>> in a PTB Target.  I have no problem keeping this out of the repository
+>> until we sort out it's proper place, but I need this working asap...
+>> can you give me some pointers on gaining access to the Screen/Window
+>> interface?   Given the window index, I need access to that GLContext.
+>> I'm looking at WindowBank.h now, what else do I need?
+>>
+>> chris
+>>
+>> On 11/23/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+>>
+>>> Hi,
+>>>
+>>> in what sense does the Eyelink toolbox need to interface
+>>> with the PTB? Am i correct that the only connection is the
+>>> need to display live-video from the eye-camera in a PTB
+>>> Onscreen window, e.g., for tracker setup and calibration?
+>>>
+>>> In that case, i'd suggest doing the following to interface
+>>> with Screen, allowing for maximum flexibility and minimum
+>>> dependence:
+>>>
+>>> We create a few new PTB Screen - functions that allow 3rd
+>>> party mex-files, e.g., the Eyelink mexfile to safely
+>>> interface with the OpenGL core of Screen.
+>>>
+>>> Something like:
+>>>
+>>> Screen('BeginOpenGLOps', windowPtr);
+>>> -> This would tell PTB that some 3rd party mexfile would
+>>> like to perform OpenGL rendering into the PTB onscreen
+>>> window 'windowPtr'. PTB would activate the OpenGL context
+>>> associated with window windowPtr and make an internal
+>>> backup of all relevant OpenGL state (matrices, attributes).
+>>>
+>>> Then an external mexfile with arbitrary OpenGL code in it
+>>> could query the properties of the onscreen window and its
+>>> context, do arbitrary OpenGL rendering into the window...
+>>>
+>>> After this, one would call
+>>> Screen('EndOpenGLOps', windowPtr);
+>>> -> This would restore the state of windowPtr's OpenGL
+>>> context from the backup made by the preceding
+>>> 'BeginExter......' call.
+>>>
+>>> The Begin... and End... Screen-calls are basically a way to
+>>> give external files convenient acess to all OpenGL features
+>>> of a PTB window and at the same time to protect PTB's
+>>> internal working from buggy/misbehaving 3rd party code - or
+>>> at least to safely detect such harmful interactions...
+>>>
+>>> By binding the OpenGL default texture 0 or by
+>>> creating/managing own textures, such a file can manage its
+>>> own textures+state isolated from PTB's textures. E.g.
+>>> Eyelink.mex could use texture 0 as scratchpad for drawing
+>>> the current live-image from the trackercamera...
+>>>
+>>> If we provide two more Screen calls to directly manipulate
+>>> or retrieve infos stored in PTB's internal texture arrays,
+>>> we can allow a safe interaction between 3rd party .mexfiles
+>>> and PTB's texture drawing functions...
+>>>
+>>> I think this would not only solve interfacing between
+>>> Eyelink and PTB in an elegant way, but would also allow
+>>> quick integration of 3rd party OpenGL routines as separate
+>>> mex files. We wouldn't need to maintain/debug those files
+>>> as PTB is protected from their possible misbehaviour. The
+>>> files wouldn't need to know much about PTB's internal
+>>> structure, except for the proper use of the few well
+>>> defined Screen interface functions. The mex-files itself
+>>> would only consist of fully portable ANSI-C and OpenGL code
+>>> because all the tricky and OS dependent stuff like window
+>>> management, timed flipp'ing, timing, I/O and such is done
+>>> by PTB.
+>>>
+>>> I plan to extend PTB's current 2D drawing functions to 3D
+>>> in a limited/conservative fashion that allows to do some
+>>> basic 3D drawing in the way PTB users are naturally used to
+>>> from 2D, with integrated child-protection to protect the
+>>> users from the complexity and PTB from the users ;-)
+>>>
+>>> But unlocking more of OpenGL's features (high perf
+>>> rendering, lighting, GL-Shading language, reading and
+>>> manipulating 3D geometry from standard graphics packages
+>>> like 3D-StudioMAX, Maya, Blender) would be beneficial esp.
+>>> for research in high-level vision, e.g, object recognition,
+>>> and i don't think this should go into the Screen command -
+>>> would make Screen too complex and too bloated and too hard
+>>> to maintain. Separate mex files otoh would be a perfect
+>>> place for this kind of stuff.
+>>>
+>>> Given that PTB is now GPL, we can also easily interface
+>>> with other GPL'd LGPL'd code...
+>>>
+>>> What do you think?
+>>>
+>>> best,
+>>> -mario
+>>>
+>>>
+>>> On Tue, 22 Nov 2005 17:09:46 -0800
+>>>  Chris Burns <chris.d.burns at gmail.com> wrote:
+>>>
+>>>> Frans,
+>>>>
+>>>> Thanks for the code update!  I've been using your
+>>>> previous version, in
+>>>> a cut-and-paste fashion, updated to the new PTB
+>>>> functions.  This
+>>>> version should help speed up that work.  (And so far,
+>>>> Enno's code
+>>>> looks pretty good.)
+>>>>
+>>>> I need to get this working for our lab, so I'll get the
+>>>> ball rolling
+>>>> and check it into the server.  We use a small subset of
+>>>> the Eyelink
+>>>> Toolbox functionality though, and I'll be focusing on
+>>>> that in the
+>>>> near-term.  But I'll check in a working version and
+>>>> figure out an
+>>>> elegant way to check in this other code so that it can be
+>>>> used in
+>>>> future porting.  I'll send out a notice after the first
+>>>> check in.
+>>>>
+>>>> I do have one question:  I'm not clear on how the
+>>>> graphics should work
+>>>> in the  eyelink('initwindow') function.  Generally, how
+>>>> to render the
+>>>> camera images received on the ethernet port to the
+>>>> display.  Anything
+>>>> pointers on how to do this?
+>>>>
+>>>>
+>>>> chris
+>>>>
+>>>>
+>>>> On 11/22/05, Frans W. Cornelissen
+>>>> <f.w.cornelissen at rug.nl> wrote:
+>>>>
+>>>>> Dear all,
+>>>>>
+>>>>> There seems to be a growing interest in getting an OSX
+>>>>
+>>>> version of the
+>>>>
+>>>>> Eyelinktoolbox.
+>>>>>
+>>>>> Quite a while ago (2 years?) we (Enno Peters that is)
+>>>>
+>>>> started working
+>>>>
+>>>>> on a version but were sort of stopped by the lack of a
+>>>>
+>>>> stable
+>>>>
+>>>>> psychtoolbox. I call this our early alpha version. It
+>>>>
+>>>> actually worked
+>>>>
+>>>>> to some extent. I haven't gotten back to it yet, due
+>>>>
+>>>> mainly to a lack
+>>>>
+>>>>> of time (and Enno leaving for a proper job).
+>>>>>
+>>>>> Here's (a copy of) a message I wrote a while to another
+>>>>
+>>>>  wannabe
+>>>>
+>>>>> Eyelink porter (Daniel Sperka):
+>>>>>
+>>>> ---------------------------------------------------------
+>>>>
+>>>>> It would be timely if an OSX version of the Eyelink TB
+>>>>
+>>>> would come out
+>>>>
+>>>>> now. In my view the PTB is becoming really useful now,
+>>>>
+>>>> especially after
+>>>>
+>>>>> the improvements Mario Kleiner has been making.
+>>>>>
+>>>>> I believe a few months would be quite sufficient to get
+>>>>
+>>>> a working
+>>>>
+>>>>> version (like I mentioned, there is an early version
+>>>>
+>>>> that has some
+>>>>
+>>>>> functions working).
+>>>>>
+>>>>> There's a couple of things that I think need to be
+>>>>
+>>>> changed/improved:
+>>>>
+>>>>>
+>>>>> 1. Update to newest XCode/Matlab/PTB source code.
+>>>>
+>>>> Shouldn't be much of
+>>>>
+>>>>> an issue, but still.
+>>>>> 2. Check for updates in code with SR Research.
+>>>>> 3. Make sure we do not use any graphics other than via
+>>>>
+>>>> PTB (there is a
+>>>>
+>>>>> problem with the 'eye' graphic during calibration).
+>>>>> 4. Seperate out functions from 'shell' very much like
+>>>>
+>>>> current PTB does.
+>>>>
+>>>>> This is not an absolute necessity, but using the same
+>>>>
+>>>> methods as the
+>>>>
+>>>>> current PTB presumably would make things easier to
+>>>>
+>>>> maintain in the long
+>>>>
+>>>>> run.
+>>>>>
+>>>>> 5. Update many of the .m files to use e.g. new graphics
+>>>>
+>>>> calls of PTB.
+>>>>
+>>>>>
+>>>>> 6. Test everything for speed, delays, etc.
+>>>>>
+>>>>> 7. provide some support/updates.
+>>>>>
+>>>>> The OS9 code can be downloaded from
+>>>>>  http://www.psychtoolbox.org/eyelinktoolbox/downloads/
+>>>>> EyelinkToolbox_C_code_1.4.sit
+>>>>>   I believe this is the most recent OS9 code.
+>>>>>
+>>>>> I've traced some OSX code for you.  I am not entirely
+>>>>
+>>>> sure if it is
+>>>>
+>>>>> complete. Enno Peters wasn't a superbly organised
+>>>>
+>>>> programmer, and I
+>>>>
+>>>>> haven't looked at this project for quite a while.
+>>>>>
+>>>>> Download from
+>>>>>
+>>>>
+>>>   
+>>> http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19 -10
+>>>
+>>>>> -05.zip
+>>>>>
+>>>>> In principle I am very much open to a collaboration.
+>>>>>
+>>>>> --------------------
+>>>>>
+>>>>>
+>>>>> Here's a plan:
+>>>>> I am offering our code as a starter. If someone with a
+>>>>
+>>>> little time on
+>>>>
+>>>>> their hands (Chris?) would check the OSX source code
+>>>>
+>>>> into the/some CVS
+>>>>
+>>>>> server and do #1 on the list, that would be a step
+>>>>
+>>>> forward. (Then
+>>>>
+>>>>> please tell all other interested in development how to
+>>>>
+>>>> get to it.)
+>>>>
+>>>>> PTB in my view is about collaboration, rather than
+>>>>
+>>>> people reinventing
+>>>>
+>>>>> wheels (or even 30% of them). So, be fair and please
+>>>>
+>>>> use the head start
+>>>>
+>>>>> and collaborative opportunities available to create a
+>>>>
+>>>> full working
+>>>>
+>>>>> version of the ETB.
+>>>>> Also, it be nice if a reasonable degree of backward
+>>>>
+>>>> compatibility with
+>>>>
+>>>>> the OS9 version is maintained.
+>>>>>
+>>>>> My proposal is that those interested in Eyelink TB
+>>>>
+>>>> programming reply to
+>>>>
+>>>>> me, so that we continue the discussion in that group
+>>>>
+>>>> (and decide where
+>>>>
+>>>>> to do this). I can tell a bit more also about our ideas
+>>>>
+>>>> back then about
+>>>>
+>>>>> what ETB should be doing (and what not).
+>>>>>
+>>>>> Gr.
+>>>>> Frans
+>>>>>
+>>>
+>>>
+>>>
+> --------------------------------------------------------
+> Frans W.Cornelissen
+> Laboratory for Experimental Ophthalmology
+>     & BCN Neuro-imaging Center
+> School of Behavioural and Cognitive Neurosciences
+> University Medical Center Groningen
+> University of Groningen
+> PO Box 30.001
+> 9700 RB Groningen
+> Nederland
+>
+> email: f.w.cornelissen at rug.nl
+> Tel. LEO: +31 50 3614173 / 2510
+> Tel. NIC: +31 50 363 8801 / 5111
+>
+> http://franswcornelissen.webhop.org/
+>
+
+-- 
+=======================================================================
+
+Daniel J. Sperka, Ph. D.
+Software Developer/Analyst
+Center for Neuroscience
+University of California, Davis
+
+=======================================================================
+
+
+
+
+From chris.d.burns at gmail.com  Fri Dec  9 21:00:14 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Fri, 9 Dec 2005 12:00:14 -0800
+Subject: [Osxptb-dev] Eyelink Toolbox
+Message-ID: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+
+I would like to propose a short-term solution for Eyelink Toolbox
+development.  In a previous discussion, Mario proposed exposing some of the
+PTB functionality externally, so other projects, like an ETB project could
+use the PTB but without being part of the PTB project.  This is a great
+idea, but in the near-term, Frans, Daniel and I would like to continue with
+the OSX port of the ETB.  If it's ok by the group, I'd like for us to
+continue to piggy-back on the PTB project.
+
+Here's what I propose:  I'll create a new branch off the trunk, an Eyelink
+branch.  This branch would ONLY contain the Eyelink source files and a copy
+of the PsychToolbox.xcodeproj file, which includes the Eyelink target.  All
+of the PTB source files are linked to the new branch, so this does not
+create duplicate copies of the source.  Then we can continue with the ETB
+development, merging in PTB updates to benefit from bug-fixes and feature
+upgrades, but continue on a separate development path which would not affect
+the PTB.  At a later date, we could break the ETB off into a separate
+project or merge it back into the PTB.  Either would be easily doable.
+
+Feedback?
+
+chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051209/82e0b1d8/attachment.html>
+
+From f.w.cornelissen at rug.nl  Fri Dec  9 22:09:36 2005
+From: f.w.cornelissen at rug.nl (Frans W. Cornelissen)
+Date: Fri, 9 Dec 2005 22:09:36 +0100
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+Message-ID: <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+
+Chris,
+
+This sounds like an excellent (intermediate) solution. It would be nice 
+if you could, at some point, provide some details as on how to get code 
+and submit revised code.
+Mario has provided some simple scripts for PTB download, but I haven't 
+yet figured out how to get actual code.
+
+Gr.
+Frans
+
+
+Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+
+> I would like to propose a short-term solution for Eyelink Toolbox 
+> development.? In a previous discussion, Mario proposed exposing some 
+> of the PTB functionality externally, so other projects, like an ETB 
+> project could use the PTB but without being part of the PTB project.? 
+> This is a great idea, but in the near-term, Frans, Daniel and I would 
+> like to continue with the OSX port of the ETB.? If it's ok by the 
+> group, I'd like for us to continue to piggy-back on the PTB project.
+>
+> Here's what I propose:? I'll create a new branch off the trunk, an 
+> Eyelink branch.? This branch would ONLY contain the Eyelink source 
+> files and a copy of the PsychToolbox.xcodeproj file, which includes 
+> the Eyelink target.? All of the PTB source files are linked to the new 
+> branch, so this does not create duplicate copies of the source.? Then 
+> we can continue with the ETB development, merging in PTB updates to 
+> benefit from bug-fixes and feature upgrades, but continue on a 
+> separate development path which would not affect the PTB.? At a later 
+> date, we could break the ETB off into a separate project or merge it 
+> back into the PTB.? Either would be easily doable.
+>
+> Feedback?
+>
+> chris
+>
+>
+>
+--------------------------------------------------------
+Frans W.Cornelissen
+Laboratory for Experimental Ophthalmology
+	& BCN Neuro-imaging Center
+School of Behavioural and Cognitive Neurosciences
+University Medical Center Groningen
+University of Groningen
+PO Box 30.001
+9700 RB Groningen
+Nederland
+
+email: f.w.cornelissen at rug.nl
+Tel. LEO: +31 50 3614173 / 2510
+Tel. NIC: +31 50 363 8801 / 5111
+
+http://franswcornelissen.webhop.org/
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Dec  9 23:38:20 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 09 Dec 2005 23:38:20 +0100
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com> <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+Message-ID: <439A075C.5040204@tuebingen.mpg.de>
+
+Hi,
+
+the only interfacing that is needed between ETB and PTB is the ability 
+of ETB to draw into a PTB onscreen window for eyeimage preview. If you'd 
+just need this, short term you get it for free: After calling any Screen 
+command, e.g. Screen('DrawingFinished', win); the OpenGL context of 
+onscreen window 'win' is ready for drawing by e.g., ETB drawing code -- 
+this is a side effect of the implementation and as such, coding mistakes 
+in ETB's drawing code can affect PTB's behaviour. But i can add the 
+"proper" interface code with child-protection quickly (this weekend) if 
+you want...
+
+If you want to take advantage of more PTB features, e.g., the nice 
+Psychscripting-Glue implementation for interfacing with Matlab, then 
+your approach is good.
+
+But if you want to check-in ETB into the Berlios Psychtoolbox repository 
+anyway (Which would make it automatically Open-Source under GPL 
+license!), you could just add the Eyelink.mexmac target to the standard 
+Psychtoolbox source-tree. Just add it to 'trunk' - No need to create 
+another branch. The different Mex targets don't interact with each other 
+and i don't see how adding an Eyelink prototype to the 'trunk' could 
+affect the stability of PTB. It also doesn't affect development of other 
+parts of PTB, as long as nobody except you tries to compile the Eyelink 
+target.
+
+So simple solution: Chris adds the current Eyelink-Target to PTB's 
+'trunk'. Daniel and Frans get a PTB developer account for the PTB 
+project (with the help of Chris and David Brainard). Frans & Daniel 
+check out the SVN source tree and we can continue developing both in 
+parallel with minimal maintenance & synchronization overhead :)
+
+What do you think?
+-mario
+
+
+Frans W. Cornelissen wrote:
+> Chris,
+> 
+> This sounds like an excellent (intermediate) solution. It would be nice 
+> if you could, at some point, provide some details as on how to get code 
+> and submit revised code.
+> Mario has provided some simple scripts for PTB download, but I haven't 
+> yet figured out how to get actual code.
+> 
+> Gr.
+> Frans
+> 
+> 
+> Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+> 
+>> I would like to propose a short-term solution for Eyelink Toolbox 
+>> development.  In a previous discussion, Mario proposed exposing some 
+>> of the PTB functionality externally, so other projects, like an ETB 
+>> project could use the PTB but without being part of the PTB project.  
+>> This is a great idea, but in the near-term, Frans, Daniel and I would 
+>> like to continue with the OSX port of the ETB.  If it's ok by the 
+>> group, I'd like for us to continue to piggy-back on the PTB project.
+>>
+>> Here's what I propose:  I'll create a new branch off the trunk, an 
+>> Eyelink branch.  This branch would ONLY contain the Eyelink source 
+>> files and a copy of the PsychToolbox.xcodeproj file, which includes 
+>> the Eyelink target.  All of the PTB source files are linked to the new 
+>> branch, so this does not create duplicate copies of the source.  Then 
+>> we can continue with the ETB development, merging in PTB updates to 
+>> benefit from bug-fixes and feature upgrades, but continue on a 
+>> separate development path which would not affect the PTB.  At a later 
+>> date, we could break the ETB off into a separate project or merge it 
+>> back into the PTB.  Either would be easily doable.
+>>
+>> Feedback?
+>>
+>> chris
+>>
+>>
+>>
+> --------------------------------------------------------
+> Frans W.Cornelissen
+> Laboratory for Experimental Ophthalmology
+>     & BCN Neuro-imaging Center
+> School of Behavioural and Cognitive Neurosciences
+> University Medical Center Groningen
+> University of Groningen
+> PO Box 30.001
+> 9700 RB Groningen
+> Nederland
+> 
+> email: f.w.cornelissen at rug.nl
+> Tel. LEO: +31 50 3614173 / 2510
+> Tel. NIC: +31 50 363 8801 / 5111
+> 
+> http://franswcornelissen.webhop.org/
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-de
+> v
+
+
+
+
+From chris.d.burns at gmail.com  Sat Dec 10 00:09:58 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Fri, 9 Dec 2005 15:09:58 -0800
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <439A075C.5040204@tuebingen.mpg.de>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+	 <439A075C.5040204@tuebingen.mpg.de>
+Message-ID: <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>
+
+All of the existing Eyelink Toolbox code uses the PsychScriptingGlue (and
+PsychError, and maybe some other code too), approximately 40+ source files.
+It would take a lot of work to pull this apart and write the Matlab
+interface from scratch.  I'd like to continue using the Psych* functions.
+They are very user friendly too!
+
+The "simple solution", adding the Eyelink Target and Source to the trunk,
+would be ideal.   That's what I planned originally and the code exists in
+that format now.  I would only have to update my working copy, verify the
+code, commit and Daniel and Frans could begin using it.
+
+The Eyelink Branch idea was an attempt to include ETB in an out-of-sight
+out-of-mind way for the PTB team.  But if it's not an issue, than I'm happy
+to not add that complexity to the process.
+
+I think everyone agrees with GPL-ing the code.  Frans already gave the OK
+with his source. (presumably he speaks for the code even though Enno
+co-developed it?)  I'm ok with it, so we're all good.
+
+Chris
+
+On 12/9/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+>
+> Hi,
+>
+> the only interfacing that is needed between ETB and PTB is the ability
+> of ETB to draw into a PTB onscreen window for eyeimage preview. If you'd
+> just need this, short term you get it for free: After calling any Screen
+> command, e.g. Screen('DrawingFinished', win); the OpenGL context of
+> onscreen window 'win' is ready for drawing by e.g., ETB drawing code --
+> this is a side effect of the implementation and as such, coding mistakes
+> in ETB's drawing code can affect PTB's behaviour. But i can add the
+> "proper" interface code with child-protection quickly (this weekend) if
+> you want...
+>
+> If you want to take advantage of more PTB features, e.g., the nice
+> Psychscripting-Glue implementation for interfacing with Matlab, then
+> your approach is good.
+>
+> But if you want to check-in ETB into the Berlios Psychtoolbox repository
+> anyway (Which would make it automatically Open-Source under GPL
+> license!), you could just add the Eyelink.mexmac target to the standard
+> Psychtoolbox source-tree. Just add it to 'trunk' - No need to create
+> another branch. The different Mex targets don't interact with each other
+> and i don't see how adding an Eyelink prototype to the 'trunk' could
+> affect the stability of PTB. It also doesn't affect development of other
+> parts of PTB, as long as nobody except you tries to compile the Eyelink
+> target.
+>
+> So simple solution: Chris adds the current Eyelink-Target to PTB's
+> 'trunk'. Daniel and Frans get a PTB developer account for the PTB
+> project (with the help of Chris and David Brainard). Frans & Daniel
+> check out the SVN source tree and we can continue developing both in
+> parallel with minimal maintenance & synchronization overhead :)
+>
+> What do you think?
+> -mario
+>
+>
+> Frans W. Cornelissen wrote:
+> > Chris,
+> >
+> > This sounds like an excellent (intermediate) solution. It would be nice
+> > if you could, at some point, provide some details as on how to get code
+> > and submit revised code.
+> > Mario has provided some simple scripts for PTB download, but I haven't
+> > yet figured out how to get actual code.
+> >
+> > Gr.
+> > Frans
+> >
+> >
+> > Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+> >
+> >> I would like to propose a short-term solution for Eyelink Toolbox
+> >> development.  In a previous discussion, Mario proposed exposing some
+> >> of the PTB functionality externally, so other projects, like an ETB
+> >> project could use the PTB but without being part of the PTB project.
+> >> This is a great idea, but in the near-term, Frans, Daniel and I would
+> >> like to continue with the OSX port of the ETB.  If it's ok by the
+> >> group, I'd like for us to continue to piggy-back on the PTB project.
+> >>
+> >> Here's what I propose:  I'll create a new branch off the trunk, an
+> >> Eyelink branch.  This branch would ONLY contain the Eyelink source
+> >> files and a copy of the PsychToolbox.xcodeproj file, which includes
+> >> the Eyelink target.  All of the PTB source files are linked to the new
+> >> branch, so this does not create duplicate copies of the source.  Then
+> >> we can continue with the ETB development, merging in PTB updates to
+> >> benefit from bug-fixes and feature upgrades, but continue on a
+> >> separate development path which would not affect the PTB.  At a later
+> >> date, we could break the ETB off into a separate project or merge it
+> >> back into the PTB.  Either would be easily doable.
+> >>
+> >> Feedback?
+> >>
+> >> chris
+> >>
+> >>
+> >>
+> > --------------------------------------------------------
+> > Frans W.Cornelissen
+> > Laboratory for Experimental Ophthalmology
+> >     & BCN Neuro-imaging Center
+> > School of Behavioural and Cognitive Neurosciences
+> > University Medical Center Groningen
+> > University of Groningen
+> > PO Box 30.001
+> > 9700 RB Groningen
+> > Nederland
+> >
+> > email: f.w.cornelissen at rug.nl
+> > Tel. LEO: +31 50 3614173 / 2510
+> > Tel. NIC: +31 50 363 8801 / 5111
+> >
+> > http://franswcornelissen.webhop.org/
+> >
+> > _______________________________________________
+> > Osxptb-dev mailing list
+> > Osxptb-dev at lists.berlios.de
+> > http://lists.berlios.de/mailman/listinfo/osxptb-de
+> > v
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051209/10db4e61/attachment.html>
+
+From djsperka at ucdavis.edu  Sat Dec 10 01:24:55 2005
+From: djsperka at ucdavis.edu (Daniel Sperka)
+Date: Fri, 09 Dec 2005 16:24:55 -0800
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>	 <439A075C.5040204@tuebingen.mpg.de> <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>
+Message-ID: <439A2057.6050100@ucdavis.edu>
+
+Chris' and Mario's ideas sound good. I'm looking forward to getting my 
+hands on this stuff!
+
+Can somebody arrange for the developer accts soon? I'd very much 
+appreciate it! (Oh, and a little info like ip address, repository type 
+(SVN/CVS?) and which module(s) one requires to build. Thanks!
+
+Dan
+
+Chris Burns wrote:
+
+>All of the existing Eyelink Toolbox code uses the PsychScriptingGlue (and
+>PsychError, and maybe some other code too), approximately 40+ source files.
+>It would take a lot of work to pull this apart and write the Matlab
+>interface from scratch.  I'd like to continue using the Psych* functions.
+>They are very user friendly too!
+>
+>The "simple solution", adding the Eyelink Target and Source to the trunk,
+>would be ideal.   That's what I planned originally and the code exists in
+>that format now.  I would only have to update my working copy, verify the
+>code, commit and Daniel and Frans could begin using it.
+>
+>The Eyelink Branch idea was an attempt to include ETB in an out-of-sight
+>out-of-mind way for the PTB team.  But if it's not an issue, than I'm happy
+>to not add that complexity to the process.
+>
+>I think everyone agrees with GPL-ing the code.  Frans already gave the OK
+>with his source. (presumably he speaks for the code even though Enno
+>co-developed it?)  I'm ok with it, so we're all good.
+>
+>Chris
+>
+>On 12/9/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+>  
+>
+>>Hi,
+>>
+>>the only interfacing that is needed between ETB and PTB is the ability
+>>of ETB to draw into a PTB onscreen window for eyeimage preview. If you'd
+>>just need this, short term you get it for free: After calling any Screen
+>>command, e.g. Screen('DrawingFinished', win); the OpenGL context of
+>>onscreen window 'win' is ready for drawing by e.g., ETB drawing code --
+>>this is a side effect of the implementation and as such, coding mistakes
+>>in ETB's drawing code can affect PTB's behaviour. But i can add the
+>>"proper" interface code with child-protection quickly (this weekend) if
+>>you want...
+>>
+>>If you want to take advantage of more PTB features, e.g., the nice
+>>Psychscripting-Glue implementation for interfacing with Matlab, then
+>>your approach is good.
+>>
+>>But if you want to check-in ETB into the Berlios Psychtoolbox repository
+>>anyway (Which would make it automatically Open-Source under GPL
+>>license!), you could just add the Eyelink.mexmac target to the standard
+>>Psychtoolbox source-tree. Just add it to 'trunk' - No need to create
+>>another branch. The different Mex targets don't interact with each other
+>>and i don't see how adding an Eyelink prototype to the 'trunk' could
+>>affect the stability of PTB. It also doesn't affect development of other
+>>parts of PTB, as long as nobody except you tries to compile the Eyelink
+>>target.
+>>
+>>So simple solution: Chris adds the current Eyelink-Target to PTB's
+>>'trunk'. Daniel and Frans get a PTB developer account for the PTB
+>>project (with the help of Chris and David Brainard). Frans & Daniel
+>>check out the SVN source tree and we can continue developing both in
+>>parallel with minimal maintenance & synchronization overhead :)
+>>
+>>What do you think?
+>>-mario
+>>
+>>
+>>Frans W. Cornelissen wrote:
+>>    
+>>
+>>>Chris,
+>>>
+>>>This sounds like an excellent (intermediate) solution. It would be nice
+>>>if you could, at some point, provide some details as on how to get code
+>>>and submit revised code.
+>>>Mario has provided some simple scripts for PTB download, but I haven't
+>>>yet figured out how to get actual code.
+>>>
+>>>Gr.
+>>>Frans
+>>>
+>>>
+>>>Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+>>>
+>>>      
+>>>
+>>>>I would like to propose a short-term solution for Eyelink Toolbox
+>>>>development.  In a previous discussion, Mario proposed exposing some
+>>>>of the PTB functionality externally, so other projects, like an ETB
+>>>>project could use the PTB but without being part of the PTB project.
+>>>>This is a great idea, but in the near-term, Frans, Daniel and I would
+>>>>like to continue with the OSX port of the ETB.  If it's ok by the
+>>>>group, I'd like for us to continue to piggy-back on the PTB project.
+>>>>
+>>>>Here's what I propose:  I'll create a new branch off the trunk, an
+>>>>Eyelink branch.  This branch would ONLY contain the Eyelink source
+>>>>files and a copy of the PsychToolbox.xcodeproj file, which includes
+>>>>the Eyelink target.  All of the PTB source files are linked to the new
+>>>>branch, so this does not create duplicate copies of the source.  Then
+>>>>we can continue with the ETB development, merging in PTB updates to
+>>>>benefit from bug-fixes and feature upgrades, but continue on a
+>>>>separate development path which would not affect the PTB.  At a later
+>>>>date, we could break the ETB off into a separate project or merge it
+>>>>back into the PTB.  Either would be easily doable.
+>>>>
+>>>>Feedback?
+>>>>
+>>>>chris
+>>>>
+>>>>
+>>>>
+>>>>        
+>>>>
+>>>--------------------------------------------------------
+>>>Frans W.Cornelissen
+>>>Laboratory for Experimental Ophthalmology
+>>>    & BCN Neuro-imaging Center
+>>>School of Behavioural and Cognitive Neurosciences
+>>>University Medical Center Groningen
+>>>University of Groningen
+>>>PO Box 30.001
+>>>9700 RB Groningen
+>>>Nederland
+>>>
+>>>email: f.w.cornelissen at rug.nl
+>>>Tel. LEO: +31 50 3614173 / 2510
+>>>Tel. NIC: +31 50 363 8801 / 5111
+>>>
+>>>http://franswcornelissen.webhop.org/
+>>>
+>>>_______________________________________________
+>>>Osxptb-dev mailing list
+>>>Osxptb-dev at lists.berlios.de
+>>>http://lists.berlios.de/mailman/listinfo/osxptb-de
+>>>v
+>>>      
+>>>
+>>
+>>    
+>>
+>
+>  
+>
+
+-- 
+=======================================================================
+
+Daniel J. Sperka, Ph. D.
+Software Developer/Analyst
+Center for Neuroscience
+University of California, Davis
+
+=======================================================================
+
+
+
+
+From chris.d.burns at gmail.com  Sat Dec 10 00:34:52 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Fri, 9 Dec 2005 15:34:52 -0800
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <439A2057.6050100@ucdavis.edu>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+	 <439A075C.5040204@tuebingen.mpg.de>
+	 <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>
+	 <439A2057.6050100@ucdavis.edu>
+Message-ID: <764e38540512091534i7608b557s38723eb4d2ab83c4@mail.gmail.com>
+
+Daniel,
+
+We should wait for confirmation from David, Denis, and/or Allen on this
+before checking this in.  But here's some info:
+
+It's a Subversion repository hosted on an Open Source site called BerliOS.
+The project page is here:
+http://developer.berlios.de/projects/osxptb/
+
+From djsperka at ucdavis.edu  Wed Dec 14 20:28:12 2005
+From: djsperka at ucdavis.edu (Daniel Sperka)
+Date: Wed, 14 Dec 2005 11:28:12 -0800
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <764e38540512091534i7608b557s38723eb4d2ab83c4@mail.gmail.com>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>	 <439A075C.5040204@tuebingen.mpg.de>	 <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>	 <439A2057.6050100@ucdavis.edu> <764e38540512091534i7608b557s38723eb4d2ab83c4@mail.gmail.com>
+Message-ID: <43A0724C.5060503@ucdavis.edu>
+
+Any chance yet to check in the code? I don't want to be a pest, so 
+please understand. We're just eager. Thanks in advance.
+
+Dan
+
+Chris Burns wrote:
+
+>Daniel,
+>
+>We should wait for confirmation from David, Denis, and/or Allen on this
+>before checking this in.  But here's some info:
+>
+>It's a Subversion repository hosted on an Open Source site called BerliOS.
+>The project page is here:
+>http://developer.berlios.de/projects/osxptb/
+>
+>>From there you can subscribe to the mailing lists and view the source.
+>
+>WebSVN:
+>http://svn.berlios.de/wsvn/osxptb
+>
+>The Berlios Subversion How To:
+>http://developer.berlios.de/docman/display_doc.php?docid=394&group_id=2
+>
+>Online doc for Subversion:  http://svnbook.red-bean.com/
+>
+>David Brainard is the project admin, so he needs to add you to the list of
+>developers.
+>
+>I'll comment more on the code when it's committed.
+>
+>Chris
+>
+>On 12/9/05, Daniel Sperka <djsperka at ucdavis.edu > wrote:
+>  
+>
+>>Chris' and Mario's ideas sound good. I'm looking forward to getting my
+>>hands on this stuff!
+>>
+>>Can somebody arrange for the developer accts soon? I'd very much
+>>appreciate it! (Oh, and a little info like ip address, repository type
+>>(SVN/CVS?) and which module(s) one requires to build. Thanks!
+>>
+>>Dan
+>>
+>>Chris Burns wrote:
+>>
+>>    
+>>
+>>>All of the existing Eyelink Toolbox code uses the PsychScriptingGlue (and
+>>>PsychError, and maybe some other code too), approximately 40+ source
+>>>      
+>>>
+>>files.
+>>    
+>>
+>>>It would take a lot of work to pull this apart and write the Matlab
+>>>interface from scratch.  I'd like to continue using the Psych* functions.
+>>>They are very user friendly too!
+>>>
+>>>The "simple solution", adding the Eyelink Target and Source to the trunk,
+>>>would be ideal.   That's what I planned originally and the code exists in
+>>>that format now.  I would only have to update my working copy, verify the
+>>>code, commit and Daniel and Frans could begin using it.
+>>>
+>>>The Eyelink Branch idea was an attempt to include ETB in an out-of-sight
+>>>out-of-mind way for the PTB team.  But if it's not an issue, than I'm
+>>>      
+>>>
+>>happy
+>>    
+>>
+>>>to not add that complexity to the process.
+>>>
+>>>I think everyone agrees with GPL-ing the code.  Frans already gave the OK
+>>>with his source. (presumably he speaks for the code even though Enno
+>>>co-developed it?)  I'm ok with it, so we're all good.
+>>>
+>>>Chris
+>>>
+>>>On 12/9/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+>>>
+>>>
+>>>      
+>>>
+>>>>Hi,
+>>>>
+>>>>the only interfacing that is needed between ETB and PTB is the ability
+>>>>of ETB to draw into a PTB onscreen window for eyeimage preview. If you'd
+>>>>just need this, short term you get it for free: After calling any Screen
+>>>>command, e.g. Screen('DrawingFinished', win); the OpenGL context of
+>>>>onscreen window 'win' is ready for drawing by e.g., ETB drawing code --
+>>>>this is a side effect of the implementation and as such, coding mistakes
+>>>>in ETB's drawing code can affect PTB's behaviour. But i can add the
+>>>>"proper" interface code with child-protection quickly (this weekend) if
+>>>>you want...
+>>>>
+>>>>If you want to take advantage of more PTB features, e.g., the nice
+>>>>Psychscripting-Glue implementation for interfacing with Matlab, then
+>>>>your approach is good.
+>>>>
+>>>>But if you want to check-in ETB into the Berlios Psychtoolbox repository
+>>>>anyway (Which would make it automatically Open-Source under GPL
+>>>>license!), you could just add the Eyelink.mexmac target to the standard
+>>>>Psychtoolbox source-tree. Just add it to 'trunk' - No need to create
+>>>>another branch. The different Mex targets don't interact with each other
+>>>>and i don't see how adding an Eyelink prototype to the 'trunk' could
+>>>>affect the stability of PTB. It also doesn't affect development of other
+>>>>parts of PTB, as long as nobody except you tries to compile the Eyelink
+>>>>target.
+>>>>
+>>>>So simple solution: Chris adds the current Eyelink-Target to PTB's
+>>>>'trunk'. Daniel and Frans get a PTB developer account for the PTB
+>>>>project (with the help of Chris and David Brainard). Frans & Daniel
+>>>>check out the SVN source tree and we can continue developing both in
+>>>>parallel with minimal maintenance & synchronization overhead :)
+>>>>
+>>>>What do you think?
+>>>>-mario
+>>>>
+>>>>
+>>>>Frans W. Cornelissen wrote:
+>>>>
+>>>>
+>>>>        
+>>>>
+>>>>>Chris,
+>>>>>
+>>>>>This sounds like an excellent (intermediate) solution. It would be nice
+>>>>>if you could, at some point, provide some details as on how to get code
+>>>>>and submit revised code.
+>>>>>Mario has provided some simple scripts for PTB download, but I haven't
+>>>>>yet figured out how to get actual code.
+>>>>>
+>>>>>Gr.
+>>>>>Frans
+>>>>>
+>>>>>
+>>>>>Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+>>>>>
+>>>>>
+>>>>>
+>>>>>          
+>>>>>
+>>>>>>I would like to propose a short-term solution for Eyelink Toolbox
+>>>>>>development.  In a previous discussion, Mario proposed exposing some
+>>>>>>of the PTB functionality externally, so other projects, like an ETB
+>>>>>>project could use the PTB but without being part of the PTB project.
+>>>>>>This is a great idea, but in the near-term, Frans, Daniel and I would
+>>>>>>like to continue with the OSX port of the ETB.  If it's ok by the
+>>>>>>group, I'd like for us to continue to piggy-back on the PTB project.
+>>>>>>
+>>>>>>Here's what I propose:  I'll create a new branch off the trunk, an
+>>>>>>Eyelink branch.  This branch would ONLY contain the Eyelink source
+>>>>>>files and a copy of the PsychToolbox.xcodeproj file, which includes
+>>>>>>the Eyelink target.  All of the PTB source files are linked to the new
+>>>>>>            
+>>>>>>
+>>>>>>branch, so this does not create duplicate copies of the source.  Then
+>>>>>>we can continue with the ETB development, merging in PTB updates to
+>>>>>>benefit from bug-fixes and feature upgrades, but continue on a
+>>>>>>separate development path which would not affect the PTB.  At a later
+>>>>>>date, we could break the ETB off into a separate project or merge it
+>>>>>>back into the PTB.  Either would be easily doable.
+>>>>>>
+>>>>>>Feedback?
+>>>>>>
+>>>>>>chris
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>            
+>>>>>>
+>>>>>--------------------------------------------------------
+>>>>>Frans W.Cornelissen
+>>>>>Laboratory for Experimental Ophthalmology
+>>>>>   & BCN Neuro-imaging Center
+>>>>>School of Behavioural and Cognitive Neurosciences
+>>>>>University Medical Center Groningen
+>>>>>University of Groningen
+>>>>>PO Box 30.001
+>>>>>9700 RB Groningen
+>>>>>Nederland
+>>>>>
+>>>>>email: f.w.cornelissen at rug.nl
+>>>>>Tel. LEO: +31 50 3614173 / 2510
+>>>>>Tel. NIC: +31 50 363 8801 / 5111
+>>>>>
+>>>>>http://franswcornelissen.webhop.org/
+>>>>>
+>>>>>_______________________________________________
+>>>>>Osxptb-dev mailing list
+>>>>>Osxptb-dev at lists.berlios.de
+>>>>>http://lists.berlios.de/mailman/listinfo/osxptb-de
+>>>>>v
+>>>>>
+>>>>>
+>>>>>          
+>>>>>
+>>>>
+>>>>        
+>>>>
+>>>
+>>>      
+>>>
+>>--
+>>=======================================================================
+>>
+>>Daniel J. Sperka, Ph. D.
+>>Software Developer/Analyst
+>>Center for Neuroscience
+>>University of California, Davis
+>>
+>>=======================================================================
+>>
+>>
+>>
+>>    
+>>
+>
+>  
+>
+
+-- 
+=======================================================================
+
+Daniel J. Sperka, Ph. D.
+Software Developer/Analyst
+Center for Neuroscience
+University of California, Davis
+
+=======================================================================
+
+
+
+
+From chris.d.burns at gmail.com  Thu Dec 15 18:54:17 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Thu, 15 Dec 2005 09:54:17 -0800
+Subject: [Osxptb-dev] Re: Eyelink Toolbox
+In-Reply-To: <43A0724C.5060503@ucdavis.edu>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>
+	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>
+	 <439A075C.5040204@tuebingen.mpg.de>
+	 <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>
+	 <439A2057.6050100@ucdavis.edu>
+	 <764e38540512091534i7608b557s38723eb4d2ab83c4@mail.gmail.com>
+	 <43A0724C.5060503@ucdavis.edu>
+Message-ID: <764e38540512150954p5d3cda32i24d9f3c1976be3a4@mail.gmail.com>
+
+Not yet, I've scheduled it for tomorrow.  I'll email as soon as it's in.
+
+Chris
+
+
+On 12/14/05, Daniel Sperka <djsperka at ucdavis.edu> wrote:
+>
+> Any chance yet to check in the code? I don't want to be a pest, so
+> please understand. We're just eager. Thanks in advance.
+>
+> Dan
+>
+> Chris Burns wrote:
+>
+> >Daniel,
+> >
+> >We should wait for confirmation from David, Denis, and/or Allen on this
+> >before checking this in.  But here's some info:
+> >
+> >It's a Subversion repository hosted on an Open Source site called
+> BerliOS.
+> >The project page is here:
+> >http://developer.berlios.de/projects/osxptb/
+> >
+> >>From there you can subscribe to the mailing lists and view the source.
+> >
+> >WebSVN:
+> >http://svn.berlios.de/wsvn/osxptb
+> >
+> >The Berlios Subversion How To:
+> >http://developer.berlios.de/docman/display_doc.php?docid=394&group_id=2
+> >
+> >Online doc for Subversion:  http://svnbook.red-bean.com/
+> >
+> >David Brainard is the project admin, so he needs to add you to the list
+> of
+> >developers.
+> >
+> >I'll comment more on the code when it's committed.
+> >
+> >Chris
+> >
+> >On 12/9/05, Daniel Sperka <djsperka at ucdavis.edu > wrote:
+> >
+> >
+> >>Chris' and Mario's ideas sound good. I'm looking forward to getting my
+> >>hands on this stuff!
+> >>
+> >>Can somebody arrange for the developer accts soon? I'd very much
+> >>appreciate it! (Oh, and a little info like ip address, repository type
+> >>(SVN/CVS?) and which module(s) one requires to build. Thanks!
+> >>
+> >>Dan
+> >>
+> >>Chris Burns wrote:
+> >>
+> >>
+> >>
+> >>>All of the existing Eyelink Toolbox code uses the PsychScriptingGlue
+> (and
+> >>>PsychError, and maybe some other code too), approximately 40+ source
+> >>>
+> >>>
+> >>files.
+> >>
+> >>
+> >>>It would take a lot of work to pull this apart and write the Matlab
+> >>>interface from scratch.  I'd like to continue using the Psych*
+> functions.
+> >>>They are very user friendly too!
+> >>>
+> >>>The "simple solution", adding the Eyelink Target and Source to the
+> trunk,
+> >>>would be ideal.   That's what I planned originally and the code exists
+> in
+> >>>that format now.  I would only have to update my working copy, verify
+> the
+> >>>code, commit and Daniel and Frans could begin using it.
+> >>>
+> >>>The Eyelink Branch idea was an attempt to include ETB in an
+> out-of-sight
+> >>>out-of-mind way for the PTB team.  But if it's not an issue, than I'm
+> >>>
+> >>>
+> >>happy
+> >>
+> >>
+> >>>to not add that complexity to the process.
+> >>>
+> >>>I think everyone agrees with GPL-ing the code.  Frans already gave the
+> OK
+> >>>with his source. (presumably he speaks for the code even though Enno
+> >>>co-developed it?)  I'm ok with it, so we're all good.
+> >>>
+> >>>Chris
+> >>>
+> >>>On 12/9/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+> >>>
+> >>>
+> >>>
+> >>>
+> >>>>Hi,
+> >>>>
+> >>>>the only interfacing that is needed between ETB and PTB is the ability
+> >>>>of ETB to draw into a PTB onscreen window for eyeimage preview. If
+> you'd
+> >>>>just need this, short term you get it for free: After calling any
+> Screen
+> >>>>command, e.g. Screen('DrawingFinished', win); the OpenGL context of
+> >>>>onscreen window 'win' is ready for drawing by e.g., ETB drawing code
+> --
+> >>>>this is a side effect of the implementation and as such, coding
+> mistakes
+> >>>>in ETB's drawing code can affect PTB's behaviour. But i can add the
+> >>>>"proper" interface code with child-protection quickly (this weekend)
+> if
+> >>>>you want...
+> >>>>
+> >>>>If you want to take advantage of more PTB features, e.g., the nice
+> >>>>Psychscripting-Glue implementation for interfacing with Matlab, then
+> >>>>your approach is good.
+> >>>>
+> >>>>But if you want to check-in ETB into the Berlios Psychtoolbox
+> repository
+> >>>>anyway (Which would make it automatically Open-Source under GPL
+> >>>>license!), you could just add the Eyelink.mexmac target to the
+> standard
+> >>>>Psychtoolbox source-tree. Just add it to 'trunk' - No need to create
+> >>>>another branch. The different Mex targets don't interact with each
+> other
+> >>>>and i don't see how adding an Eyelink prototype to the 'trunk' could
+> >>>>affect the stability of PTB. It also doesn't affect development of
+> other
+> >>>>parts of PTB, as long as nobody except you tries to compile the
+> Eyelink
+> >>>>target.
+> >>>>
+> >>>>So simple solution: Chris adds the current Eyelink-Target to PTB's
+> >>>>'trunk'. Daniel and Frans get a PTB developer account for the PTB
+> >>>>project (with the help of Chris and David Brainard). Frans & Daniel
+> >>>>check out the SVN source tree and we can continue developing both in
+> >>>>parallel with minimal maintenance & synchronization overhead :)
+> >>>>
+> >>>>What do you think?
+> >>>>-mario
+> >>>>
+> >>>>
+> >>>>Frans W. Cornelissen wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>>
+> >>>>>Chris,
+> >>>>>
+> >>>>>This sounds like an excellent (intermediate) solution. It would be
+> nice
+> >>>>>if you could, at some point, provide some details as on how to get
+> code
+> >>>>>and submit revised code.
+> >>>>>Mario has provided some simple scripts for PTB download, but I
+> haven't
+> >>>>>yet figured out how to get actual code.
+> >>>>>
+> >>>>>Gr.
+> >>>>>Frans
+> >>>>>
+> >>>>>
+> >>>>>Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>>I would like to propose a short-term solution for Eyelink Toolbox
+> >>>>>>development.  In a previous discussion, Mario proposed exposing some
+> >>>>>>of the PTB functionality externally, so other projects, like an ETB
+> >>>>>>project could use the PTB but without being part of the PTB project.
+> >>>>>>This is a great idea, but in the near-term, Frans, Daniel and I
+> would
+> >>>>>>like to continue with the OSX port of the ETB.  If it's ok by the
+> >>>>>>group, I'd like for us to continue to piggy-back on the PTB project.
+> >>>>>>
+> >>>>>>Here's what I propose:  I'll create a new branch off the trunk, an
+> >>>>>>Eyelink branch.  This branch would ONLY contain the Eyelink source
+> >>>>>>files and a copy of the PsychToolbox.xcodeproj file, which includes
+> >>>>>>the Eyelink target.  All of the PTB source files are linked to the
+> new
+> >>>>>>
+> >>>>>>
+> >>>>>>branch, so this does not create duplicate copies of the
+> source.  Then
+> >>>>>>we can continue with the ETB development, merging in PTB updates to
+> >>>>>>benefit from bug-fixes and feature upgrades, but continue on a
+> >>>>>>separate development path which would not affect the PTB.  At a
+> later
+> >>>>>>date, we could break the ETB off into a separate project or merge it
+> >>>>>>back into the PTB.  Either would be easily doable.
+> >>>>>>
+> >>>>>>Feedback?
+> >>>>>>
+> >>>>>>chris
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>--------------------------------------------------------
+> >>>>>Frans W.Cornelissen
+> >>>>>Laboratory for Experimental Ophthalmology
+> >>>>>   & BCN Neuro-imaging Center
+> >>>>>School of Behavioural and Cognitive Neurosciences
+> >>>>>University Medical Center Groningen
+> >>>>>University of Groningen
+> >>>>>PO Box 30.001
+> >>>>>9700 RB Groningen
+> >>>>>Nederland
+> >>>>>
+> >>>>>email: f.w.cornelissen at rug.nl
+> >>>>>Tel. LEO: +31 50 3614173 / 2510
+> >>>>>Tel. NIC: +31 50 363 8801 / 5111
+> >>>>>
+> >>>>>http://franswcornelissen.webhop.org/
+> >>>>>
+> >>>>>_______________________________________________
+> >>>>>Osxptb-dev mailing list
+> >>>>>Osxptb-dev at lists.berlios.de
+> >>>>>http://lists.berlios.de/mailman/listinfo/osxptb-de
+> >>>>>v
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>
+> >>>>
+> >>>>
+> >>>
+> >>>
+> >>>
+> >>--
+> >>=======================================================================
+> >>
+> >>Daniel J. Sperka, Ph. D.
+> >>Software Developer/Analyst
+> >>Center for Neuroscience
+> >>University of California, Davis
+> >>
+> >>=======================================================================
+> >>
+> >>
+> >>
+> >>
+> >>
+> >
+> >
+> >
+>
+> --
+> =======================================================================
+>
+> Daniel J. Sperka, Ph. D.
+> Software Developer/Analyst
+> Center for Neuroscience
+> University of California, Davis
+>
+> =======================================================================
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051215/1139978b/attachment.html>
+
+From mario.kleiner at tuebingen.mpg.de  Fri Dec 16 00:04:30 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 16 Dec 2005 00:04:30 +0100
+Subject: [Osxptb-dev] Re: Eyelink Toolbox and other stuff...
+In-Reply-To: <764e38540512150954p5d3cda32i24d9f3c1976be3a4@mail.gmail.com>
+References: <764e38540512091200o4e02cb22uc3f0fb72c1d44738@mail.gmail.com>	 <1A7092E8-68F8-11DA-9029-000393D48314@rug.nl>	 <439A075C.5040204@tuebingen.mpg.de>	 <764e38540512091509x732c341dp3cd759a79a1b8103@mail.gmail.com>	 <439A2057.6050100@ucdavis.edu>	 <764e38540512091534i7608b557s38723eb4d2ab83c4@mail.gmail.com>	 <43A0724C.5060503@ucdavis.edu> <764e38540512150954p5d3cda32i24d9f3c1976be3a4@mail.gmail.com>
+Message-ID: <43A1F67E.5050208@tuebingen.mpg.de>
+
+Hi Chris,
+
+please don't forget - before committing to subversion - to run the 
+scripts in /trunk/managementtools/convertlinefeeds.sh shell script over 
+the Eyelink-Sourcecode. You see usage info at top of the script. It 
+replaces all CRLF (old style OS-9) linefeeds by LF linefeeds, in order 
+to be able to display the source code properly in other text editors 
+than XCode and to make Subversion happy.
+
+Everybody developing for PTB should also set the setting in 
+XCode->Preferences->Editor-Tab for linefeed handling to "Unix" (LF) 
+style for old and new files!
+
+Without this, most useful text processing tools, scripts and Subversion 
+will screw up!
+
+Oh and for Frans, Allen, Denis and Daniel: Maybe you should also 
+subscribe to the osxptb-dev mailinglist on Berlios, so we save each 
+other typing all these many e-mail adresses and can document our 
+technical discussions as Denis suggested.
+
+Btw. Allen could you send me the missing CocoaBundle binary for 
+inclusion? A working GetChar would probably make all those poor FORP and 
+fMRI scanner users a lot more happy, given that some keyboard-triggers 
+and the FORP don't work well with KbCheck/KbWait?
+
+Oh and there's good news for potential users of 3D OpenGL. Richard 
+Murray and Christopher Taylor have started something intersting:A 
+minimalistic low-level wrapper that exposes all OpenGL low-level calls 
+to Matlab by a thin wrapper layer. The nice thing: With the proposed 
+support for interaction between PTB and external OpenGL rendering 
+mexfiles, we will be able to incorporate the low-level wrapper "as is".
+
+So users can use PTB as they are used to, but at the same time by use of 
+that mexfile can acess low-level OpenGL drawing functions in a safe way 
+(safe for the users and PTB) -- we'll get free support for 3D stimuli 
+drawing. Well at least if they are really brave enough to wrap a 
+significant subset of the > 200 OpenGL functions ;-)
+
+I'll forward the e-mail...
+
+Btw., this:
+
+<http://developer.berlios.de/docman/display_doc.php?docid=31&group_id=2>
+
+is recommended. It safes you from typing your password over and over 
+again when working with Subversion, at least if you are (like me) using 
+svn from the command-line...
+
+-mario
+
+
+Chris Burns wrote:
+> Not yet, I've scheduled it for tomorrow.  I'll email as soon as it's in.
+> 
+> Chris
+> 
+> 
+> On 12/14/05, *Daniel Sperka* < djsperka at ucdavis.edu 
+> <mailto:djsperka at ucdavis.edu>> wrote:
+> 
+>     Any chance yet to check in the code? I don't want to be a pest, so
+>     please understand. We're just eager. Thanks in advance.
+> 
+>     Dan
+> 
+
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Dec 16 00:09:01 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 16 Dec 2005 00:09:01 +0100
+Subject: [Osxptb-dev] [Fwd: Re: psychtoolbox] OpenGL stuff...
+Message-ID: <43A1F78D.5000003@tuebingen.mpg.de>
+
+An embedded message was scrubbed...
+From: Richard Murray <rfm at yorku.ca>
+Subject: Re: psychtoolbox
+Date: Wed, 14 Dec 2005 08:52:28 -0500
+Size: 2834
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051216/a34c4d0f/attachment.mht>
+
+From mario.kleiner at tuebingen.mpg.de  Fri Dec 16 00:09:53 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 16 Dec 2005 00:09:53 +0100
+Subject: [Osxptb-dev] [Fwd: Re: psychtoolbox] OpenGL wrapper Part II
+Message-ID: <43A1F7C1.6040906@tuebingen.mpg.de>
+
+
+-------------- next part --------------
+An embedded message was scrubbed...
+From: Richard Murray <rfm at yorku.ca>
+Subject: Re: psychtoolbox
+Date: Tue, 13 Dec 2005 21:48:37 -0500
+Size: 4990
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051216/b77fdcdc/attachment.mht>
+
+From chris.d.burns at gmail.com  Mon Dec 19 20:09:45 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Mon, 19 Dec 2005 11:09:45 -0800
+Subject: [Osxptb-dev] Eyelink Toolbox checked in
+Message-ID: <764e38540512191109n1b28e968j2ff5ff18d6a20696@mail.gmail.com>
+
+Dan and Frans,
+
+I just checked in my source for the Eyelink Toolbox.  I did not have
+access to the experiment machine I orginally set this up on, so I had
+to start over from my backups on a new machine... unfortunately I ran
+into several problems with XCode.  The Eyelink Target, as checked in
+does not compile!  For whatever reason, XCode cannot find the Eyelink
+Header file, eyelink.h.  I've included the eyelink_core.framework, and
+I don't see any differences between the checked-in project and my
+original project.  I'm at a loss.  XCode is very different than VC++,
+and I'm still not up to speed on it's use of frameworks.
+
+Some Hacks I used:
+- Somewhere in the PsychToolbox.xcodeproj the Matlab directory is
+assigned, but I can't find where.  grepping the file it's set to
+MATLAB704.  I'm using vertion 7.1, so I created a symbolic link in
+Applications directory for 7.04 to point to 7.1
+
+- On my experiment machine, XCode couldn't find Frameworks outside of
+the System folder, so I copied
+/Library/Frameworks/eyelink_core.framework to
+/System/Library/Frameworks/eyelink_core.framework.
+
+Sorry, I hate checking in code that doesn't compile, but hopefully
+it's a simple fix that will be obvious to someone else.  And I ran out
+of time to work on this as I'm heading out of town for the week.  I'll
+be back next week and can help more with it then.
+
+Below is a copy of the email Frans sent me that includes the original
+OSX port of the Eyelink Toolbox.  Much of the source can probably be
+included in the project as is, but you'd want to give it a once-over.
+
+Good Luck!
+Chris
+
+
+-----------------------------------------------------------------
+Dear all,
+
+There seems to be a growing interest in getting an OSX version of the
+Eyelinktoolbox.
+
+Quite a while ago (2 years?) we (Enno Peters that is) started working
+on a version but were sort of stopped by the lack of a stable
+psychtoolbox. I call this our early alpha version. It actually worked
+to some extent. I haven't gotten back to it yet, due mainly to a lack
+of time (and Enno leaving for a proper job).
+
+Here's (a copy of) a message I wrote a while to another  wannabe
+Eyelink porter (Daniel Sperka):
+---------------------------------------------------------
+It would be timely if an OSX version of the Eyelink TB would come out
+now. In my view the PTB is becoming really useful now, especially after
+the improvements Mario Kleiner has been making.
+
+I believe a few months would be quite sufficient to get a working
+version (like I mentioned, there is an early version that has some
+functions working).
+
+There's a couple of things that I think need to be changed/improved:
+
+1. Update to newest XCode/Matlab/PTB source code. Shouldn't be much of
+an issue, but still.
+2. Check for updates in code with SR Research.
+3. Make sure we do not use any graphics other than via PTB (there is a
+problem with the 'eye' graphic during calibration).
+4. Seperate out functions from 'shell' very much like current PTB does.
+This is not an absolute necessity, but using the same methods as the
+current PTB presumably would make things easier to maintain in the long
+run.
+
+5. Update many of the .m files to use e.g. new graphics calls of PTB.
+
+6. Test everything for speed, delays, etc.
+
+7. provide some support/updates.
+
+The OS9 code can be downloaded from
+http://www.psychtoolbox.org/eyelinktoolbox/downloads/
+EyelinkToolbox_C_code_1.4.sit
+ I believe this is the most recent OS9 code.
+
+I've traced some OSX code for you.  I am not entirely sure if it is
+complete. Enno Peters wasn't a superbly organised programmer, and I
+haven't looked at this project for quite a while.
+
+Download from
+http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19-10
+-05.zip
+
+In principle I am very much open to a collaboration.
+
+--------------------
+
+
+Here's a plan:
+I am offering our code as a starter. If someone with a little time on
+their hands (Chris?) would check the OSX source code into the/some CVS
+server and do #1 on the list, that would be a step forward. (Then
+please tell all other interested in development how to get to it.)
+PTB in my view is about collaboration, rather than people reinventing
+wheels (or even 30% of them). So, be fair and please use the head start
+and collaborative opportunities available to create a full working
+version of the ETB.
+Also, it be nice if a reasonable degree of backward compatibility with
+the OS9 version is maintained.
+
+My proposal is that those interested in Eyelink TB programming reply to
+me, so that we continue the discussion in that group (and decide where
+to do this). I can tell a bit more also about our ideas back then about
+what ETB should be doing (and what not).
+
+Gr.
+Frans
+
+
+
+On 12/14/05, Daniel Sperka <djsperka at ucdavis.edu> wrote:
+> Any chance yet to check in the code? I don't want to be a pest, so
+> please understand. We're just eager. Thanks in advance.
+>
+> Dan
+>
+
+
+From brainard at psych.upenn.edu  Tue Dec 20 20:48:44 2005
+From: brainard at psych.upenn.edu (David Brainard)
+Date: Tue, 20 Dec 2005 14:48:44 -0500
+Subject: [Osxptb-dev] Psychtoolbox development protocol
+In-Reply-To: <A30F6550-42FE-4091-AF8A-895D868F7963@mail.med.upenn.edu>
+References: <13C5CA4F-F134-459D-B6E2-25E9A315516F@psych.upenn.edu> <A30F6550-42FE-4091-AF8A-895D868F7963@mail.med.upenn.edu>
+Message-ID: <D8E4201F-E3A5-4C47-A9B3-860FFC2E9EA5@psych.upenn.edu>
+
+On Dec 20, 2005, at 9:27 AM, Joshua Gold wrote:
+
+> Dear David,
+>
+> Yes, we've already downloaded (and modified) the source...
+> My account is: jigold
+
+You're added as a developer and can now check code in as well
+as out.
+
+> Is there a standard procedure for developers to add new features?
+> Should we write to the forum or to the other developers first to see
+> if anyone objects?
+
+The general idea is that you can fold anything you want back into
+the alpha trunk, it doesn't even have to work.  But checking in  
+regularly
+allows everyone to stay up to date.  Once you think is working, merge
+the change into the beta trunk. Finally, the stable trunk represents
+things that we think have been tested enough to be, well, stable.
+SVN will enforce that you merge any changes where someone else
+has checked something else in while you were working on it.
+
+Sending a message to the developers (use the developer mailing list  
+we set
+up on Berlios, and cc'd above) about what you've modified is a good
+idea.  You can subscribe to this list through Berlios, or just view the
+list archive on the website.
+
+More generally, I think we're all still feeling our way through how this
+should go.  Marie has a longer version of the above, which he believes
+represents best practice.  There has been some going back and forth
+about whether we really need alpha, beta, and stable trunks or whether
+two (or even one) would work OK.  Mario (or someone), it may be worth
+reposting that traffic now that we have the dev mailing list -- I  
+don't think
+I have it handy.
+
+But in any case, the main message is that fixes and contributions are
+really welcome!
+
+Best,
+
+David
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Thu Dec 22 02:18:58 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 22 Dec 2005 02:18:58 +0100
+Subject: [Osxptb-dev] Psychtoolbox development protocol
+In-Reply-To: <D8E4201F-E3A5-4C47-A9B3-860FFC2E9EA5@psych.upenn.edu>
+References: <13C5CA4F-F134-459D-B6E2-25E9A315516F@psych.upenn.edu> <A30F6550-42FE-4091-AF8A-895D868F7963@mail.med.upenn.edu> <D8E4201F-E3A5-4C47-A9B3-860FFC2E9EA5@psych.upenn.edu>
+Message-ID: <43A9FF02.3080500@tuebingen.mpg.de>
+
+Great! Another contributor :)
+
+A few comments:
+
+This is very important before checking in stuff to Subversion:
+
+"please don't forget - before committing to subversion - to run the
+scripts in /trunk/managementtools/convertlinefeeds.sh shell script over
+your Sourcecode. You see usage info at top of the script. It
+replaces all CRLF (old style OS-9) linefeeds by LF linefeeds, in order
+to be able to display the source code properly in other text editors
+than XCode and to make Subversion happy.
+
+Everybody developing for PTB should also set the setting in
+XCode->Preferences->Editor-Tab for linefeed handling to "Unix" (LF)
+style for old and new files!
+
+Without this, most useful text processing tools, scripts and Subversion
+will ***screw up***!"
+
+Regarding the different branches of PTB:
+
+The "alpha" branch is dead - it was overkill. I'll delete that branch in 
+the next days.
+
+The "trunk" is were *all* development should happen. You shouldn't check 
+in/commit changes that break trunk in the sense of leaving it completely 
+dysfunctional or not compilable anymore, but you can commit new features 
+that are non-functional or only half-finished, e.g., source code that is 
+not yet integrated into the build process, source code where huge parts 
+are commented out and such, or partially implemented code that you work 
+on, but that others shouldn't touch because it may crash/malfunction.
+
+This allows you to use Subversion as backup-system for your work, to 
+keep the others well informed about what you are doing so they can 
+probably give you feedback or adapt their own work to the changes. And 
+it makes it easier to merge code. I usually do one commit per 
+significant change, e.g., per new feature and such, so one can easily 
+undo specific changes without trouble...
+
+I'd ask/recommend you to write a log entry for each commit that explains 
+in a few lines why and how you changed something. That helps to keep 
+track of changes and how they possibly affect other parts of the system. 
+Obviously for a trivial/small change a one-liner in the log will do. I 
+tend to write rather longish log-entries because i have bad long-term 
+memory...
+
+And i think it would be good to announce roughly on the osxptb-dev 
+mailinglist from time to time what you want to do, doesn't need to be 
+much info, just to make sure that not multiple people make conflicting 
+changes or duplicate work and such - and to make use of possible 
+valuable feedback by the others...
+
+"beta" is meant for code that has matured so far that it is worth 
+testing by users that like to test the code - or are desperately waiting 
+for a new feature and want to get their hands on it asap.
+
+"stable" is for code that you consider stable for general use - in the 
+sense that people can trust it for day to day work.
+
+So it goes new stuff -> trunk --- copy/merge into --> beta --> 
+copy/merge into ---> stable.
+
+ From the stuff in stable one could make a new official release anytime 
+that enough coherent stuff has piled up...
+
+Denis thinks/thought? that the beta-branch is overkill and we should 
+just go for trunk and stable. I think it is good as it is, at least when 
+it comes to big changes in the code, although its a bit more work for us 
+to do this merging, because it allows us to expose bleeding-edge stuff 
+to users that are willing to take the risk and get valuable feedback 
+while at the same time protecting naive users from using features that 
+are known to fail in many occasions -- the name "experimental" would be 
+probably a better choice for "beta". If there is still disagreement from 
+Denis or David with that i would drop beta, but i think it would either 
+put the users to more risk or slow down development if we have to be too 
+careful before releasing anything to users... This scheme is very common 
+in many big open-source projects and works there...
+
+These are all just guidelines that i find useful for my work. In the end 
+  its a matter of common-sense of how to strictly follow these...
+
+
+My work flow goes like this:
+
+1. Login to computer...
+2. Visit Berlios mailinglist and SVN web interface to see if anything 
+changed in a way that i should take into account for what i wanna do.
+3. svn update  -- to bring my local copy up to date to the latest state.
+4. Work on code.
+5. Whenever i changed something i wanna be able to easily undo in case 
+of trouble, i commit it to Subversion with some meaningful log comment.
+6. Whenever a single isolated thing is finished (new feature, or 
+specific improvement to an existing feature, or a single bugfix for a 
+single bug) i also commit to SVN.
+7. Repeat from step 4 until done.
+
+
+I think we are all still practising this new Subversion and new style of 
+development thing and nothing is really set in stone. But its nice to 
+have many people contributing now and the new process seems to be more 
+efficient and scalable to me than the old one...
+
+So what are you (intending to) work on?
+
+I myself use the diary-function of my Berlios account as a scratchpas 
+for ideas and to keep a todo list for myself to keep track of the 
+features i'm working on, don't know if this is useful for others...
+
+<http://developer.berlios.de/developer/diary.php?diary_user=20591>
+
+Actually i think a 1.0.7 release at the beginning of next year wouldn't 
+be a bad idea. Some significant changes are finished, e.g., Quicktime 
+support is finished and stable, will move it into stable in the next 
+days - just a few demos are missing, and i'll probably add a few more 
+features and cleanups during the christmas break. I'll also try to 
+reenable Offscreen-windows, single-buffer mode and WaitBlanking at least 
+for "Tiger" users -- i don't think that Single-Buffer + WaitBlanking 
+should be advertised *at all* for new code -- The flip method is better, 
+but maybe it would make porting easier for users that just want to keep 
+old code running. Tiger has new features (OpenGL Framebuffer objects) 
+that should allow to efficiently merge offscreen windows with textures 
+so one gets best of both worlds: Each texture can be efficiently used as 
+offscreen window and each offscreen window efficiently as texture... -- 
+This feature will only work on 10.4 not 10.3 though...
+
+Best,
+-mario
+
+
+David Brainard wrote:
+> 
+> On Dec 20, 2005, at 9:27 AM, Joshua Gold wrote:
+> 
+>> Dear David,
+>>
+>> Yes, we've already downloaded (and modified) the source...
+>> My account is: jigold
+> 
+> 
+> You're added as a developer and can now check code in as well
+> as out.
+> 
+>> Is there a standard procedure for developers to add new features?
+>> Should we write to the forum or to the other developers first to see
+>> if anyone objects?
+> 
+> 
+> The general idea is that you can fold anything you want back into
+> the alpha trunk, it doesn't even have to work.  But checking in  regularly
+> allows everyone to stay up to date.  Once you think is working, merge
+> the change into the beta trunk. Finally, the stable trunk represents
+> things that we think have been tested enough to be, well, stable.
+> SVN will enforce that you merge any changes where someone else
+> has checked something else in while you were working on it.
+> 
+> Sending a message to the developers (use the developer mailing list  we set
+> up on Berlios, and cc'd above) about what you've modified is a good
+> idea.  You can subscribe to this list through Berlios, or just view the
+> list archive on the website.
+> 
+> More generally, I think we're all still feeling our way through how this
+> should go.  Marie has a longer version of the above, which he believes
+> represents best practice.  There has been some going back and forth
+> about whether we really need alpha, beta, and stable trunks or whether
+> two (or even one) would work OK.  Mario (or someone), it may be worth
+> reposting that traffic now that we have the dev mailing list -- I  don't 
+> think
+> I have it handy.
+> 
+> But in any case, the main message is that fixes and contributions are
+> really welcome!
+> 
+> Best,
+> 
+> David
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+
+

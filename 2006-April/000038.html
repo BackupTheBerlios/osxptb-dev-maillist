@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] just an idea
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20just%20an%20idea&In-Reply-To=%3C445220BB.3000400%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000037.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] just an idea</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20just%20an%20idea&In-Reply-To=%3C445220BB.3000400%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] just an idea">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Apr 28 16:03:39 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000037.html">[Osxptb-dev] just an idea
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I thought about disabling the whole light-show, but i'm not sure... It 
+mostly seems to create confusion and is not that useful. I already 
+disabled the flicker-test sheet on dual-disp. setups and replaced it by 
+the PerceptualVLBSyncTest.m file. The main reason there isn't any text 
+message instead of the warning sign is because we cannot call 'DrawText' 
+from inside PTBs code the way it is implemented at the moment, so 
+outputting text is difficult, unless i change the drawtext implementation.
+
+Otoh one should expect people to read output in the Matlab window, but 
+then the output is a bit to verbose to be read all the time...
+
+Thanks for the suggestion.
+
+I made another attempt in fixing MorphDemo for your hardware. Could you 
+update your beta and try again? If it works now then it wasn't a bug (by 
+the strict definition of bug) in OS-X, but just pretty bad system design 
+by Apple ;)
+
+gr.
+mario
+
+
+Frans Cornelissen wrote:
+&gt;<i> Hi Mario,
+</I>&gt;<i> 
+</I>&gt;<i> Just occured to me, since a lot of messages on the PTB are about the 
+</I>&gt;<i> &quot;warning sign&quot;.
+</I>&gt;<i> 
+</I>&gt;<i> Why not actually include a message like this one (approx. your words of 
+</I>&gt;<i> message #4432) as part of the warning:
+</I>&gt;<i> 
+</I>&gt;<i> &quot;This warning is meant to direct your attention to
+</I>&gt;<i> the output in the Matlab window because some (potentially serious)
+</I>&gt;<i> display timing problem was detected.&quot;
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Or perhaps (or additional) direct user to a web page that explains all 
+</I>&gt;<i> the intricate details of timing, warnings, etc.
+</I>&gt;<i> Might save a lot of frustration and typing the same responses over and 
+</I>&gt;<i> over again.
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> gr.
+</I>&gt;<i> frans
+</I>&gt;<i> 
+</I>
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+*********************************************************************
+&quot;Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000037.html">[Osxptb-dev] just an idea
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#38">[ date ]</a>
+              <a href="thread.html#38">[ thread ]</a>
+              <a href="subject.html#38">[ subject ]</a>
+              <a href="author.html#38">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

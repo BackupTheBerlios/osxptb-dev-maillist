@@ -1,0 +1,3267 @@
+From f.w.cornelissen at rug.nl  Tue Jun 13 20:04:17 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 13 Jun 2006 20:04:17 +0200
+Subject: [Osxptb-dev] building targets of PTB
+Message-ID: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl>
+
+Dear all,
+
+I've attempted to build a number of targets from the source code  
+(revision 348/363).
+Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+anything to completion (compiling seems to go alright mostly)
+
+The errors I get are:
+
+gcc-3.3: No such file or directory
+gcc-3.3: ApplicationServices: No such file or directory
+gcc-3.3: No such file or directory
+gcc-3.3: Carbon: No such file or directory
+
+this goes on for a while, and than ends with:
+
+command /usr/bin/gcc-3.3 failed with exit code 1
+
+(I'll post some screen dumps that show the full (nearly identical)  
+error messages, both for eyelink and donothing targets, in a seperate  
+message)
+
+
+Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+the former comes with 10.4
+
+It somehow seems the frameworks can't be found (even though I did  
+specify their locations in the project settings). The paths are all  
+pointing to the right positions too.
+
+
+Is there any obvious reason why this is going wrong and that I am  
+overlooking?
+
+Gr.
+Frans
+
+PS: I am on 10.4.5 and using Xcode 2.1
+
+
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/4365df03/attachment.html>
+
+From allen_ingling at mac.com  Tue Jun 13 22:15:27 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Tue, 13 Jun 2006 16:15:27 -0400
+Subject: [Osxptb-dev] building targets of PTB
+In-Reply-To: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl>
+References: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl>
+Message-ID: <D06C2A8C-C8F6-4EC3-A7B8-F5032FA37A9A@mac.com>
+
+> Dear all,
+>
+> I've attempted to build a number of targets from the source code  
+> (revision 348/363).
+> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+> anything to completion (compiling seems to go alright mostly)
+>
+> The errors I get are...
+
+Hi Frans,
+
+I expect it would fix the problem to upgrade dev tools.  Even if not,  
+it is the correct starting point for diagnosis.  Additional comments  
+interspersed.
+
+> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+> the former comes with 10.4
+
+If you want gcc 2.95.2 it is available for Xcode 2.x under 10.4.  It  
+is a separate install.  Get the "Xcode Legacy Tools" package from  
+developer.apple.com.   (The free flavor of ADC membership allows  
+access to the developer downloads area.)
+
+All of the .mex targets should already be set to use gcc 3.3.  It is  
+a mystery to me why you found gcc 2.95.2 in the settings.  I have the  
+project open now and just examined the Screen target and it is  
+definitely set to gcc 3.3.
+
+> It somehow seems the frameworks can't be found (even though I did  
+> specify their locations in the project settings).
+
+That should be unnecessary.
+
+After upgrading tools, it might be best to start over with a fresh  
+copy of the project to exclude the changes which you have made.
+
+>  I am on 10.4.5
+
+Should not be a problem,  but fyi 10.4.6 is out.
+
+> and using Xcode 2.1
+
+Try Xcode Tools 2.2.1.  Also available from developer.apple.com.
+
+best,
+
+Allen
+
+
+
+
+
+
+
+
+
+
+
+
+On Jun 13, 2006, at 2:04 PM, Frans Cornelissen wrote:
+
+> Dear all,
+>
+> I've attempted to build a number of targets from the source code  
+> (revision 348/363).
+> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+> anything to completion (compiling seems to go alright mostly)
+>
+> The errors I get are:
+>
+> gcc-3.3: No such file or directory
+> gcc-3.3: ApplicationServices: No such file or directory
+> gcc-3.3: No such file or directory
+> gcc-3.3: Carbon: No such file or directory
+>
+> this goes on for a while, and than ends with:
+>
+> command /usr/bin/gcc-3.3 failed with exit code 1
+>
+> (I'll post some screen dumps that show the full (nearly identical)  
+> error messages, both for eyelink and donothing targets, in a  
+> seperate message)
+>
+>
+> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+> the former comes with 10.4
+>
+> It somehow seems the frameworks can't be found (even though I did  
+> specify their locations in the project settings). The paths are all  
+> pointing to the right positions too.
+>
+>
+> Is there any obvious reason why this is going wrong and that I am  
+> overlooking?
+>
+> Gr.
+> Frans
+>
+> PS: I am on 10.4.5 and using Xcode 2.1
+>
+>
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/b609a6ec/attachment.html>
+
+From f.w.cornelissen at rug.nl  Wed Jun 14 11:29:49 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Wed, 14 Jun 2006 11:29:49 +0200
+Subject: [Osxptb-dev] building targets of PTB
+In-Reply-To: <D06C2A8C-C8F6-4EC3-A7B8-F5032FA37A9A@mac.com>
+References: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl> <D06C2A8C-C8F6-4EC3-A7B8-F5032FA37A9A@mac.com>
+Message-ID: <9B92043E-CB50-454B-8C19-7E5CED5CA9C7@rug.nl>
+
+Thanks Allen ,
+
+I checked the xcode verison with software update but apparently this  
+is not reporting about Xcode upgrades anymore?
+Anyway, installed 2.1.1. and fresh copy of code.
+
+The update seemed to have fixed most problems. I can now compile and  
+build all targets except the eyelink target.
+
+When I try, I now get the following error:
+Building target ?Eyelink? of project ?PsychToolbox? ? (1 error)
+
+cp: /Users/frans/Development/PsychToolbox/trunk/PsychSourceGL/ 
+Projects/MacOSX/PsychToolbox/build/Development/Eyelink.mexmac: No  
+such file or directory
+
+In the buiild directory, a "foo.mexmac" is created in build/ 
+development, which is unlike the other targets, where e.g.  
+screen.mexmac are created. I also see a foo.hmap in
+build/psychtoolbox.build/development/Eyelink.build
+
+
+Any suggestions on how to solve this one?
+
+
+
+
+Regarding gcc versions:
+
+One path that definitely was pointing to gcc 2.95.2 is the stdlibc+ 
++.a file/archive.
+Also in most targets there is a library search path defined as 2.95.2
+And I am fairly sure I came across it elsewhere.
+
+
+
+Gr.
+
+Frans
+
+
+
+
+Op 13-jun-2006, om 22:15 heeft Allen W. Ingling het volgende geschreven:
+
+>> Dear all,
+>>
+>> I've attempted to build a number of targets from the source code  
+>> (revision 348/363).
+>> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+>> anything to completion (compiling seems to go alright mostly)
+>>
+>> The errors I get are...
+>
+> Hi Frans,
+>
+> I expect it would fix the problem to upgrade dev tools.  Even if  
+> not, it is the correct starting point for diagnosis.  Additional  
+> comments interspersed.
+>
+>> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+>> the former comes with 10.4
+>
+> If you want gcc 2.95.2 it is available for Xcode 2.x under 10.4.   
+> It is a separate install.  Get the "Xcode Legacy Tools" package  
+> from developer.apple.com.   (The free flavor of ADC membership  
+> allows access to the developer downloads area.)
+>
+> All of the .mex targets should already be set to use gcc 3.3.  It  
+> is a mystery to me why you found gcc 2.95.2 in the settings.  I  
+> have the project open now and just examined the Screen target and  
+> it is definitely set to gcc 3.3.
+>
+>> It somehow seems the frameworks can't be found (even though I did  
+>> specify their locations in the project settings).
+>
+> That should be unnecessary.
+>
+> After upgrading tools, it might be best to start over with a fresh  
+> copy of the project to exclude the changes which you have made.
+>
+>>  I am on 10.4.5
+>
+> Should not be a problem,  but fyi 10.4.6 is out.
+>
+>> and using Xcode 2.1
+>
+> Try Xcode Tools 2.2.1.  Also available from developer.apple.com.
+>
+> best,
+>
+> Allen
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+>
+> On Jun 13, 2006, at 2:04 PM, Frans Cornelissen wrote:
+>
+>> Dear all,
+>>
+>> I've attempted to build a number of targets from the source code  
+>> (revision 348/363).
+>> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+>> anything to completion (compiling seems to go alright mostly)
+>>
+>> The errors I get are:
+>>
+>> gcc-3.3: No such file or directory
+>> gcc-3.3: ApplicationServices: No such file or directory
+>> gcc-3.3: No such file or directory
+>> gcc-3.3: Carbon: No such file or directory
+>>
+>> this goes on for a while, and than ends with:
+>>
+>> command /usr/bin/gcc-3.3 failed with exit code 1
+>>
+>> (I'll post some screen dumps that show the full (nearly identical)  
+>> error messages, both for eyelink and donothing targets, in a  
+>> seperate message)
+>>
+>>
+>> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+>> the former comes with 10.4
+>>
+>> It somehow seems the frameworks can't be found (even though I did  
+>> specify their locations in the project settings). The paths are  
+>> all pointing to the right positions too.
+>>
+>>
+>> Is there any obvious reason why this is going wrong and that I am  
+>> overlooking?
+>>
+>> Gr.
+>> Frans
+>>
+>> PS: I am on 10.4.5 and using Xcode 2.1
+>>
+>>
+>>
+>> --------------------------------------------------------------------- 
+>> --------------------------------------------
+>> Laboratory of Experimental Ophthalmology & BCN NeuroImaging  
+>> Centre, School of Behavioural and Cognitive Neurosciences,  
+>> University Medical Centre Groningen,
+>> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+>> Email: f.w.cornelissen at rug.nl
+>>
+>>
+>>
+>
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060614/26ab5cf7/attachment.html>
+
+From f.w.cornelissen at rug.nl  Wed Jun 14 16:23:39 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Wed, 14 Jun 2006 16:23:39 +0200
+Subject: [Osxptb-dev] foo found and some minor issues
+Message-ID: <8E1C0F47-D7C5-4345-BCD4-999D743A6A0F@rug.nl>
+
+Hi All,
+Sorry for the noise. I found a deviant parameter called Product Name,  
+which for unknown reasons was set to Foo instead of Eyelink.
+This solved the previous issue. It's now buildiing correctly, yeah!
+	
+Minor issues/questions (some already mentioned by daniel):
+Eyelink.h is not found, but problem solved by adding eyelink.h to the  
+"PsychToolbox Source/Mex Targets/" folder.
+
+Matlab resources.
+There's a MATLABVERSION variable declared, but it's not used to  
+locate the matlab resources, such as mex.h
+Requires editing the actual file locations all the time, which is a  
+pity. It's not clear how to use the variable in the filepath though  
+(editing XML file?).
+
+Frameworks:
+What is the correct frameworks that should be used?
+Quicktime.framework was pointing to a folder in universal SDK folder,  
+rather than the framework in System/Library/
+Most other frameworks point to the latter location. But the CHUD  
+framework is not in this place.
+
+Eyelink.core.framework points to a location in System/Library/ 
+Frameworks/ but this should presumably be /Library/Frameworks/ as  
+this is were the installer of the eyelinkapi  put the files.
+
+Why are all executables called (e4xecutable_name)_OLD?
+
+
+ScreenMakeTexture and PsychCellGlue compile but with warnings.
+
+Gr.
+Frans
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060614/8c6ce0b2/attachment.html>
+
+From cburns at berkeley.edu  Wed Jun 14 19:26:57 2006
+From: cburns at berkeley.edu (Chris Burns)
+Date: Wed, 14 Jun 2006 10:26:57 -0700
+Subject: [Osxptb-dev] foo found and some minor issues
+In-Reply-To: <8E1C0F47-D7C5-4345-BCD4-999D743A6A0F@rug.nl>
+References: <8E1C0F47-D7C5-4345-BCD4-999D743A6A0F@rug.nl>
+Message-ID: <764e38540606141026u6089a35m5fcec2afadcf2b5b@mail.gmail.com>
+
+Hey Frans,
+
+The Eyelink Framework reference is probably a setting I created.  No
+matter what I tried, I could not get XCode to find the Eyelink
+Framework in the correct place, /Library/Frameworks.  So I moved it to
+the System directory.   I did my best to do things in the "XCode Way"
+but being new to Mac programming, at certain points I needed to just
+make it work.
+
+Chris
+
+On 6/14/06, Frans Cornelissen <f.w.cornelissen at rug.nl> wrote:
+> Frameworks:
+> Eyelink.core.framework points to a location in System/Library/Frameworks/
+> but this should presumably be /Library/Frameworks/ as this is were the
+> installer of the eyelinkapi  put the files.
+
+
+From allen_ingling at mac.com  Wed Jun 14 19:29:19 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Wed, 14 Jun 2006 13:29:19 -0400
+Subject: [Osxptb-dev] foo found and some minor issues
+In-Reply-To: <8E1C0F47-D7C5-4345-BCD4-999D743A6A0F@rug.nl>
+References: <8E1C0F47-D7C5-4345-BCD4-999D743A6A0F@rug.nl>
+Message-ID: <5E72FF28-27D1-4EFF-B026-3EA673ECA4A6@mac.com>
+
+
+On Jun 14, 2006, at 10:23 AM, Frans Cornelissen wrote:
+
+> Hi All,
+>  I found a deviant parameter called Product Name, which for unknown  
+> reasons was set to Foo instead of Eyelink.
+> This solved the previous issue. It's now buildiing correctly, yeah!
+
+
+Hi Frans,
+
+I had just begun looking into that, but was interrupted by the good  
+news that you had fixed it.
+
+> There's a MATLABVERSION variable declared, but it's not used to  
+> locate the matlab resources, such as mex.h
+
+I can't find "MATLABVERSION" in the project, either in the source or  
+the target settings.  Where is it?
+
+> Requires editing the actual file locations all the time, which is a  
+> pity.
+
+That sounds incorrect.
+
+It should be necessary only to change the value of the  
+"MATLAB_DIR_NAME" variable in each target setting.  That is the  
+canonical reference within the PTB Xcode project; All paths to MATLAB  
+resources used by mex targets derive from that variable.  For  
+example, the Eyelink target defines header search paths to be:
+  $(SYSTEM_APPS_DIR)/$(MATLAB_DIR_NAME)/extern/include $ 
+(SYSTEM_APPS_DIR)/$(MATLAB_DIR_NAME)/simulink/include
+
+That is still one change per target (mex file), not one change.   
+However, "MATLAB_DIR_NAME" is also defined in the project settings,  
+as well as in each target setting.  I think if we deleted the  
+MATLAB_DIR_NAME definitions from each target, then each target would  
+inherit the project's definition of that variable.  That would be one  
+switch, not one switch per target.  The flexibility to set separately  
+for each mex target the MATLAB lib directory is unnecessary.
+
+A good way to set this up would be to keep the per-target  
+MATLAB_DIR_NAME  definitions and create build configurations which  
+switch between MATLAB directories.  There is the super-convenient  
+"build configuration" drop-down menu at the top left corner of the  
+Xcode main window.    That seems like a really good way to deal with  
+problem that not all developers have the same version of MATLAB, but  
+we share the same Psychtoolbox Xcode project.
+
+> It's not clear how to use the variable in the filepath though  
+> (editing XML file?).
+>
+
+Definitely unnecessary and potentially harmful to edit any Xcode  
+project file.  Any changes made to the Xcode project settings can be  
+made using the Xcode gui.  Only Xcode should read the and write the  
+project configuration files because any changes made outside of that  
+risk corrupting those files.
+
+
+>
+> Frameworks:
+> What is the correct frameworks that should be used?
+
+The most recent is usually the best.
+
+> Quicktime.framework was pointing to a folder in universal SDK  
+> folder, rather than the framework in System/Library/
+
+Stuff which finds its way into System/Library/ is sometimes released  
+in advance from ADC in an SDK .   So is the Quicktime SDK the most  
+recent framework, or has it been superseded by a system update?
+
+> Most other frameworks point to the latter location. But the CHUD  
+> framework is not in this place.
+
+Apple decides where in the filesystem their frameworks reside.  I  
+don't know what rules Apple uses for deciding what to put where.  It  
+might be that anything installed with the OS goes into System/ 
+Library/ but separate add-ons go elsewhere.  That rule is consistent  
+with the examples which you have given.
+
+>
+> Eyelink.core.framework points to a location in System/Library/ 
+> Frameworks/ but this should presumably be /Library/Frameworks/ as  
+> this is were the installer of the eyelinkapi  put the files.
+
+I would expect so.  It works one way and not the other?
+
+>
+> Why are all executables called (e4xecutable_name)_OLD?
+
+Because they are generated by eponymous targets named "*_OLD".  Xcode  
+does not list executables for the new targets in its "Groups & Files"  
+pane.  That's ok, we don't need them there.
+
+I left the old targets in the project until I was sure that everyone  
+was ok with the new ones.  I appended "_OLD" to these to distinguish  
+them from the new targets.   If the new eyelink mex target works for  
+you then we can delete all of the old targets except for PsychSound.   
+(Last I checked neither the old nor new Psychsound target would  
+build.)  We can also delete corresponding "*_OLD"  executables and  
+retain only the MATLAB executable.  We can also get rid of the now  
+unnecessary info.plist files and their references in the PTB Xcode  
+project.    That would clear out a lot of clutter.
+
+FYI there are multiple changes between old and new targets,  
+significantly I fixed problems in the build settings which caused  
+"clear mex" not to work.  See svn commit logs at Berlios for more  
+details, some time around last fall.
+
+>
+>
+> ScreenMakeTexture and PsychCellGlue compile but with warnings.
+>
+
+Ok.
+
+
+Best,
+
+Allen
+
+
+
+
+
+
+On Jun 14, 2006, at 10:23 AM, Frans Cornelissen wrote:
+> Hi All,
+> Sorry for the noise. I found a deviant parameter called Product  
+> Name, which for unknown reasons was set to Foo instead of Eyelink.
+> This solved the previous issue. It's now buildiing correctly, yeah!
+> 	
+> Minor issues/questions (some already mentioned by daniel):
+> Eyelink.h is not found, but problem solved by adding eyelink.h to  
+> the "PsychToolbox Source/Mex Targets/" folder.
+>
+> Matlab resources.
+> There's a MATLABVERSION variable declared, but it's not used to  
+> locate the matlab resources, such as mex.h
+> Requires editing the actual file locations all the time, which is a  
+> pity. It's not clear how to use the variable in the filepath though  
+> (editing XML file?).
+>
+> Frameworks:
+> What is the correct frameworks that should be used?
+> Quicktime.framework was pointing to a folder in universal SDK  
+> folder, rather than the framework in System/Library/
+> Most other frameworks point to the latter location. But the CHUD  
+> framework is not in this place.
+>
+> Eyelink.core.framework points to a location in System/Library/ 
+> Frameworks/ but this should presumably be /Library/Frameworks/ as  
+> this is were the installer of the eyelinkapi  put the files.
+>
+> Why are all executables called (e4xecutable_name)_OLD?
+>
+>
+> ScreenMakeTexture and PsychCellGlue compile but with warnings.
+>
+> Gr.
+> Frans
+>
+
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060614/26cbb564/attachment.html>
+
+From f.w.cornelissen at rug.nl  Tue Jun 13 17:35:19 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 13 Jun 2006 17:35:19 +0200
+Subject: [Osxptb-dev] building PTB
+Message-ID: <5102F799-E3FB-412D-A47A-7BFA7527507C@rug.nl>
+
+Dear all,
+
+I've attempted to build a number of targets from the source code  
+(revision 348/363).
+Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+anything to completion (compiling seems to go alright mostly)
+
+The errors I get are:
+
+command /usr/bin/gcc-3.3 failed with exit code 1
+
+(the attached screen dumps show the full (nearly identical) error  
+messages, both for eyelink and donothing targets.
+
+
+Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+the former comes with 10.4
+
+It somehow seems the frameworks can't be found (even though I did  
+specify their locations in the project settings). The paths are all  
+pointing to the right positions too.
+
+
+Is there any obvious reason why this is going wrong and that I am  
+overlooking?
+
+Gr.
+Frans
+
+PS: I am on 10.4.5 and using Xcode 2.1
+
+
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+??
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/1fffd081/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Afbeelding 3.png
+Type: image/png
+Size: 62865 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/1fffd081/attachment.png>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: Afbeelding 2.png
+Type: image/png
+Size: 79605 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060613/1fffd081/attachment-0001.png>
+
+From f.w.cornelissen at rug.nl  Fri Jun 16 02:32:13 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Fri, 16 Jun 2006 02:32:13 +0200
+Subject: [Osxptb-dev] building PTB (already solved!)
+In-Reply-To: <5102F799-E3FB-412D-A47A-7BFA7527507C@rug.nl>
+References: <5102F799-E3FB-412D-A47A-7BFA7527507C@rug.nl>
+Message-ID: <EC2C6FC0-8AC9-4706-9751-19E93541A23C@rug.nl>
+
+This issue was already solved.
+I guess this particular message got stuck in moderation phase (due to  
+images).
+Gr.
+Frans
+
+
+
+Op 13-jun-2006, om 17:35 heeft Frans Cornelissen het volgende  
+geschreven:
+
+> Dear all,
+>
+> I've attempted to build a number of targets from the source code  
+> (revision 348/363).
+> Unlike Dan and Chris (and Mario ;-) I am thusfar unable to build  
+> anything to completion (compiling seems to go alright mostly)
+>
+> The errors I get are:
+>
+> command /usr/bin/gcc-3.3 failed with exit code 1
+>
+> (the attached screen dumps show the full (nearly identical) error  
+> messages, both for eyelink and donothing targets.
+>
+>
+> Note that I had to change to gcc 3.3 rather than 2.95.2 since only  
+> the former comes with 10.4
+>
+> It somehow seems the frameworks can't be found (even though I did  
+> specify their locations in the project settings). The paths are all  
+> pointing to the right positions too.
+>
+>
+> Is there any obvious reason why this is going wrong and that I am  
+> overlooking?
+>
+> Gr.
+> Frans
+>
+> PS: I am on 10.4.5 and using Xcode 2.1
+>
+>
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+> <Afbeelding 3.png>
+> <Afbeelding 2.png>
+>
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060616/79000fa4/attachment.html>
+
+From f.w.cornelissen at rug.nl  Wed Jun 21 10:19:07 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Wed, 21 Jun 2006 10:19:07 +0200
+Subject: [Osxptb-dev] committing new material related to eyelinktoolbox
+Message-ID: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl>
+
+Dear all,
+
+I am fairly new to these versioning systems.
+Could someone be as kind as to point to or write a short 'fool/non- 
+unix geek proof" recipe for committing (that's the word right) new  
+stuff? (I don't want to appear lazy, but I am very time pressed and  
+prefer to spend my time on coding rather than figuring out what is  
+presumably very obvious to some of you already).
+
+I have the following material related to the eyelinktoolbox that  
+needs to be added (to trunk):
+
+1. updated and new c-code
+2. lot's of m-code
+3. adapted main project file (because of the new c-code)
+
+If the're no objections, in my view, the most consistent would be if  
+the m-code and main eyelink mexmac file would go in a new directory  
+in PsychHardware/EyelinkToolbox, with various further subdirectories  
+such as EyelinkBasic, EyelinkDemos etc.
+(so I need some info on how to create such new directories as well if  
+this is not handled transparently).
+
+Gr.
+Frans
+
+
+
+
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060621/5be02f7f/attachment.html>
+
+From allen_ingling at mac.com  Wed Jun 21 16:56:39 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Wed, 21 Jun 2006 10:56:39 -0400
+Subject: [Osxptb-dev] merging trunk into beta
+Message-ID: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com>
+
+Hi Mario,
+
+When can I merge the trunk into the beta fork?    Whenever I want?
+
+Others merging my own changes from trunk into beta should always be  
+ok; That should not displace something working in beta with something  
+unworking in trunk, because I commit stuff into trunk in chunks which  
+do not require subsequent commits to function.  At least it is my  
+plan that what I put in trunk be complete enough to build and  
+execute, even if not feature-complete.
+
+So can I assume that others with write access to the repository are  
+doing the same and that I can merge trunk into beta whenever?
+
+best,
+
+  Allen
+
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Wed Jun 21 17:43:02 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Wed, 21 Jun 2006 17:43:02 +0200
+Subject: [Osxptb-dev] merging trunk into beta
+In-Reply-To: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com>
+References: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com>
+Message-ID: <44996906.9010801@tuebingen.mpg.de>
+
+Hi Allen,
+
+you can merge your changes whenever you want. With changes of others i'd 
+say, read the associated log messages and decide if they sound like 
+something that's safe to merge. One can merge a specific subset of 
+changes via "svn merge -r start:end trunk/ beta/"  where start is the 
+revision number of the first thing to merge, end the one of the last 
+thing to include. When i merge from trunk i usually try to merge 
+everything since the last merge into beta to make life simple, i.e., svn 
+merge -r lastmergedrevision:HEAD trunk/ beta/
+
+I only omit (merge around) other peoples change if the log messages 
+sound like the changes could break functionality in beta, or they are 
+not yet well tested.
+
+My own rules are like:
+
+1. Whatever is committed into trunk should at least compile and not 
+severely break functionality, so other developers can always update from 
+trunk and work on the code without having to fight bugs introduced by 
+others. -> Either make small incremental commits or commit consistent 
+chunks.
+
+-> That's what you do as well.
+
+2. Code merged into beta should be somewhat stable, as many people use 
+beta for real work -- which is encouraged, given that stable is many 
+month behind beta. It's ok if new features are merged into beta that 
+don't break old features of beta, even if this new features are 
+incomplete, work in progress, e.g., fine-tuning and more debugging 
+needed, interface subject to change. Only code in stable should not 
+change in functionality or interface (well more functionality is always 
+good, but removing functionality, massive incompatible change to 
+behaviour or interface are not good), as people should be able to rely 
+on "code working with stable at point t still works with the same 
+behaviour at t + x month".
+
+3. I often commit "mostly working, but not yet completely polished" 
+features into beta to simplify merging, but i simply don't announce them 
+on the forum until i'm confident they are really ok.
+
+best,
+-mario
+
+
+Allen W. Ingling wrote:
+> 
+> Hi Mario,
+> 
+> When can I merge the trunk into the beta fork?    Whenever I want?
+> 
+> Others merging my own changes from trunk into beta should always be  ok; 
+> That should not displace something working in beta with something  
+> unworking in trunk, because I commit stuff into trunk in chunks which  
+> do not require subsequent commits to function.  At least it is my  plan 
+> that what I put in trunk be complete enough to build and  execute, even 
+> if not feature-complete.
+> 
+> So can I assume that others with write access to the repository are  
+> doing the same and that I can merge trunk into beta whenever?
+> 
+> best,
+> 
+>  Allen
+> 
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Wed Jun 21 18:08:38 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Wed, 21 Jun 2006 18:08:38 +0200
+Subject: [Osxptb-dev] committing new material related to eyelinktoolbox
+In-Reply-To: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl>
+References: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl>
+Message-ID: <44996F06.90208@tuebingen.mpg.de>
+
+Hi Frans,
+
+it goes like this:
+
+1a. Check out your local working copy via:
+
+svn checkout 
+svn+ssh://franswcorneliss at svn.berlios.de/svnroot/repos/osxptb/trunk 
+/Users/frans/MyPsychtoolboxfolder
+
+-> 1a is only done once in a life-time
+-> If you didn't do 1a, you can always just do 1a and then manually copy 
+your new/modified files and folders from your current copy of PTB into 
+the newly checked out working copy.
+
+
+Every day you start coding on PTB do:
+
+1b.
+
+cd /Users/frans/MyPsychtoolboxfolder/trunk
+svn update
+
+2. Make any modification & addition you want to the copy in 
+MyPsychtoolboxfolder/trunk.
+
+3a. If you want to add a single file, or a full new subdirectory, 
+including all contained directories and files, you just add it as you 
+would always do, then add it to Subversion via:
+
+svn add <pathToTheNewFolderOrFileToAdd>
+
+e.g.,
+
+svn add Psychtoolbox/PsychHardware/EyelinkToolbox
+
+to add EyelinkToolbox and all its subdirectories and files.
+
+3b. There's also commands for removing files and folders...
+
+svn remove <path>
+
+...or moving them (renaming or moving to a different location):
+
+3c. svn mv <oldnameOrLocation> <newNameOrLocation>
+
+4a. Finally you can inspect what you've modified, added or deleted via:
+
+svn status
+
+-> Shows a list of all files with status letters (A)dded, (D)eleted, 
+(M)odified (?) Unknown file, not belonging to Subversion and therefore 
+ignored.
+
+4b. You can always review your changes, i.e., look what you've actually 
+changed with respect to the current state of trunk:
+
+svn diff <PathOrFilename>
+
+-> Prints out all differing lines.
+
+4c. You can undo changes, i.e., restore files to their state in trunk:
+
+svn revert <PathOrFilename>
+
+
+4d. Or restore them to the state of a specific revision in trunk, via:
+
+svn update -r <RequestedRevisionNumber>
+
+
+5. When you're happy with the new state of the files in your working 
+copy, you can commit them to the database via:
+
+svn commit  <--- Everything you did.
+
+svn commit <PathToDirectoryOrFile>  <--- Only specific directories (and 
+their content) or files.
+
+6. Done.
+
+
+If you don't want to retype your Berlios password all the time, you can 
+create a cryptographic key and upload it to Berlios, so your machine can 
+automatically authenticate you. See...
+
+<http://developer.berlios.de/docman/display_doc.php?docid=31&group_id=2>
+
+
+Merging files from trunk into beta goes via svn merge. One usually 
+checks out a working copy of the trunk and one copy of beta, e.g., 
+side-by-side:
+
+/Users/kleinerm/Psychtoolbox/trunk/
+/Users/kleinerm/Psychtoolbox/beta/
+
+and then one can do:
+
+1. cd /Users/kleinerm/Psychtoolbox
+2. svn merge -r <revnumberOfLastMerge>:HEAD trunk/ beta/
+3. cd beta
+4. svn commit
+
+But merging trunk-stuff into beta can also be done by me if you just 
+drop me an e-mail when you think that stuff in trunk is ready for beta.
+
+Subversion has many more commands, but this is what one mostly needs for 
+day-to-day work. If you get used to it, it is a pretty convenient way of 
+backing up and organising data, keeping track of changes and a great aid 
+in debugging the more involved bugs.
+
+
+I'd say your proposed placement of files makes sense to me.
+
+ciao,
+-mario
+
+
+
+Frans Cornelissen wrote:
+> Dear all,
+> 
+> I am fairly new to these versioning systems.
+> Could someone be as kind as to point to or write a short 'fool/non-unix 
+> geek proof" recipe for committing (that's the word right) new stuff? (I 
+> don't want to appear lazy, but I am very time pressed and prefer to 
+> spend my time on coding rather than figuring out what is presumably very 
+> obvious to some of you already).
+> 
+> I have the following material related to the eyelinktoolbox that needs 
+> to be added (to trunk):
+> 
+> 1. updated and new c-code
+> 2. lot's of m-code
+> 3. adapted main project file (because of the new c-code)
+> 
+> If the're no objections, in my view, the most consistent would be if the 
+> m-code and main eyelink mexmac file would go in a new directory in 
+> PsychHardware/EyelinkToolbox, with various further subdirectories such 
+> as EyelinkBasic, EyelinkDemos etc.
+> (so I need some info on how to create such new directories as well if 
+> this is not handled transparently).
+> 
+> Gr.
+> Frans
+> 
+> 
+> 
+> 
+> 
+> -----------------------------------------------------------------------------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre, 
+> School of Behavioural and Cognitive Neurosciences, University Medical 
+> Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>  
+> 
+> 
+> 
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From allen_ingling at mac.com  Wed Jun 21 19:56:43 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Wed, 21 Jun 2006 13:56:43 -0400
+Subject: [Osxptb-dev] merging trunk into beta
+In-Reply-To: <44996906.9010801@tuebingen.mpg.de>
+References: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com> <44996906.9010801@tuebingen.mpg.de>
+Message-ID: <626EDCBD-2A8E-4DD0-905F-7ED01FB03D83@mac.com>
+
+Mario,
+
+Ok thanks.  That all sounds sensible.
+
+best,
+
+Allen
+
+
+
+
+On Jun 21, 2006, at 11:43 AM, Mario Kleiner wrote:
+
+> Hi Allen,
+>
+> you can merge your changes whenever you want. With changes of  
+> others i'd say, read the associated log messages and decide if they  
+> sound like something that's safe to merge. One can merge a specific  
+> subset of changes via "svn merge -r start:end trunk/ beta/"  where  
+> start is the revision number of the first thing to merge, end the  
+> one of the last thing to include. When i merge from trunk i usually  
+> try to merge everything since the last merge into beta to make life  
+> simple, i.e., svn merge -r lastmergedrevision:HEAD trunk/ beta/
+>
+> I only omit (merge around) other peoples change if the log messages  
+> sound like the changes could break functionality in beta, or they  
+> are not yet well tested.
+>
+> My own rules are like:
+>
+> 1. Whatever is committed into trunk should at least compile and not  
+> severely break functionality, so other developers can always update  
+> from trunk and work on the code without having to fight bugs  
+> introduced by others. -> Either make small incremental commits or  
+> commit consistent chunks.
+>
+> -> That's what you do as well.
+>
+> 2. Code merged into beta should be somewhat stable, as many people  
+> use beta for real work -- which is encouraged, given that stable is  
+> many month behind beta. It's ok if new features are merged into  
+> beta that don't break old features of beta, even if this new  
+> features are incomplete, work in progress, e.g., fine-tuning and  
+> more debugging needed, interface subject to change. Only code in  
+> stable should not change in functionality or interface (well more  
+> functionality is always good, but removing functionality, massive  
+> incompatible change to behaviour or interface are not good), as  
+> people should be able to rely on "code working with stable at point  
+> t still works with the same behaviour at t + x month".
+>
+> 3. I often commit "mostly working, but not yet completely polished"  
+> features into beta to simplify merging, but i simply don't announce  
+> them on the forum until i'm confident they are really ok.
+>
+> best,
+> -mario
+>
+>
+> Allen W. Ingling wrote:
+>> Hi Mario,
+>> When can I merge the trunk into the beta fork?    Whenever I want?
+>> Others merging my own changes from trunk into beta should always  
+>> be  ok; That should not displace something working in beta with  
+>> something  unworking in trunk, because I commit stuff into trunk  
+>> in chunks which  do not require subsequent commits to function.   
+>> At least it is my  plan that what I put in trunk be complete  
+>> enough to build and  execute, even if not feature-complete.
+>> So can I assume that others with write access to the repository  
+>> are  doing the same and that I can merge trunk into beta whenever?
+>> best,
+>>  Allen
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>
+>
+> -- 
+> *********************************************************************
+> Mario Kleiner
+> Max Planck Institute for Biological Cybernetics
+> Spemannstr. 38
+> 72076 Tuebingen
+> Germany
+>
+> e-mail: mario.kleiner at tuebingen.mpg.de
+> office: +49 (0)7071/601-742
+> fax:    +49 (0)7071/601-616
+> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+> *********************************************************************
+> "Debugging is twice as hard as writing the code in the first place.
+> Therefore, if you write the code as cleverly as possible, you are,
+> by definition, not smart enough to debug it." - Brian W. Kernighan
+>
+>
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Thu Jun 22 02:19:35 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 22 Jun 2006 02:19:35 +0200
+Subject: [Osxptb-dev] merging trunk into beta
+In-Reply-To: <626EDCBD-2A8E-4DD0-905F-7ED01FB03D83@mac.com>
+References: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com> <44996906.9010801@tuebingen.mpg.de> <626EDCBD-2A8E-4DD0-905F-7ED01FB03D83@mac.com>
+Message-ID: <4499E217.10303@tuebingen.mpg.de>
+
+Allen,
+
+One more idea:
+
+we could add a little statement like "Safe for beta" to our SVN 
+log-messages to explicitely tell each other when a commit would be safe 
+for merge into beta, so there is no ambiguity if merging others code is 
+safe or not.
+
+E.g., revision 368 is safe for merge into beta, although the log message 
+may sound like this is experimental code. It is incomplete experimental 
+code, but it only affects Linux + Octave, so all the official Matlab 
+versions should be fine.
+
+So if you want to merge your latest GetChar improvements, go ahead :)
+
+ciao,
+-mario
+
+
+Allen W. Ingling wrote:
+> 
+> Mario,
+> 
+> Ok thanks.  That all sounds sensible.
+> 
+> best,
+> 
+> Allen
+> 
+> 
+> 
+> 
+> On Jun 21, 2006, at 11:43 AM, Mario Kleiner wrote:
+> 
+>> Hi Allen,
+>>
+>> you can merge your changes whenever you want. With changes of  others 
+>> i'd say, read the associated log messages and decide if they  sound 
+>> like something that's safe to merge. One can merge a specific  subset 
+>> of changes via "svn merge -r start:end trunk/ beta/"  where  start is 
+>> the revision number of the first thing to merge, end the  one of the 
+>> last thing to include. When i merge from trunk i usually  try to merge 
+>> everything since the last merge into beta to make life  simple, i.e., 
+>> svn merge -r lastmergedrevision:HEAD trunk/ beta/
+>>
+>> I only omit (merge around) other peoples change if the log messages  
+>> sound like the changes could break functionality in beta, or they  are 
+>> not yet well tested.
+>>
+>> My own rules are like:
+>>
+>> 1. Whatever is committed into trunk should at least compile and not  
+>> severely break functionality, so other developers can always update  
+>> from trunk and work on the code without having to fight bugs  
+>> introduced by others. -> Either make small incremental commits or  
+>> commit consistent chunks.
+>>
+>> -> That's what you do as well.
+>>
+>> 2. Code merged into beta should be somewhat stable, as many people  
+>> use beta for real work -- which is encouraged, given that stable is  
+>> many month behind beta. It's ok if new features are merged into  beta 
+>> that don't break old features of beta, even if this new  features are 
+>> incomplete, work in progress, e.g., fine-tuning and  more debugging 
+>> needed, interface subject to change. Only code in  stable should not 
+>> change in functionality or interface (well more  functionality is 
+>> always good, but removing functionality, massive  incompatible change 
+>> to behaviour or interface are not good), as  people should be able to 
+>> rely on "code working with stable at point  t still works with the 
+>> same behaviour at t + x month".
+>>
+>> 3. I often commit "mostly working, but not yet completely polished"  
+>> features into beta to simplify merging, but i simply don't announce  
+>> them on the forum until i'm confident they are really ok.
+>>
+>> best,
+>> -mario
+>>
+>>
+>> Allen W. Ingling wrote:
+>>
+>>> Hi Mario,
+>>> When can I merge the trunk into the beta fork?    Whenever I want?
+>>> Others merging my own changes from trunk into beta should always  be  
+>>> ok; That should not displace something working in beta with  
+>>> something  unworking in trunk, because I commit stuff into trunk  in 
+>>> chunks which  do not require subsequent commits to function.   At 
+>>> least it is my  plan that what I put in trunk be complete  enough to 
+>>> build and  execute, even if not feature-complete.
+>>> So can I assume that others with write access to the repository  are  
+>>> doing the same and that I can merge trunk into beta whenever?
+>>> best,
+>>>  Allen
+>>> _______________________________________________
+>>> Osxptb-dev mailing list
+>>> Osxptb-dev at lists.berlios.de
+>>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>>
+>>
+>>
+>> -- 
+>> *********************************************************************
+>> Mario Kleiner
+>> Max Planck Institute for Biological Cybernetics
+>> Spemannstr. 38
+>> 72076 Tuebingen
+>> Germany
+>>
+>> e-mail: mario.kleiner at tuebingen.mpg.de
+>> office: +49 (0)7071/601-742
+>> fax:    +49 (0)7071/601-616
+>> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+>> *********************************************************************
+>> "Debugging is twice as hard as writing the code in the first place.
+>> Therefore, if you write the code as cleverly as possible, you are,
+>> by definition, not smart enough to debug it." - Brian W. Kernighan
+>>
+>>
+> 
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From allen_ingling at mac.com  Thu Jun 22 14:41:42 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Thu, 22 Jun 2006 08:41:42 -0400
+Subject: [Osxptb-dev] merging trunk into beta
+In-Reply-To: <4499E217.10303@tuebingen.mpg.de>
+References: <7F1E4EFF-3CE5-48B7-9906-D1791DF8A188@mac.com> <44996906.9010801@tuebingen.mpg.de> <626EDCBD-2A8E-4DD0-905F-7ED01FB03D83@mac.com> <4499E217.10303@tuebingen.mpg.de>
+Message-ID: <62CF4021-A016-4235-B64E-611B090A8926@mac.com>
+
+On Jun 21, 2006, at 8:19 PM, Mario Kleiner wrote:
+> we could add a little statement like "Safe for beta" to our SVN log- 
+> messages
+
+
+Mario,
+
+I had the same thought.  Let's do that.
+
+best,
+
+Allen
+
+
+
+
+
+
+On Jun 21, 2006, at 8:19 PM, Mario Kleiner wrote:
+
+> Allen,
+>
+> One more idea:
+>
+> we could add a little statement like "Safe for beta" to our SVN log- 
+> messages to explicitely tell each other when a commit would be safe  
+> for merge into beta, so there is no ambiguity if merging others  
+> code is safe or not.
+>
+> E.g., revision 368 is safe for merge into beta, although the log  
+> message may sound like this is experimental code. It is incomplete  
+> experimental code, but it only affects Linux + Octave, so all the  
+> official Matlab versions should be fine.
+>
+> So if you want to merge your latest GetChar improvements, go ahead :)
+>
+> ciao,
+> -mario
+>
+>
+> Allen W. Ingling wrote:
+>> Mario,
+>> Ok thanks.  That all sounds sensible.
+>> best,
+>> Allen
+>> On Jun 21, 2006, at 11:43 AM, Mario Kleiner wrote:
+>>> Hi Allen,
+>>>
+>>> you can merge your changes whenever you want. With changes of   
+>>> others i'd say, read the associated log messages and decide if  
+>>> they  sound like something that's safe to merge. One can merge a  
+>>> specific  subset of changes via "svn merge -r start:end trunk/  
+>>> beta/"  where  start is the revision number of the first thing to  
+>>> merge, end the  one of the last thing to include. When i merge  
+>>> from trunk i usually  try to merge everything since the last  
+>>> merge into beta to make life  simple, i.e., svn merge -r  
+>>> lastmergedrevision:HEAD trunk/ beta/
+>>>
+>>> I only omit (merge around) other peoples change if the log  
+>>> messages  sound like the changes could break functionality in  
+>>> beta, or they  are not yet well tested.
+>>>
+>>> My own rules are like:
+>>>
+>>> 1. Whatever is committed into trunk should at least compile and  
+>>> not  severely break functionality, so other developers can always  
+>>> update  from trunk and work on the code without having to fight  
+>>> bugs  introduced by others. -> Either make small incremental  
+>>> commits or  commit consistent chunks.
+>>>
+>>> -> That's what you do as well.
+>>>
+>>> 2. Code merged into beta should be somewhat stable, as many  
+>>> people  use beta for real work -- which is encouraged, given that  
+>>> stable is  many month behind beta. It's ok if new features are  
+>>> merged into  beta that don't break old features of beta, even if  
+>>> this new  features are incomplete, work in progress, e.g., fine- 
+>>> tuning and  more debugging needed, interface subject to change.  
+>>> Only code in  stable should not change in functionality or  
+>>> interface (well more  functionality is always good, but removing  
+>>> functionality, massive  incompatible change to behaviour or  
+>>> interface are not good), as  people should be able to rely on  
+>>> "code working with stable at point  t still works with the same  
+>>> behaviour at t + x month".
+>>>
+>>> 3. I often commit "mostly working, but not yet completely  
+>>> polished"  features into beta to simplify merging, but i simply  
+>>> don't announce  them on the forum until i'm confident they are  
+>>> really ok.
+>>>
+>>> best,
+>>> -mario
+>>>
+>>>
+>>> Allen W. Ingling wrote:
+>>>
+>>>> Hi Mario,
+>>>> When can I merge the trunk into the beta fork?    Whenever I want?
+>>>> Others merging my own changes from trunk into beta should  
+>>>> always  be  ok; That should not displace something working in  
+>>>> beta with  something  unworking in trunk, because I commit stuff  
+>>>> into trunk  in chunks which  do not require subsequent commits  
+>>>> to function.   At least it is my  plan that what I put in trunk  
+>>>> be complete  enough to build and  execute, even if not feature- 
+>>>> complete.
+>>>> So can I assume that others with write access to the repository   
+>>>> are  doing the same and that I can merge trunk into beta whenever?
+>>>> best,
+>>>>  Allen
+>>>> _______________________________________________
+>>>> Osxptb-dev mailing list
+>>>> Osxptb-dev at lists.berlios.de
+>>>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>>>
+>>>
+>>>
+>>> -- 
+>>> ******************************************************************** 
+>>> *
+>>> Mario Kleiner
+>>> Max Planck Institute for Biological Cybernetics
+>>> Spemannstr. 38
+>>> 72076 Tuebingen
+>>> Germany
+>>>
+>>> e-mail: mario.kleiner at tuebingen.mpg.de
+>>> office: +49 (0)7071/601-742
+>>> fax:    +49 (0)7071/601-616
+>>> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+>>> ******************************************************************** 
+>>> *
+>>> "Debugging is twice as hard as writing the code in the first place.
+>>> Therefore, if you write the code as cleverly as possible, you are,
+>>> by definition, not smart enough to debug it." - Brian W. Kernighan
+>>>
+>>>
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>
+>
+> -- 
+> *********************************************************************
+> Mario Kleiner
+> Max Planck Institute for Biological Cybernetics
+> Spemannstr. 38
+> 72076 Tuebingen
+> Germany
+>
+> e-mail: mario.kleiner at tuebingen.mpg.de
+> office: +49 (0)7071/601-742
+> fax:    +49 (0)7071/601-616
+> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+> *********************************************************************
+> "Debugging is twice as hard as writing the code in the first place.
+> Therefore, if you write the code as cleverly as possible, you are,
+> by definition, not smart enough to debug it." - Brian W. Kernighan
+>
+>
+
+
+
+From f.w.cornelissen at rug.nl  Thu Jun 22 23:20:17 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Thu, 22 Jun 2006 23:20:17 +0200
+Subject: [Osxptb-dev] PsychCopyInCharArg missing?
+Message-ID: <11FB9267-7A2D-4D52-B5FB-675A4BE29911@rug.nl>
+
+Hi,
+
+While developing for the EyelinkToolbox, I appear to have run into a  
+problem.
+I need to pass a char to my (eyelink) function "SendButtonPress",  
+that communicates key presses to the eyelink system,
+but there appears to be no PsychCopyInCharArg.
+When I use PsychCopyInIntArg i get an error stating I am not passing  
+the correct type of argument.
+
+Any suggestion on how to tackle this?
+
+I now see that "screendrawtext" uses "PsychAllocInCharArg" to obtain  
+a string.
+Should I use this also for passing a single char?
+The accompanying text suggests that there may an issue with using  
+this function (allocation of memory that isn't used). Would this  
+result in a serious memory loop when used frequently in a loop?
+
+Thanks for any information.
+gr.
+frans
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060622/09796ec4/attachment.html>
+
+From laubrock at uni-potsdam.de  Fri Jun 23 12:18:07 2006
+From: laubrock at uni-potsdam.de (Jochen Laubrock)
+Date: Fri, 23 Jun 2006 12:18:07 +0200
+Subject: [Osxptb-dev] building targets of PTB
+In-Reply-To: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl>
+References: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl>
+Message-ID: <5C776C44-9F9B-4AC1-8419-7AB03833964A@uni-potsdam.de>
+
+Dear Frans,
+
+apparently you are making good progress on the Eyelink Toolbox for  
+Mac OS X. Congratulations and sorry that I did not find the time to  
+look at the ptb code in more detail (for a novice, it takes some time  
+to familiarize with the ptb paradigm).
+
+In your recent forum post, you mention some current limitations of  
+the eyelink toolbox.
+> -does not run in dummy mode, so no point in trying without an  
+> actual eyelink
+ From the manual:
+The link connection can be simulated for early development work, or  
+when the EyeLink tracker is not available.  By calling  
+open_eyelink_connection() with an argument of 1 instead of 0, your  
+program will not attempt to connect to the EyeLink tracker, but  
+simply initializes the eyelink_core library.
+
+> -does not show an eye image on subject pc
+> -no (or at least no functional) communication from the subject  
+> (i.e. mac) keyboard with
+> the operator Eyelink PC
+
+In my C code for eyelink experiments using a combination of SDL and  
+OpenGL on OS X, I have written some eyelink callback functions ("hook  
+functions") that implement this functionality. I guess that it would  
+not be too difficult to adapt them if you're familiar with ptb  
+programming (in fact, some of the code is taken from Mario's source).  
+For example, there is a version of the camera display callback  
+allowing to show an eye image on the subject pc (which is beta  
+quality, but quite useful in developing eyelink applications, and can  
+be used in research). The files are attached--If you are interested,  
+feel free to use these.
+
+Regards,
+Jochen
+
+
+????
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: do_drift_corr_GL.c
+Type: application/octet-stream
+Size: 2762 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.obj>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: do_drift_corr_GL.h
+Type: application/octet-stream
+Size: 1349 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.obj>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: myhookfcns.cpp
+Type: application/octet-stream
+Size: 8682 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.obj>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.html>
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: myhookfcns.h
+Type: application/octet-stream
+Size: 609 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.obj>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0004.html>
+
+From f.w.cornelissen at rug.nl  Fri Jun 23 15:52:09 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Fri, 23 Jun 2006 15:52:09 +0200
+Subject: [Osxptb-dev] building targets of PTB
+In-Reply-To: <5C776C44-9F9B-4AC1-8419-7AB03833964A@uni-potsdam.de>
+References: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl> <5C776C44-9F9B-4AC1-8419-7AB03833964A@uni-potsdam.de>
+Message-ID: <53AECA90-A7AA-4A95-8932-FB2B48BE323B@rug.nl>
+
+Dear Jochen,
+
+The dummy mode lack is just a matter of priorities, not coding  
+difficulty. The eye image IS related to the latter, so I am greatly  
+interested to see how you solved these issues.
+
+My idea is to have eyelink.mexmac put/collect the image information  
+somewhere, and use Screen putimage to actually put it on screen (or  
+perhaps via maketexture, not sure yet), thus avoiding use of any  
+actual drawing routines other than those present in PTB (and thus  
+hopefully making it more portable).
+
+If you have any suggestions for this, feel free to ventilate them.
+
+Gr.
+
+frans
+
+
+
+
+Op 23-jun-2006, om 12:18 heeft Jochen Laubrock het volgende geschreven:
+
+> Dear Frans,
+>
+> apparently you are making good progress on the Eyelink Toolbox for  
+> Mac OS X. Congratulations and sorry that I did not find the time to  
+> look at the ptb code in more detail (for a novice, it takes some  
+> time to familiarize with the ptb paradigm).
+>
+> In your recent forum post, you mention some current limitations of  
+> the eyelink toolbox.
+>> -does not run in dummy mode, so no point in trying without an  
+>> actual eyelink
+> From the manual:
+> The link connection can be simulated for early development work, or  
+> when the EyeLink tracker is not available.  By calling  
+> open_eyelink_connection() with an argument of 1 instead of 0, your  
+> program will not attempt to connect to the EyeLink tracker, but  
+> simply initializes the eyelink_core library.
+>
+>> -does not show an eye image on subject pc
+>> -no (or at least no functional) communication from the subject  
+>> (i.e. mac) keyboard with
+>> the operator Eyelink PC
+>
+> In my C code for eyelink experiments using a combination of SDL and  
+> OpenGL on OS X, I have written some eyelink callback functions  
+> ("hook functions") that implement this functionality. I guess that  
+> it would not be too difficult to adapt them if you're familiar with  
+> ptb programming (in fact, some of the code is taken from Mario's  
+> source). For example, there is a version of the camera display  
+> callback allowing to show an eye image on the subject pc (which is  
+> beta quality, but quite useful in developing eyelink applications,  
+> and can be used in research). The files are attached--If you are  
+> interested, feel free to use these.
+>
+> Regards,
+> Jochen
+>
+>
+> <do_drift_corr_GL.c>
+> <do_drift_corr_GL.h>
+> <myhookfcns.cpp>
+> <myhookfcns.h>
+>
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/68e2b13c/attachment.html>
+
+From allen_ingling at mac.com  Sat Jun 24 05:56:36 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Fri, 23 Jun 2006 23:56:36 -0400
+Subject: [Osxptb-dev] PsychCopyInCharArg missing?
+In-Reply-To: <11FB9267-7A2D-4D52-B5FB-675A4BE29911@rug.nl>
+References: <11FB9267-7A2D-4D52-B5FB-675A4BE29911@rug.nl>
+Message-ID: <A172FAB4-0CEC-400B-AF0E-19F3E09F52DA@mac.com>
+
+
+On Jun 22, 2006, at 5:20 PM, Frans Cornelissen wrote:
+
+
+> I need to pass a char to my (eyelink) function "SendButtonPress"..  
+> but there appears to be no PsychCopyInCharArg.. I now see that  
+> "screendrawtext" uses "PsychAllocInCharArg" to obtain a string.
+
+Hi Frans,
+
+PsychAllocInCharArg() is indeed the correct  function to use for that  
+purpose.
+
+
+> The accompanying text suggests that there may an issue with using  
+> this function (allocation of memory that isn't used).
+
+Are you referring to the following comment appearing above the  
+definition of PsychAllocInCharArg() in PsychScriptingGlue.cc?
+
+This function violates the rule for AllocIn fuctions that if the  
+argument is optional and absent we allocate
+space.  That turns out to be an unuseful feature anyway, so we should  
+probably get rid of it.
+
+If so, there should be no cause for concern.  It only means that if  
+the caller in the MATLAB environment does not pass an argument then  
+PsychAllocInCharArg does not allocate memory to hold the non-existent  
+argument.  For other PsychAlloc* functions which do allocate memory  
+when no argument is present there is still no leak because the memory  
+is automatically freed when the thread exits the mex function and  
+returns to MATLAB.
+
+Note that a pointer to memory allocated by PsychAllocInCharArg upon  
+entering into the mex file remains valid only until the thread exits  
+the mex function; The pointer to input values received from the  
+previous call to a mex function is invalid upon reentry to the mex  
+function.  If between invocations of your mex file you need to retain  
+the contents of memory holding an input argument, then copy those  
+contents to memory which the mex file owns.  In this respect, the  
+Psych Scripting Glue and MATLAB mex APIs are the same.
+
+best,
+
+Allen
+
+
+
+
+
+
+On Jun 22, 2006, at 5:20 PM, Frans Cornelissen wrote:
+
+> Hi,
+>
+> While developing for the EyelinkToolbox, I appear to have run into  
+> a problem.
+> I need to pass a char to my (eyelink) function "SendButtonPress",  
+> that communicates key presses to the eyelink system,
+> but there appears to be no PsychCopyInCharArg.
+> When I use PsychCopyInIntArg i get an error stating I am not  
+> passing the correct type of argument.
+>
+> Any suggestion on how to tackle this?
+>
+> I now see that "screendrawtext" uses "PsychAllocInCharArg" to  
+> obtain a string.
+> Should I use this also for passing a single char?
+> The accompanying text suggests that there may an issue with using  
+> this function (allocation of memory that isn't used). Would this  
+> result in a serious memory loop when used frequently in a loop?
+>
+> Thanks for any information.
+> gr.
+> frans
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/c168a4fc/attachment.html>
+
+From mario.kleiner at tuebingen.mpg.de  Sat Jun 24 08:04:03 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Sat, 24 Jun 2006 08:04:03 +0200
+Subject: [Osxptb-dev] building targets of PTB
+In-Reply-To: <53AECA90-A7AA-4A95-8932-FB2B48BE323B@rug.nl>
+References: <41FDAF8C-DCC8-4637-913C-130011AA33BE@rug.nl> <5C776C44-9F9B-4AC1-8419-7AB03833964A@uni-potsdam.de> <53AECA90-A7AA-4A95-8932-FB2B48BE323B@rug.nl>
+Message-ID: <449CD5D3.60403@tuebingen.mpg.de>
+
+Hi Frans,
+
+i've added a new Screen subfunction to the beta. This function allows to 
+pass a (void*) pointer to a memory buffer with image data. PTB will then 
+convert the content of that image buffer into a Psychtoolbox texture.
+
+That should be the easiest: Use whatever eyelink provides to fill a 
+memory buffer with the image, return the pointer, call the new Screen 
+function to make a texture out of it, use the texture with 'DrawTexture' 
+and such as any other texture.
+
+There's a new subfolder...
+
+Psychtoolbox/PsychOpenGL/ExampleCodeForC/
+
+...which contains a simple example mex file and demo m file to show how 
+you need to create an appropriate pointer and pass it. You need to 
+compile the 'mex Memorybuffer2Texture.c', then run the demo.
+
+best,
+-mario
+
+Frans Cornelissen wrote:
+> Dear Jochen,
+> 
+> The dummy mode lack is just a matter of priorities, not coding 
+> difficulty. The eye image IS related to the latter, so I am greatly 
+> interested to see how you solved these issues.
+> 
+> My idea is to have eyelink.mexmac put/collect the image information 
+> somewhere, and use Screen putimage to actually put it on screen (or 
+> perhaps via maketexture, not sure yet), thus avoiding use of any actual 
+> drawing routines other than those present in PTB (and thus hopefully 
+> making it more portable).
+> 
+> If you have any suggestions for this, feel free to ventilate them.
+> 
+> Gr.
+> 
+> frans
+> 
+> 
+> 
+> 
+> Op 23-jun-2006, om 12:18 heeft Jochen Laubrock het volgende geschreven:
+> 
+>> Dear Frans,
+>>
+>> apparently you are making good progress on the Eyelink Toolbox for Mac 
+>> OS X. Congratulations and sorry that I did not find the time to look 
+>> at the ptb code in more detail (for a novice, it takes some time to 
+>> familiarize with the ptb paradigm).
+>>
+>> In your recent forum post, you mention some current limitations of the 
+>> eyelink toolbox. 
+>>
+>>> -does not run in dummy mode, so no point in trying without an actual 
+>>> eyelink
+>>
+>> From the manual: 
+>> The link connection can be simulated for early development work, or 
+>> when the EyeLink tracker is not available.  By calling 
+>> *open_eyelink_connection()* with an argument of 1 instead of 0, your 
+>> program will not attempt to connect to the EyeLink tracker, but simply 
+>> initializes the eyelink_core library. 
+>>
+>>> -does not show an eye image on subject pc
+>>> -no (or at least no functional) communication from the subject (i.e. 
+>>> mac) keyboard with
+>>> the operator Eyelink PC
+>>
+>>
+>> In my C code for eyelink experiments using a combination of SDL and 
+>> OpenGL on OS X, I have written some eyelink callback functions ("hook 
+>> functions") that implement this functionality. I guess that it would 
+>> not be too difficult to adapt them if you're familiar with ptb 
+>> programming (in fact, some of the code is taken from Mario's source). 
+>> For example, there is a version of the camera display callback 
+>> allowing to show an eye image on the subject pc (which is beta 
+>> quality, but quite useful in developing eyelink applications, and can 
+>> be used in research). The files are attached--If you are interested, 
+>> feel free to use these. 
+>>
+>> Regards, 
+>> Jochen
+>>
+>>
+>> <do_drift_corr_GL.c>
+>> <do_drift_corr_GL.h>
+>> <myhookfcns.cpp>
+>> <myhookfcns.h>
+>>
+> 
+> -----------------------------------------------------------------------------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre, 
+> School of Behavioural and Cognitive Neurosciences, University Medical 
+> Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>  
+> 
+> 
+> 
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From f.w.cornelissen at rug.nl  Tue Jun 27 00:16:49 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 27 Jun 2006 00:16:49 +0200
+Subject: [Osxptb-dev] committing new material
+In-Reply-To: <44996F06.90208@tuebingen.mpg.de>
+References: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl> <44996F06.90208@tuebingen.mpg.de>
+Message-ID: <ACFD8165-531E-46A9-9DA6-064561A9F146@rug.nl>
+
+Hi Mario et al.
+
+Thanks for this recipe. I have been trying to get it to work, but it  
+seems to fail at the commit stage.
+
+After svn commit,
+it starts to spit out a long list of added/changed files, creates a  
+scn-commit.tmp file in my working copy directory, but
+than nothing happens, except for about ten tildes '~' appearing over  
+the course of say 10 minutes.
+
+Terminal doesn't respond anymore, can only quit the terminal.
+
+Any idea what's going wrong?
+
+
+Frans
+
+
+Here's part of the content of the .tmp file:
+------------------------------------------------------
+
+--This line, and those below, will be ignored--
+
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkAcceptTrigger.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkMessage.c
+M    PsychSourceGL/Source/Common/Eyelink/RegisterProject.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkOpenFile.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkWaitForModeReady.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkCheckRecording.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkDriftCorrStart.c
+AM   PsychSourceGL/Source/Common/Eyelink/ 
+EyelinkNewFloatSampleAvailable.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkEyeAvailable.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyeLinkTargetCheck.c
+M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.c
+M    PsychSourceGL/Source/Common/Eyelink/EyelinkSynopsis.c
+M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.h
+
+.......
+
+
+
+Op 21-jun-2006, om 18:08 heeft Mario Kleiner het volgende geschreven:
+
+> Hi Frans,
+>
+> it goes like this:
+>
+> 1a. Check out your local working copy via:
+>
+> svn checkout svn+ssh://franswcorneliss at svn.berlios.de/svnroot/repos/ 
+> osxptb/trunk /Users/frans/MyPsychtoolboxfolder
+>
+> -> 1a is only done once in a life-time
+> -> If you didn't do 1a, you can always just do 1a and then manually  
+> copy your new/modified files and folders from your current copy of  
+> PTB into the newly checked out working copy.
+>
+>
+> Every day you start coding on PTB do:
+>
+> 1b.
+>
+> cd /Users/frans/MyPsychtoolboxfolder/trunk
+> svn update
+>
+> 2. Make any modification & addition you want to the copy in  
+> MyPsychtoolboxfolder/trunk.
+>
+> 3a. If you want to add a single file, or a full new subdirectory,  
+> including all contained directories and files, you just add it as  
+> you would always do, then add it to Subversion via:
+>
+> svn add <pathToTheNewFolderOrFileToAdd>
+>
+> e.g.,
+>
+> svn add Psychtoolbox/PsychHardware/EyelinkToolbox
+>
+> to add EyelinkToolbox and all its subdirectories and files.
+>
+> 3b. There's also commands for removing files and folders...
+>
+> svn remove <path>
+>
+> ...or moving them (renaming or moving to a different location):
+>
+> 3c. svn mv <oldnameOrLocation> <newNameOrLocation>
+>
+> 4a. Finally you can inspect what you've modified, added or deleted  
+> via:
+>
+> svn status
+>
+> -> Shows a list of all files with status letters (A)dded, (D) 
+> eleted, (M)odified (?) Unknown file, not belonging to Subversion  
+> and therefore ignored.
+>
+> 4b. You can always review your changes, i.e., look what you've  
+> actually changed with respect to the current state of trunk:
+>
+> svn diff <PathOrFilename>
+>
+> -> Prints out all differing lines.
+>
+> 4c. You can undo changes, i.e., restore files to their state in trunk:
+>
+> svn revert <PathOrFilename>
+>
+>
+> 4d. Or restore them to the state of a specific revision in trunk, via:
+>
+> svn update -r <RequestedRevisionNumber>
+>
+>
+> 5. When you're happy with the new state of the files in your  
+> working copy, you can commit them to the database via:
+>
+> svn commit  <--- Everything you did.
+>
+> svn commit <PathToDirectoryOrFile>  <--- Only specific directories  
+> (and their content) or files.
+>
+> 6. Done.
+>
+>
+> If you don't want to retype your Berlios password all the time, you  
+> can create a cryptographic key and upload it to Berlios, so your  
+> machine can automatically authenticate you. See...
+>
+> <http://developer.berlios.de/docman/display_doc.php? 
+> docid=31&group_id=2>
+>
+>
+> Merging files from trunk into beta goes via svn merge. One usually  
+> checks out a working copy of the trunk and one copy of beta, e.g.,  
+> side-by-side:
+>
+> /Users/kleinerm/Psychtoolbox/trunk/
+> /Users/kleinerm/Psychtoolbox/beta/
+>
+> and then one can do:
+>
+> 1. cd /Users/kleinerm/Psychtoolbox
+> 2. svn merge -r <revnumberOfLastMerge>:HEAD trunk/ beta/
+> 3. cd beta
+> 4. svn commit
+>
+> But merging trunk-stuff into beta can also be done by me if you  
+> just drop me an e-mail when you think that stuff in trunk is ready  
+> for beta.
+>
+> Subversion has many more commands, but this is what one mostly  
+> needs for day-to-day work. If you get used to it, it is a pretty  
+> convenient way of backing up and organising data, keeping track of  
+> changes and a great aid in debugging the more involved bugs.
+>
+>
+> I'd say your proposed placement of files makes sense to me.
+>
+> ciao,
+> -mario
+>
+>
+>
+> Frans Cornelissen wrote:
+>> Dear all,
+>> I am fairly new to these versioning systems.
+>> Could someone be as kind as to point to or write a short 'fool/non- 
+>> unix geek proof" recipe for committing (that's the word right) new  
+>> stuff? (I don't want to appear lazy, but I am very time pressed  
+>> and prefer to spend my time on coding rather than figuring out  
+>> what is presumably very obvious to some of you already).
+>> I have the following material related to the eyelinktoolbox that  
+>> needs to be added (to trunk):
+>> 1. updated and new c-code
+>> 2. lot's of m-code
+>> 3. adapted main project file (because of the new c-code)
+>> If the're no objections, in my view, the most consistent would be  
+>> if the m-code and main eyelink mexmac file would go in a new  
+>> directory in PsychHardware/EyelinkToolbox, with various further  
+>> subdirectories such as EyelinkBasic, EyelinkDemos etc.
+>> (so I need some info on how to create such new directories as well  
+>> if this is not handled transparently).
+>> Gr.
+>> Frans
+>> --------------------------------------------------------------------- 
+>> --------------------------------------------
+>> Laboratory of Experimental Ophthalmology & BCN NeuroImaging  
+>> Centre, School of Behavioural and Cognitive Neurosciences,  
+>> University Medical Centre Groningen,
+>> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+>> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>>
+>
+>
+> -- 
+> *********************************************************************
+> Mario Kleiner
+> Max Planck Institute for Biological Cybernetics
+> Spemannstr. 38
+> 72076 Tuebingen
+> Germany
+>
+> e-mail: mario.kleiner at tuebingen.mpg.de
+> office: +49 (0)7071/601-742
+> fax:    +49 (0)7071/601-616
+> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+> *********************************************************************
+> "Debugging is twice as hard as writing the code in the first place.
+> Therefore, if you write the code as cleverly as possible, you are,
+> by definition, not smart enough to debug it." - Brian W. Kernighan
+>
+>
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/df68fc09/attachment.html>
+
+From allen_ingling at mac.com  Tue Jun 27 01:10:18 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Mon, 26 Jun 2006 19:10:18 -0400
+Subject: [Osxptb-dev] committing new material
+In-Reply-To: <ACFD8165-531E-46A9-9DA6-064561A9F146@rug.nl>
+References: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl> <44996F06.90208@tuebingen.mpg.de> <ACFD8165-531E-46A9-9DA6-064561A9F146@rug.nl>
+Message-ID: <70C7B42F-2CA0-4D8F-B4A3-71AD059D90E0@mac.com>
+
+
+
+Hi Frans,
+
+The command "svn commit" dumps you into the VI editor so that you can  
+add a  log entry.  That's what you would see immediately after "svn  
+commit".
+
+Various way which this can be dealt with or avoided:
+
+- Just go ahead and use the VI editor if you know that.  The commit  
+will proceed after you quit the editor.
+
+- Specify a log message on the command line when you commit, for  
+example:
+svn commit --message "Fixed operation of foo in bar.c"
+
+- Specify a file holding a log message on the command line when you  
+commit, for example:
+svn commit --file myLogMessageFile
+
+- Change the default editor to something which you like more than VI  
+by setting the $EDITOR environment variable.  The unix editor "nano"  
+a.k.a "pico" included with OS X would be good choice if you are  
+unfamiliar with Emacs or VI.  Or you could use nano to edit a file  
+and then specify that when you commit using the "--file" flag as in  
+the previous example.
+
+It would be helpful to match the format and style of your log message  
+to what Mario has established, unless you have deliberate reasons to  
+deviate, which is fine.  Here are recent log messages for trunk:
+http://svn.berlios.de/wsvn/osxptb/trunk/?op=log&rev=0&sc=0&isdir=1
+
+best,
+
+Allen
+
+
+
+
+
+
+
+
+On Jun 26, 2006, at 6:16 PM, Frans Cornelissen wrote:
+
+> Hi Mario et al.
+>
+> Thanks for this recipe. I have been trying to get it to work, but  
+> it seems to fail at the commit stage.
+>
+> After svn commit,
+> it starts to spit out a long list of added/changed files, creates a  
+> scn-commit.tmp file in my working copy directory, but
+> than nothing happens, except for about ten tildes '~' appearing  
+> over the course of say 10 minutes.
+>
+> Terminal doesn't respond anymore, can only quit the terminal.
+>
+> Any idea what's going wrong?
+>
+>
+> Frans
+>
+>
+> Here's part of the content of the .tmp file:
+> ------------------------------------------------------
+>
+> --This line, and those below, will be ignored--
+>
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkAcceptTrigger.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkMessage.c
+> M    PsychSourceGL/Source/Common/Eyelink/RegisterProject.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkOpenFile.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkWaitForModeReady.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkCheckRecording.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkDriftCorrStart.c
+> AM   PsychSourceGL/Source/Common/Eyelink/ 
+> EyelinkNewFloatSampleAvailable.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkEyeAvailable.c
+> AM   PsychSourceGL/Source/Common/Eyelink/EyeLinkTargetCheck.c
+> M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.c
+> M    PsychSourceGL/Source/Common/Eyelink/EyelinkSynopsis.c
+> M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.h
+>
+> .......
+>
+>
+>
+> Op 21-jun-2006, om 18:08 heeft Mario Kleiner het volgende geschreven:
+>
+>> Hi Frans,
+>>
+>> it goes like this:
+>>
+>> 1a. Check out your local working copy via:
+>>
+>> svn checkout svn+ssh://franswcorneliss at svn.berlios.de/svnroot/ 
+>> repos/osxptb/trunk /Users/frans/MyPsychtoolboxfolder
+>>
+>> -> 1a is only done once in a life-time
+>> -> If you didn't do 1a, you can always just do 1a and then  
+>> manually copy your new/modified files and folders from your  
+>> current copy of PTB into the newly checked out working copy.
+>>
+>>
+>> Every day you start coding on PTB do:
+>>
+>> 1b.
+>>
+>> cd /Users/frans/MyPsychtoolboxfolder/trunk
+>> svn update
+>>
+>> 2. Make any modification & addition you want to the copy in  
+>> MyPsychtoolboxfolder/trunk.
+>>
+>> 3a. If you want to add a single file, or a full new subdirectory,  
+>> including all contained directories and files, you just add it as  
+>> you would always do, then add it to Subversion via:
+>>
+>> svn add <pathToTheNewFolderOrFileToAdd>
+>>
+>> e.g.,
+>>
+>> svn add Psychtoolbox/PsychHardware/EyelinkToolbox
+>>
+>> to add EyelinkToolbox and all its subdirectories and files.
+>>
+>> 3b. There's also commands for removing files and folders...
+>>
+>> svn remove <path>
+>>
+>> ...or moving them (renaming or moving to a different location):
+>>
+>> 3c. svn mv <oldnameOrLocation> <newNameOrLocation>
+>>
+>> 4a. Finally you can inspect what you've modified, added or deleted  
+>> via:
+>>
+>> svn status
+>>
+>> -> Shows a list of all files with status letters (A)dded, (D) 
+>> eleted, (M)odified (?) Unknown file, not belonging to Subversion  
+>> and therefore ignored.
+>>
+>> 4b. You can always review your changes, i.e., look what you've  
+>> actually changed with respect to the current state of trunk:
+>>
+>> svn diff <PathOrFilename>
+>>
+>> -> Prints out all differing lines.
+>>
+>> 4c. You can undo changes, i.e., restore files to their state in  
+>> trunk:
+>>
+>> svn revert <PathOrFilename>
+>>
+>>
+>> 4d. Or restore them to the state of a specific revision in trunk,  
+>> via:
+>>
+>> svn update -r <RequestedRevisionNumber>
+>>
+>>
+>> 5. When you're happy with the new state of the files in your  
+>> working copy, you can commit them to the database via:
+>>
+>> svn commit  <--- Everything you did.
+>>
+>> svn commit <PathToDirectoryOrFile>  <--- Only specific directories  
+>> (and their content) or files.
+>>
+>> 6. Done.
+>>
+>>
+>> If you don't want to retype your Berlios password all the time,  
+>> you can create a cryptographic key and upload it to Berlios, so  
+>> your machine can automatically authenticate you. See...
+>>
+>> <http://developer.berlios.de/docman/display_doc.php? 
+>> docid=31&group_id=2>
+>>
+>>
+>> Merging files from trunk into beta goes via svn merge. One usually  
+>> checks out a working copy of the trunk and one copy of beta, e.g.,  
+>> side-by-side:
+>>
+>> /Users/kleinerm/Psychtoolbox/trunk/
+>> /Users/kleinerm/Psychtoolbox/beta/
+>>
+>> and then one can do:
+>>
+>> 1. cd /Users/kleinerm/Psychtoolbox
+>> 2. svn merge -r <revnumberOfLastMerge>:HEAD trunk/ beta/
+>> 3. cd beta
+>> 4. svn commit
+>>
+>> But merging trunk-stuff into beta can also be done by me if you  
+>> just drop me an e-mail when you think that stuff in trunk is ready  
+>> for beta.
+>>
+>> Subversion has many more commands, but this is what one mostly  
+>> needs for day-to-day work. If you get used to it, it is a pretty  
+>> convenient way of backing up and organising data, keeping track of  
+>> changes and a great aid in debugging the more involved bugs.
+>>
+>>
+>> I'd say your proposed placement of files makes sense to me.
+>>
+>> ciao,
+>> -mario
+>>
+>>
+>>
+>> Frans Cornelissen wrote:
+>>> Dear all,
+>>> I am fairly new to these versioning systems.
+>>> Could someone be as kind as to point to or write a short 'fool/ 
+>>> non-unix geek proof" recipe for committing (that's the word  
+>>> right) new stuff? (I don't want to appear lazy, but I am very  
+>>> time pressed and prefer to spend my time on coding rather than  
+>>> figuring out what is presumably very obvious to some of you  
+>>> already).
+>>> I have the following material related to the eyelinktoolbox that  
+>>> needs to be added (to trunk):
+>>> 1. updated and new c-code
+>>> 2. lot's of m-code
+>>> 3. adapted main project file (because of the new c-code)
+>>> If the're no objections, in my view, the most consistent would be  
+>>> if the m-code and main eyelink mexmac file would go in a new  
+>>> directory in PsychHardware/EyelinkToolbox, with various further  
+>>> subdirectories such as EyelinkBasic, EyelinkDemos etc.
+>>> (so I need some info on how to create such new directories as  
+>>> well if this is not handled transparently).
+>>> Gr.
+>>> Frans
+>>> -------------------------------------------------------------------- 
+>>> ---------------------------------------------
+>>> Laboratory of Experimental Ophthalmology & BCN NeuroImaging  
+>>> Centre, School of Behavioural and Cognitive Neurosciences,  
+>>> University Medical Centre Groningen,
+>>> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+>>> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>>>
+>>
+>>
+>> -- 
+>> *********************************************************************
+>> Mario Kleiner
+>> Max Planck Institute for Biological Cybernetics
+>> Spemannstr. 38
+>> 72076 Tuebingen
+>> Germany
+>>
+>> e-mail: mario.kleiner at tuebingen.mpg.de
+>> office: +49 (0)7071/601-742
+>> fax:    +49 (0)7071/601-616
+>> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+>> *********************************************************************
+>> "Debugging is twice as hard as writing the code in the first place.
+>> Therefore, if you write the code as cleverly as possible, you are,
+>> by definition, not smart enough to debug it." - Brian W. Kernighan
+>>
+>>
+>> _______________________________________________
+>> Osxptb-dev mailing list
+>> Osxptb-dev at lists.berlios.de
+>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060626/b7a0b8aa/attachment.html>
+
+From f.w.cornelissen at rug.nl  Tue Jun 27 01:54:33 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 27 Jun 2006 01:54:33 +0200
+Subject: [Osxptb-dev] committed new material
+In-Reply-To: <70C7B42F-2CA0-4D8F-B4A3-71AD059D90E0@mac.com>
+References: <797FDF33-1094-4048-878E-6F788B17201F@rug.nl> <44996F06.90208@tuebingen.mpg.de> <ACFD8165-531E-46A9-9DA6-064561A9F146@rug.nl> <70C7B42F-2CA0-4D8F-B4A3-71AD059D90E0@mac.com>
+Message-ID: <A97CFACB-66FE-4A6D-96C5-23CF9653E779@rug.nl>
+
+Thanks,
+That seemed to have done it.
+(Mario's recipe forgot to mention the whipped cream to top it of. ;-)
+
+Gr.
+Frans
+
+
+Op 27-jun-2006, om 1:10 heeft Allen W. Ingling het volgende geschreven:
+
+>
+>
+> Hi Frans,
+>
+> The command "svn commit" dumps you into the VI editor so that you  
+> can add a  log entry.  That's what you would see immediately after  
+> "svn commit".
+>
+> Various way which this can be dealt with or avoided:
+>
+> - Just go ahead and use the VI editor if you know that.  The commit  
+> will proceed after you quit the editor.
+>
+> - Specify a log message on the command line when you commit, for  
+> example:
+> svn commit --message "Fixed operation of foo in bar.c"
+>
+> - Specify a file holding a log message on the command line when you  
+> commit, for example:
+> svn commit --file myLogMessageFile
+>
+> - Change the default editor to something which you like more than  
+> VI by setting the $EDITOR environment variable.  The unix editor  
+> "nano" a.k.a "pico" included with OS X would be good choice if you  
+> are unfamiliar with Emacs or VI.  Or you could use nano to edit a  
+> file and then specify that when you commit using the "--file" flag  
+> as in the previous example.
+>
+> It would be helpful to match the format and style of your log  
+> message to what Mario has established, unless you have deliberate  
+> reasons to deviate, which is fine.  Here are recent log messages  
+> for trunk:
+> http://svn.berlios.de/wsvn/osxptb/trunk/?op=log&rev=0&sc=0&isdir=1
+>
+> best,
+>
+> Allen
+>
+>
+>
+>
+>
+>
+>
+>
+> On Jun 26, 2006, at 6:16 PM, Frans Cornelissen wrote:
+>
+>> Hi Mario et al.
+>>
+>> Thanks for this recipe. I have been trying to get it to work, but  
+>> it seems to fail at the commit stage.
+>>
+>> After svn commit,
+>> it starts to spit out a long list of added/changed files, creates  
+>> a scn-commit.tmp file in my working copy directory, but
+>> than nothing happens, except for about ten tildes '~' appearing  
+>> over the course of say 10 minutes.
+>>
+>> Terminal doesn't respond anymore, can only quit the terminal.
+>>
+>> Any idea what's going wrong?
+>>
+>>
+>> Frans
+>>
+>>
+>> Here's part of the content of the .tmp file:
+>> ------------------------------------------------------
+>>
+>> --This line, and those below, will be ignored--
+>>
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkAcceptTrigger.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkMessage.c
+>> M    PsychSourceGL/Source/Common/Eyelink/RegisterProject.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkOpenFile.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkWaitForModeReady.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkCheckRecording.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkDriftCorrStart.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/ 
+>> EyelinkNewFloatSampleAvailable.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyelinkEyeAvailable.c
+>> AM   PsychSourceGL/Source/Common/Eyelink/EyeLinkTargetCheck.c
+>> M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.c
+>> M    PsychSourceGL/Source/Common/Eyelink/EyelinkSynopsis.c
+>> M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.h
+>>
+>> .......
+>>
+>>
+>>
+>> Op 21-jun-2006, om 18:08 heeft Mario Kleiner het volgende geschreven:
+>>
+>>> Hi Frans,
+>>>
+>>> it goes like this:
+>>>
+>>> 1a. Check out your local working copy via:
+>>>
+>>> svn checkout svn+ssh://franswcorneliss at svn.berlios.de/svnroot/ 
+>>> repos/osxptb/trunk /Users/frans/MyPsychtoolboxfolder
+>>>
+>>> -> 1a is only done once in a life-time
+>>> -> If you didn't do 1a, you can always just do 1a and then  
+>>> manually copy your new/modified files and folders from your  
+>>> current copy of PTB into the newly checked out working copy.
+>>>
+>>>
+>>> Every day you start coding on PTB do:
+>>>
+>>> 1b.
+>>>
+>>> cd /Users/frans/MyPsychtoolboxfolder/trunk
+>>> svn update
+>>>
+>>> 2. Make any modification & addition you want to the copy in  
+>>> MyPsychtoolboxfolder/trunk.
+>>>
+>>> 3a. If you want to add a single file, or a full new subdirectory,  
+>>> including all contained directories and files, you just add it as  
+>>> you would always do, then add it to Subversion via:
+>>>
+>>> svn add <pathToTheNewFolderOrFileToAdd>
+>>>
+>>> e.g.,
+>>>
+>>> svn add Psychtoolbox/PsychHardware/EyelinkToolbox
+>>>
+>>> to add EyelinkToolbox and all its subdirectories and files.
+>>>
+>>> 3b. There's also commands for removing files and folders...
+>>>
+>>> svn remove <path>
+>>>
+>>> ...or moving them (renaming or moving to a different location):
+>>>
+>>> 3c. svn mv <oldnameOrLocation> <newNameOrLocation>
+>>>
+>>> 4a. Finally you can inspect what you've modified, added or  
+>>> deleted via:
+>>>
+>>> svn status
+>>>
+>>> -> Shows a list of all files with status letters (A)dded, (D) 
+>>> eleted, (M)odified (?) Unknown file, not belonging to Subversion  
+>>> and therefore ignored.
+>>>
+>>> 4b. You can always review your changes, i.e., look what you've  
+>>> actually changed with respect to the current state of trunk:
+>>>
+>>> svn diff <PathOrFilename>
+>>>
+>>> -> Prints out all differing lines.
+>>>
+>>> 4c. You can undo changes, i.e., restore files to their state in  
+>>> trunk:
+>>>
+>>> svn revert <PathOrFilename>
+>>>
+>>>
+>>> 4d. Or restore them to the state of a specific revision in trunk,  
+>>> via:
+>>>
+>>> svn update -r <RequestedRevisionNumber>
+>>>
+>>>
+>>> 5. When you're happy with the new state of the files in your  
+>>> working copy, you can commit them to the database via:
+>>>
+>>> svn commit  <--- Everything you did.
+>>>
+>>> svn commit <PathToDirectoryOrFile>  <--- Only specific  
+>>> directories (and their content) or files.
+>>>
+>>> 6. Done.
+>>>
+>>>
+>>> If you don't want to retype your Berlios password all the time,  
+>>> you can create a cryptographic key and upload it to Berlios, so  
+>>> your machine can automatically authenticate you. See...
+>>>
+>>> <http://developer.berlios.de/docman/display_doc.php? 
+>>> docid=31&group_id=2>
+>>>
+>>>
+>>> Merging files from trunk into beta goes via svn merge. One  
+>>> usually checks out a working copy of the trunk and one copy of  
+>>> beta, e.g., side-by-side:
+>>>
+>>> /Users/kleinerm/Psychtoolbox/trunk/
+>>> /Users/kleinerm/Psychtoolbox/beta/
+>>>
+>>> and then one can do:
+>>>
+>>> 1. cd /Users/kleinerm/Psychtoolbox
+>>> 2. svn merge -r <revnumberOfLastMerge>:HEAD trunk/ beta/
+>>> 3. cd beta
+>>> 4. svn commit
+>>>
+>>> But merging trunk-stuff into beta can also be done by me if you  
+>>> just drop me an e-mail when you think that stuff in trunk is  
+>>> ready for beta.
+>>>
+>>> Subversion has many more commands, but this is what one mostly  
+>>> needs for day-to-day work. If you get used to it, it is a pretty  
+>>> convenient way of backing up and organising data, keeping track  
+>>> of changes and a great aid in debugging the more involved bugs.
+>>>
+>>>
+>>> I'd say your proposed placement of files makes sense to me.
+>>>
+>>> ciao,
+>>> -mario
+>>>
+>>>
+>>>
+>>> Frans Cornelissen wrote:
+>>>> Dear all,
+>>>> I am fairly new to these versioning systems.
+>>>> Could someone be as kind as to point to or write a short 'fool/ 
+>>>> non-unix geek proof" recipe for committing (that's the word  
+>>>> right) new stuff? (I don't want to appear lazy, but I am very  
+>>>> time pressed and prefer to spend my time on coding rather than  
+>>>> figuring out what is presumably very obvious to some of you  
+>>>> already).
+>>>> I have the following material related to the eyelinktoolbox that  
+>>>> needs to be added (to trunk):
+>>>> 1. updated and new c-code
+>>>> 2. lot's of m-code
+>>>> 3. adapted main project file (because of the new c-code)
+>>>> If the're no objections, in my view, the most consistent would  
+>>>> be if the m-code and main eyelink mexmac file would go in a new  
+>>>> directory in PsychHardware/EyelinkToolbox, with various further  
+>>>> subdirectories such as EyelinkBasic, EyelinkDemos etc.
+>>>> (so I need some info on how to create such new directories as  
+>>>> well if this is not handled transparently).
+>>>> Gr.
+>>>> Frans
+>>>> ------------------------------------------------------------------- 
+>>>> ----------------------------------------------
+>>>> Laboratory of Experimental Ophthalmology & BCN NeuroImaging  
+>>>> Centre, School of Behavioural and Cognitive Neurosciences,  
+>>>> University Medical Centre Groningen,
+>>>> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+>>>> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>>>>
+>>>
+>>>
+>>> -- 
+>>> ******************************************************************** 
+>>> *
+>>> Mario Kleiner
+>>> Max Planck Institute for Biological Cybernetics
+>>> Spemannstr. 38
+>>> 72076 Tuebingen
+>>> Germany
+>>>
+>>> e-mail: mario.kleiner at tuebingen.mpg.de
+>>> office: +49 (0)7071/601-742
+>>> fax:    +49 (0)7071/601-616
+>>> www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+>>> ******************************************************************** 
+>>> *
+>>> "Debugging is twice as hard as writing the code in the first place.
+>>> Therefore, if you write the code as cleverly as possible, you are,
+>>> by definition, not smart enough to debug it." - Brian W. Kernighan
+>>>
+>>>
+>>> _______________________________________________
+>>> Osxptb-dev mailing list
+>>> Osxptb-dev at lists.berlios.de
+>>> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+>>
+>> --------------------------------------------------------------------- 
+>> --------------------------------------------
+>> Laboratory of Experimental Ophthalmology & BCN NeuroImaging  
+>> Centre, School of Behavioural and Cognitive Neurosciences,  
+>> University Medical Centre Groningen,
+>> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+>> Email: f.w.cornelissen at rug.nl
+>>
+>>
+>>
+>>
+>
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/25b5b5bd/attachment.html>
+
+From f.w.cornelissen at rug.nl  Tue Jun 27 01:56:11 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 27 Jun 2006 01:56:11 +0200
+Subject: [Osxptb-dev] svn GUI's
+Message-ID: <3CC046E9-9EF0-436F-AC11-D8E029F48CFB@rug.nl>
+
+While struggling with svn commit, I found two svn GUI's:
+
+http://www.lachoseinteractive.net/en/community/subversion/
+http://rapidsvn.tigris.org/
+
+but those seemed (also) to have some issues (not just with  
+committing). Anyone got any experience with such things and could  
+recommend one?
+
+Gr,
+Frans
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/0f4e2824/attachment.html>
+
+From f.w.cornelissen at rug.nl  Tue Jun 27 01:59:03 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 27 Jun 2006 01:59:03 +0200
+Subject: [Osxptb-dev] bubble demo and gazecontingent demo
+Message-ID: <ECFECC56-93E3-42A9-83E2-A8FA0D51DC85@rug.nl>
+
+	Question for Mario,
+
+There are two what seem to be (highly) identical demos in the PTB:  
+bubble demo and gazecontingent demo.
+I started adapting one for use with eyelink (eyelinkbubble), but  
+perhaps I should have used the other one?
+Please advice.
+Gr.
+Frans
+
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/335e552b/attachment.html>
+
+From allen_ingling at mac.com  Tue Jun 27 02:35:24 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Mon, 26 Jun 2006 20:35:24 -0400
+Subject: [Osxptb-dev] svn GUI's
+In-Reply-To: <3CC046E9-9EF0-436F-AC11-D8E029F48CFB@rug.nl>
+References: <3CC046E9-9EF0-436F-AC11-D8E029F48CFB@rug.nl>
+Message-ID: <FFBE49F1-E9E1-43D5-8D52-55022AB85043@mac.com>
+
+
+Frans,
+
+On the subject of svn GUIs for OS X: I like the Xcode built-in  
+support for svn.  Instructions for how to configure here:
+http://developer.apple.com/documentation/DeveloperTools/Conceptual/ 
+XcodeUserGuide/Contents/Resources/en.lproj/index.html
+
+I tried la chose svnX, the first of your two links, maybe back in  
+January.  There were problems then.
+
+I am happy with the command line.   The manual is available for free  
+here: http://svnbook.red-bean.com/
+
+- Allen
+
+
+On Jun 26, 2006, at 7:56 PM, Frans Cornelissen wrote:
+
+> While struggling with svn commit, I found two svn GUI's:
+>
+> http://www.lachoseinteractive.net/en/community/subversion/
+> http://rapidsvn.tigris.org/
+>
+> but those seemed (also) to have some issues (not just with  
+> committing). Anyone got any experience with such things and could  
+> recommend one?
+>
+> Gr,
+> Frans
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+
+
+
+
+On Jun 26, 2006, at 7:56 PM, Frans Cornelissen wrote:
+
+> While struggling with svn commit, I found two svn GUI's:
+>
+> http://www.lachoseinteractive.net/en/community/subversion/
+> http://rapidsvn.tigris.org/
+>
+> but those seemed (also) to have some issues (not just with  
+> committing). Anyone got any experience with such things and could  
+> recommend one?
+>
+> Gr,
+> Frans
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060626/b1300d76/attachment.html>
+
+From mario.kleiner at tuebingen.mpg.de  Tue Jun 27 14:01:33 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Tue, 27 Jun 2006 14:01:33 +0200
+Subject: [Osxptb-dev] bubble demo and gazecontingent demo
+In-Reply-To: <ECFECC56-93E3-42A9-83E2-A8FA0D51DC85@rug.nl>
+References: <ECFECC56-93E3-42A9-83E2-A8FA0D51DC85@rug.nl>
+Message-ID: <44A11E1D.2050805@tuebingen.mpg.de>
+
+The GazeContingentDemoOSX only efficiently creates one bubble at the 
+center of gaze and is nicely commented. It is probably the more classic 
+type of a gaze contingent display. The BubbleDemoOSX is more general: It 
+uses a different alpha blending trick and allows to create multiple 
+bubbles in a more efficient way, but i'm not 100% sure that all comments 
+explaining the trick are correct (consistent with the code). Bubbledemo 
+draws two apertures, one at the center of gaze, the other one offset by 
+some amount i arbitrary selected, just to show that you can superimpose 
+bubbles as well to create more complex masks online. I think, it lacks a 
+good deal of explanation what it is supposed to be...
+
+I guess it doesn't really matter which to take...
+
+Gr.
+-mario
+
+
+Frans Cornelissen wrote:
+>   Question for Mario,
+> 
+> There are two what seem to be (highly) identical demos in the 
+> PTB: bubble demo and gazecontingent demo.
+> I started adapting one for use with eyelink (eyelinkbubble), but perhaps 
+> I should have used the other one?
+> Please advice.
+> Gr.
+> Frans
+> 
+> 
+> -----------------------------------------------------------------------------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre, 
+> School of Behavioural and Cognitive Neurosciences, University Medical 
+> Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl <mailto:f.w.cornelissen at rug.nl>
+>  
+> 
+> 
+> 
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From f.w.cornelissen at rug.nl  Thu Jun 29 21:36:56 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Thu, 29 Jun 2006 21:36:56 +0200
+Subject: [Osxptb-dev] scripts in psychtb project
+Message-ID: <CF273E6E-D1D5-4B6D-88F0-899C2DF3198F@rug.nl>
+
+
+the psychtoolbox projects (the targets in it, that is) contain a  
+'script' that copies the target from the build directory to a  
+particular psychtoolbox directory in /Applications/Psychtoolbox/  
+(e.g. Screen.mexmac goes to PsychBasic).
+
+Although potentially a nice feature, it works out a bit odd, at least  
+in my case.
+
+I am keeping my "production grade/safe" psychtoolbox version in the  
+Applications directory (as per recommendation of  
+DownloadPsychToolbox). But during development, I prefer to use the  
+one that is part of the 'trunk'.
+
+Wouldn't it make much more sense that the script copies the compiled  
+target into the PsychToolbox directory that is part of my working  
+copy of trunk?
+
+(Of course, I can make it work like that by changing the different  
+versions' locations , but it just doesn't seem entirely "appropriate".
+
+Is there a particular reason for the copy scripts to work the way to  
+do now?
+Can they be changed to copy the targets into the appropriate trunk  
+directories?
+
+Gr.
+Frans
+
+
+
+
+
+
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060629/d08b0acf/attachment.html>
+
+From allen_ingling at mac.com  Fri Jun 30 05:52:07 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Thu, 29 Jun 2006 23:52:07 -0400
+Subject: [Osxptb-dev] scripts in psychtb project
+In-Reply-To: <CF273E6E-D1D5-4B6D-88F0-899C2DF3198F@rug.nl>
+References: <CF273E6E-D1D5-4B6D-88F0-899C2DF3198F@rug.nl>
+Message-ID: <40A69274-58FE-4D01-8485-3EC8FF847E25@mac.com>
+
+
+On Jun 29, 2006, at 3:36 PM, Frans Cornelissen wrote:
+
+> Is there a particular reason for the copy scripts to work the way  
+> to do now?
+
+Hi Frans,
+
+I configured the Xcode project to copy mex files under /Applications/ 
+Psychtoolbox/ before we began using Subversion.  So there was no  
+consideration of how to handle having multiple Psychtoolbox forks  
+installed on the same system.  With only one fork, placing the .mex  
+build under /Applications/Psychtoolbox was fine.
+
+
+> Wouldn't it make much more sense that the script copies the  
+> compiled target into the PsychToolbox directory that is part of my  
+> working copy of trunk?
+
+Three applications operate on mex files and each has its own notion  
+of where they are.  Those are Xcode, Subversion and MATLAB. The  
+present arrangement automatically enforces consistency between them.   
+The path settings are automatically consistent between applications  
+because they are constant, always under /Applications/Psychtoolbox.   
+That is a benefit of the present arrangement, that I can leave MATLAB  
+path settings the same and also always invoke Subversion from the  
+same directory, /Applications/Psychtoolbox.  I can trust that what I  
+compiled is what MATLAB sees without checking, and trust that when I  
+invoke svn in the Psychtoolbox directory that I am always in the  
+right Psychtoolbox directory.  I  switch between Psychoolbox forks  
+with just "svn switch" and "svn info" tells me which I have.  Works  
+great for me.
+
+If you want to keep two Psychtoolbox forks on your computer and  
+switch between them by changing the MATLAB path instead of using 'svn  
+switch' then what you suggest might be the best arrangement.  There  
+is reason to do that if you need to change between forks before a  
+commit.
+
+Not sure what works best for others, what's the consensus?
+
+- Allen
+
+
+On Jun 29, 2006, at 3:36 PM, Frans Cornelissen wrote:
+
+>
+> the psychtoolbox projects (the targets in it, that is) contain a  
+> 'script' that copies the target from the build directory to a  
+> particular psychtoolbox directory in /Applications/Psychtoolbox/  
+> (e.g. Screen.mexmac goes to PsychBasic).
+>
+> Although potentially a nice feature, it works out a bit odd, at  
+> least in my case.
+>
+> I am keeping my "production grade/safe" psychtoolbox version in the  
+> Applications directory (as per recommendation of  
+> DownloadPsychToolbox). But during development, I prefer to use the  
+> one that is part of the 'trunk'.
+>
+> Wouldn't it make much more sense that the script copies the  
+> compiled target into the PsychToolbox directory that is part of my  
+> working copy of trunk?
+>
+> (Of course, I can make it work like that by changing the different  
+> versions' locations , but it just doesn't seem entirely "appropriate".
+>
+> Is there a particular reason for the copy scripts to work the way  
+> to do now?
+> Can they be changed to copy the targets into the appropriate trunk  
+> directories?
+>
+> Gr.
+> Frans
+>
+>
+>
+>
+>
+>
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060629/0fd442b9/attachment.html>
+

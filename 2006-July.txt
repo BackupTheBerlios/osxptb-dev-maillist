@@ -1,0 +1,844 @@
+From f.w.cornelissen at rug.nl  Tue Jul  4 02:05:23 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 4 Jul 2006 02:05:23 +0200
+Subject: [Osxptb-dev] eyelink toolbox for opengl windows
+Message-ID: <C0ED73E3-FC50-41A1-9E96-D588C3F0B467@rug.nl>
+
+certainly not my favorite topic, but I have had one or two people ask  
+about the possibility to compile the new OSX eyelinktoolbox for  
+windows. I presume it should be possible, there's nothing OSX  
+specific in the code, and eyelink libraries are available for windows  
+(and even linux). The question is how? Can this be done from within  
+Xcode in some way?
+
+Frans
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060704/cb41094b/attachment.html>
+
+From f.w.cornelissen at rug.nl  Tue Jul  4 02:26:01 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Tue, 4 Jul 2006 02:26:01 +0200
+Subject: [Osxptb-dev] calling m-file functions from within c routine
+Message-ID: <DC3E5C25-CD17-44D7-977D-39DAF379CBFA@rug.nl>
+
+Hi,
+
+I may have to call specific ptb functions from within my c-code. I  
+believe there are ways to do this.
+Does anyone happen to have an example that shows how to do this  
+(ideally for calling ptb functions of course ;-)
+
+Thanks very much,
+
+Frans
+
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: f.w.cornelissen at rug.nl
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060704/9404bb5a/attachment.html>
+
+From allen_ingling at mac.com  Tue Jul  4 04:16:14 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Mon, 3 Jul 2006 22:16:14 -0400
+Subject: [Osxptb-dev] eyelink toolbox for opengl windows
+In-Reply-To: <C0ED73E3-FC50-41A1-9E96-D588C3F0B467@rug.nl>
+References: <C0ED73E3-FC50-41A1-9E96-D588C3F0B467@rug.nl>
+Message-ID: <DCFA61C7-4EAB-4019-895E-DCFD653E2E03@mac.com>
+
+
+
+On Jul 3, 2006, at 8:05 PM, Frans Cornelissen wrote:
+
+
+> ...compile the new OSX eyelinktoolbox for windows... how?
+
+Hi Frans,
+
+Mario appears to be  using Microsoft's Visual C++ IDE to build the  
+OpenGL Screen mex on Windows.  The file extensions on the Windows  
+Screen project files indicate that.  That should work fine for  
+building the eyelink mex.    The rest of the Win PTB mex functions  
+are also built in Microsoft's Visual C++ IDE.
+
+As for cross-compiling a Windows target using Xcode, that would be  
+really convenient.   Apple does not support that, however Google  
+turns up a this page with instructions:
+http://www.zonic.co.uk/products/mingw/
+
+That cross-compiling setup uses the gcc compiler and I don't know  
+whether Mathworks supports that for building .mex files on Windows.   
+Not really a problem though, there is a way around if it is unsupported.
+
+Cross-compiling Windows .mex targets in Xcode would be great,  but I  
+would anticipate headaches when setting that up.  Should be much  
+easier to copy Mario's OpenGL Screen mex target settings for MS  
+Visual C++.
+
+best,
+
+Allen
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+On Jul 3, 2006, at 8:05 PM, Frans Cornelissen wrote:
+
+> certainly not my favorite topic, but I have had one or two people  
+> ask about the possibility to compile the new OSX eyelinktoolbox for  
+> windows. I presume it should be possible, there's nothing OSX  
+> specific in the code, and eyelink libraries are available for  
+> windows (and even linux). The question is how? Can this be done  
+> from within Xcode in some way?
+>
+> Frans
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060703/1f0e27d9/attachment.html>
+
+From allen_ingling at mac.com  Tue Jul  4 04:30:33 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Mon, 3 Jul 2006 22:30:33 -0400
+Subject: [Osxptb-dev] calling m-file functions from within c routine
+In-Reply-To: <DC3E5C25-CD17-44D7-977D-39DAF379CBFA@rug.nl>
+References: <DC3E5C25-CD17-44D7-977D-39DAF379CBFA@rug.nl>
+Message-ID: <9140051B-2290-4C31-A2C4-FA809025FEBE@mac.com>
+
+
+
+Frans,
+
+To be certain that I understand the question correctly:  you want to  
+know how to invoke a MATLAB .m file from within a compiled C mex  
+function?
+
+Use mexCallMATLAB() from within your C mex source.  Example: The  
+StoreBit mex function calls the .m function "FunctionFolder" to find  
+its enclosing folder.  See StoreBit.c in the OpenGL PsychSource.
+
+Here is the section of StoreBit.c which calls mexCallMATLAB():
+
+
+			thisMexFunctionName= mexFunctionName();
+			matlabCallbackInputs[0]= mxCreateString(thisMexFunctionName);
+			matlabCallbackErrorFlag=mexCallMATLAB(1, &matlabCallbackOutputs,  
+1, matlabCallbackInputs, "FunctionFolder");
+			if(matlabCallbackErrorFlag){
+				failedToLoadFlag=TRUE;
+				PsychErrorExitMsg(PsychError_internal,"MATLAB callback to  
+\"FunctionFolder.m\" failed.  It could be missing or off the MATLAB  
+path.");
+			}
+			if(mxGetM(matlabCallbackOutputs) * mxGetN(matlabCallbackOutputs)  
+== 0){
+				failedToLoadFlag=TRUE;
+				PsychErrorExitMsg(PsychError_internal,"MATLAB callback to  
+\"FunctionFolder.m\" failed.");
+			}
+			pathToBundleDirectoryStrSizeBytes= (size_t)((mxGetM 
+(matlabCallbackOutputs) * mxGetN(matlabCallbackOutputs) + 1)* sizeof 
+(mxChar));
+			pathToBundleDirectoryStr=(char*)malloc 
+(pathToBundleDirectoryStrSizeBytes);
+			errorFlag= mxGetString(matlabCallbackOutputs, (char*) 
+pathToBundleDirectoryStr, pathToBundleDirectoryStrSizeBytes);
+			if(errorFlag){
+				free((void*)pathToBundleDirectoryStr);
+				failedToLoadFlag=TRUE;
+				PsychErrorExitMsg(PsychError_internal,"Failed to load the Cocoa  
+Bundle because we could not convert a MATALB string to C string.");
+			}
+
+
+
+best,
+
+Allen
+
+
+
+
+On Jul 3, 2006, at 8:26 PM, Frans Cornelissen wrote:
+
+> Hi,
+>
+> I may have to call specific ptb functions from within my c-code. I  
+> believe there are ways to do this.
+> Does anyone happen to have an example that shows how to do this  
+> (ideally for calling ptb functions of course ;-)
+>
+> Thanks very much,
+>
+> Frans
+>
+> ---------------------------------------------------------------------- 
+> -------------------------------------------
+> Laboratory of Experimental Ophthalmology & BCN NeuroImaging Centre,  
+> School of Behavioural and Cognitive Neurosciences, University  
+> Medical Centre Groningen,
+> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> Email: f.w.cornelissen at rug.nl
+>
+>
+>
+>
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060703/a3995635/attachment.html>
+
+From allen_ingling at mac.com  Tue Jul  4 04:58:57 2006
+From: allen_ingling at mac.com (Allen W. Ingling)
+Date: Mon, 3 Jul 2006 22:58:57 -0400
+Subject: [Osxptb-dev] calling m-file functions from within c routine
+In-Reply-To: <9140051B-2290-4C31-A2C4-FA809025FEBE@mac.com>
+References: <DC3E5C25-CD17-44D7-977D-39DAF379CBFA@rug.nl> <9140051B-2290-4C31-A2C4-FA809025FEBE@mac.com>
+Message-ID: <BCD8EFCD-3921-4FF5-86A3-F4838E7F1311@mac.com>
+
+On Jul 3, 2006, at 10:30 PM, Allen W. Ingling wrote:
+
+> To be certain that I understand the question correctly:  you want  
+> to know how to invoke a MATLAB .m file from within a compiled C mex  
+> function?
+
+That was answered in the title of your message.  Overlooked the  
+title, sorry.
+
+- Allen
+
+
+
+
+
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Tue Jul  4 16:00:18 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Tue, 04 Jul 2006 16:00:18 +0200
+Subject: [Osxptb-dev] eyelink toolbox for opengl windows
+In-Reply-To: <DCFA61C7-4EAB-4019-895E-DCFD653E2E03@mac.com>
+Message-ID: <web-20621691@tuebingen.mpg.de>
+
+Actually, what i do is a pretty dumb approach, ugly but it
+works. The files in Projects/Windows are misleading. They
+are stale Visual C++ project files, not useful and not used
+at all. I have Microsofts VC-6 compiler installed, but i
+use Matlabs mex - command, called from a standard Matlab
+M-File, to compile Screen, WaitSecs and GetSecs. Have a
+look at the file makeit.m in the Source/ folder. Whenever i
+changed code in PTB i just start Matlab 5 - the only one i
+have on my Laptop, cd into the Source folder and run
+makeit.m. This rebuilds the whole source -- very
+inefficient.
+
+The reasons for that:
+
+1. Space constraints: My windows partition is stuffed, i
+currently have no way of installing full blown VC-6 or a
+more recent Matlab -- Only 50 Mb left...
+
+2. Brain & Time constraints: I did not use VC for more than
+3 years, and it was faster to do the dumb M-File solution
+than to fight with VC, given that fighting with Microsofts
+compiler used up more time than the whole actual Windows
+coding!
+
+The same is done for the Linux+Matlab and Linux+Octave
+versions...
+
+It's not a big problem, because i develop under Linux or
+XCode, so its just about booting in to Windows and running
+the script, but it's not a clean solution. Anyway, for now
+it does its job.
+
+So the dumb solution would be to have VC-6 installed and
+write a little build-script, modelled from makeit.m as
+example.
+
+But what Allen found sounds very interesting and would be
+worth exploring as a long-term solution!
+
+best,
+-mario
+
+On Mon, 3 Jul 2006 22:16:14 -0400
+ "Allen W. Ingling" <allen_ingling at mac.com> wrote:
+> 
+> 
+> On Jul 3, 2006, at 8:05 PM, Frans Cornelissen wrote:
+> 
+> 
+> > ...compile the new OSX eyelinktoolbox for windows...
+> how?
+> 
+> Hi Frans,
+> 
+> Mario appears to be  using Microsoft's Visual C++ IDE to
+> build the  OpenGL Screen mex on Windows.  The file
+> extensions on the Windows  Screen project files indicate
+> that.  That should work fine for  building the eyelink
+> mex.    The rest of the Win PTB mex functions  are also
+> built in Microsoft's Visual C++ IDE.
+> 
+> As for cross-compiling a Windows target using Xcode, that
+> would be  really convenient.   Apple does not support
+> that, however Google  turns up a this page with
+> instructions:
+> http://www.zonic.co.uk/products/mingw/
+> 
+> That cross-compiling setup uses the gcc compiler and I
+> don't know  whether Mathworks supports that for building
+> .mex files on Windows.   Not really a problem though,
+> there is a way around if it is unsupported.
+> 
+> Cross-compiling Windows .mex targets in Xcode would be
+> great,  but I  would anticipate headaches when setting
+> that up.  Should be much  easier to copy Mario's OpenGL
+> Screen mex target settings for MS  Visual C++.
+> 
+> best,
+> 
+> Allen
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> On Jul 3, 2006, at 8:05 PM, Frans Cornelissen wrote:
+> 
+> > certainly not my favorite topic, but I have had one or
+> two people  
+> > ask about the possibility to compile the new OSX
+> eyelinktoolbox for  
+> > windows. I presume it should be possible, there's
+> nothing OSX  
+> > specific in the code, and eyelink libraries are
+> available for  
+> > windows (and even linux). The question is how? Can this
+> be done  
+> > from within Xcode in some way?
+> >
+> > Frans
+> >
+> >
+>
+----------------------------------------------------------------------
+> 
+> > -------------------------------------------
+> > Laboratory of Experimental Ophthalmology & BCN
+> NeuroImaging Centre,  
+> > School of Behavioural and Cognitive Neurosciences,
+> University  
+> > Medical Centre Groningen,
+> > PO Box 30.001, Groningen 9700 RB, The Netherlands,
+> > Email: f.w.cornelissen at rug.nl
+> >
+> >
+> >
+> >
+> 
+
+
+
+From chrg at sas.upenn.edu  Wed Jul 12 22:34:06 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Wed, 12 Jul 2006 16:34:06 -0400
+Subject: [Osxptb-dev] new developer
+Message-ID: <44B55CBE.6080206@sas.upenn.edu>
+
+Hi everyone,
+    My name is Chris Broussard and I'm now working for David Brainard 
+full time as a programmer.  I will be doing some work on the toolbox and 
+just wanted to let you all know this so you won't be wondering who the 
+heck is messing with the code.
+
+    -Chris-
+
+
+From mario.kleiner at tuebingen.mpg.de  Wed Jul 12 23:59:20 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Wed, 12 Jul 2006 23:59:20 +0200
+Subject: [Osxptb-dev] new developer
+In-Reply-To: <44B55CBE.6080206@sas.upenn.edu>
+References: <44B55CBE.6080206@sas.upenn.edu>
+Message-ID: <44B570B8.9000302@tuebingen.mpg.de>
+
+That's great! Welcome!
+
+Do you already roughly know to which areas of the toolbox you'll contribute?
+
+Please make sure that you are familiar with the basic svn commands 
+(e.g., 
+<http://developer.berlios.de/docman/display_doc.php?docid=394&group_id=2>) 
+and maybe quickly read over the postings on osxptb-dev to get yourself 
+familiar with the "state of affairs". Apart from that, the svn log 
+entries on the svn web-frontend will keep you up to date on development 
+and changes:
+
+<http://svn.berlios.de/wsvn/osxptb>
+
+best,
+-mario
+
+Christopher Broussard wrote:
+> Hi everyone,
+>    My name is Chris Broussard and I'm now working for David Brainard 
+> full time as a programmer.  I will be doing some work on the toolbox and 
+> just wanted to let you all know this so you won't be wondering who the 
+> heck is messing with the code.
+> 
+>    -Chris-
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From chrg at sas.upenn.edu  Tue Jul 18 20:52:24 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Tue, 18 Jul 2006 14:52:24 -0400
+Subject: [Osxptb-dev] threading in Matlab
+Message-ID: <44BD2DE8.8040805@sas.upenn.edu>
+
+I was curious about how successful people were creating new threads from 
+within a mex function.  About 3 or 4 months back I experimented with 
+this on a Windows machine and found that trying to do multi-threading 
+within a mex function caused unpredictable results.  My contact with 
+Matlab support and looking up other developer's experiences on the 
+internet resulted in finding out that Matlab wants to remain single 
+threaded.  That said, I was looking over some of the C code to become 
+more familiar with it and noticed that there were pthread calls.  Has 
+this been stable on OS X, and what have people found to be threading 
+limitations in Matlab.
+
+    Thanks,
+    Chris Broussard
+
+
+From mario.kleiner at tuebingen.mpg.de  Tue Jul 25 06:27:47 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Tue, 25 Jul 2006 06:27:47 +0200
+Subject: [Osxptb-dev] osxptb -- Do not run the convertlinefeeds script
+	again!!!
+In-Reply-To: <44C59335.5060502@sas.upenn.edu>
+References: <44C57EA4.5070007@tuebingen.mpg.de>
+	<44C59335.5060502@sas.upenn.edu>
+Message-ID: <44C59DC3.9010408@tuebingen.mpg.de>
+
+Christopher Broussard wrote:
+> Hey Mario,
+>    Sorry about that.  I saw that it had changed many files so I did a 
+> diff on a few of the files and all I could see different was some 
+> whitespace changes so I figured that maybe no one had run the script in 
+> a long time.  The only reason I ran the script was because of a post to 
+> the dev list that David sent me recommending that it be run.  Here is 
+> the relevant quote:
+> 
+> "please don't forget - before committing to subversion - to run the 
+> scripts in /trunk/managementtools/convertlinefeeds.sh shell script over 
+> your Sourcecode."
+> 
+> It might be a good idea to make a post to the dev forums with some 
+
+Jap. I think the script needs some modification to be safe. It was 
+written before the M$-Windows port and is only needed if someone creates 
+code with the wrong linefeed mode set in XCode (needs to be Unix-Style). 
+Editing the files under M$-Windows creates characters that the script 
+does not handle properly, so it introduces lots of messy linefeeds...
+
+This needs some thoughts and testing before its useable again...
+
+> updated guidelines so no one makes the same mistake I did.  Also, no one 
+> replied to my question about pthreads and Matlab compatibility.  Would 
+> you be the one to ask about that or is there a resource on the web that 
+> I can use to illuminate the subject?
+
+Regarding the PThreads: Avoid multi-threading if you can!
+
+In theory, there is no fundamental reason why starting and managing our 
+own threads via the pthreads-API should cause trouble with Matlab. 
+Matlab doesn't know about our threads, and doesn't care.
+
+The one place were i introduced pthreads is for the asynchronous movie 
+loading under OS-X, because there is no other way to implement that 
+functionality and it seems to be a very useful feature.
+
+In practice, there are many reasons to avoid threads in PTB if the same 
+task can be solved in a single-threaded way:
+
+1. Multi-threaded programming is difficult: You can easily introduce a 
+lot of weird bugs that are very hard to fix. Locking issues, 
+race-conditions and such. That does not apply only to PTB, but to any 
+multi-threaded app.
+
+2. OpenGL is not thread-safe: You are not allowed to access the same 
+OpenGL context from multiple threads simultaneously, so you have to be 
+very careful with all OpenGL ops. This can even crash the whole desktop.
+
+3. Matlab or Octave is not thread-safe: You are not allowed to call any 
+Matlab/Octave function from a thread other than the main thread. This 
+rules out all functions in PsychScriptingGlue for accessing or returning 
+data from/to Matlab. All memory allocations via PsychMallocTemp() and 
+friends are bound to crash from your threads. Any kind of printf(), 
+fprintf() or errror output via PsychErrorExitMsg() and such will 
+possibly crash Matlab... You need to inspect each Psychtoolbox function 
+if it doesn't indirectly access Matlab...
+
+4. Threads have a limited stack-size, so allocating too much memory in 
+local variables of functions can crash, unless you know how to handle this.
+
+5. Some functions in some libraries are not thread-safe or reentrant, so 
+you need to know very well which functions are allowed and which not.
+
+6. Psychtoolbox itself is not thread-safe or reentrant. Its design 
+doesn't protect against parallelism in accessing internal data 
+structures or other ressources.
+
+7. Timing and priority issues: Specific pieces of PTB code, e.g., the 
+Screen('Flip') command depend on the fact that the main-thread gets all 
+the computation time it needs when it needs it. If you start parallel 
+threads inside PTB, they could steal cpu cycles from the main thread in 
+exactly the wrong moment and mess up stimulus timing.
+
+8. The multi-threading needs to work on OS-X, Linux and M$-Windows, each 
+of them has different scheduling behaviour...
+
+9. There are some weird interactions between Quicktime on OS-X (which is 
+highly multi-threaded) and Matlab when running with JVM: Playing some 
+movies can hang or crash Matlab in some situations. The reason is 
+unclear, except that it is threading related, i failed completely in 
+debugging it. The only thing i know is that running matlab in -nojvm 
+mode makes it reliable, probably because then a lot of Java related 
+threads don't run anymore.
+
+So all in all, its not impossible to use threads in PTB, but it is 
+pretty difficult and needs a lot of care if you want to do it. Although 
+i have a lot of experience with multi-threaded and realtime parallel 
+programming from many other projects, i'll try to avoid it in PTB 
+whenever i can.
+
+ciao,
+-mario
+
+
+> 
+>    Thanks,
+>    Chris
+> 
+> Mario Kleiner wrote:
+> 
+>> Hello Christopher,
+>>
+>> your last commit when running the convertlinefeeds.sh script caused 
+>> massive breakage and loss of about 2 hours of my work. I think i 
+>> reverted your changes in the repository to make it workable again. You 
+>> will have to:
+>>
+>> 1. svn update your working copy, possibly you will need to delete it 
+>> completely and check out a fresh copy if you get merge conflicts.
+>>
+>> 2. Readd and recommit the two new files that you added during revision 
+>> 400.
+>>
+>> Please do not run this script without it being absolutely necessary! 
+>> It was only meant to repair severely broken files. When run, it screws 
+>> up the formatting of C source code which makes it pretty unreadable. 
+>> It also creates merge-conflicts which are very painful to resolve 
+>> manually. And it breaks the 'help' function of Matlab for affected 
+>> M-Files. I think the script needs some serious rework and testing 
+>> before it can be safely used again. It was my fault not putting big 
+>> warning messages into the script.
+>>
+>> Also, if you see that a commit changes many files (via invocation of 
+>> "svn status" before committing), please double-check that they really 
+>> don't break anything before committing. Undoing small problems in a 
+>> single file is not a big issue, but undoing such massive changes is a 
+>> lot of work.
+>>
+>> thanks,
+>> -mario
+>>
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+
+From brainard at psych.upenn.edu  Fri Jul 28 18:04:34 2006
+From: brainard at psych.upenn.edu (David Brainard)
+Date: Fri, 28 Jul 2006 12:04:34 -0400
+Subject: [Osxptb-dev] Updates from OS 9 version
+Message-ID: <A6DF9CCA-6C59-4B87-A504-958A83A27FAE@psych.upenn.edu>
+
+		
+Hi,
+
+Chris B. and I have gone through with a file compare utility and  
+moved a bunch of MATLAB code from the OS 9 version into the OS X  
+version.  I think this gets most of the non-display stuff imported  
+and up to date.  I am about to switch my OS/X machines over to point  
+at the OS X version, so if there are any omissions that we use in our  
+calculations we'll find them and fix them.  A list of the changes is  
+below.  Chris will shortly move these into the trunk on Berlios (some  
+are done already).  Then we'd like to push them over to the beta  
+version.  I'll leave Chris and Mario to work out the protocol for  
+doing that.
+
+I did notice going through that there are a lot of demos and tests  
+that don't have corresponding entries in the Contents.m files.  I'd  
+encourage anyone adding or subtracting files to try to keep the  
+Contents files up to date -- they are very helpful in the long run,  
+but less so if they are inaccurate.
+
+Denis, looking over the demo and test folders reinforces my  
+enthusiasm for seeing if the core grant will spring for someone whose  
+job is simply to convert, clean, and document demos and tests.
+
+Best,
+
+David
+
+**************
+
+Updated OSX version from OS9 by copying file over
+   PsychOneLiners/AreStructsEqualOnFields.m
+   PsychCal/CalibrateMonDrvr.m
+   PsychColorimetric/ComputeDKL_M.m
+   PsychColorimetric/SplineCmf.m
+   PsychColorimetricData/PsychColorimetricMatFiles: Contents.m
+   PsychColorimetricData/PsychColorimetric: Contents.m
+
+Added to OS/X version
+   Only in PsychCal: DropCalBits.m
+   Only in PsychColorimetricData/PsychColorimetricMatFiles: B_vrhel.mat
+   Only in PsychColorimetricData/PsychColorimetricMatFiles:  
+sur_vrhel.mat
+
+Deleted from OS/X version, don't need for new programs
+   PsychCal/PsychCalObsolete
+
+Edited
+   PsychDemos: Contents.m
+   PsychDemos: StressQuickTimeOSX
+   PsychFiles: Contents.m
+   PsychTests: Contents.m
+
+Changed name
+   PsychDemos: stressQuickTimeOSX -> StressQuickTimeOSX
+
+Added to OS/X version
+   Only in PsychDemos: IsomerizationsInDishDemo.m
+   Only in PsychDemos: IsomerizationsInEyeDemo.m
+   Only in PsychDemos: NomogramDemo.m
+   Only in PsychDemos: ValetonVanNorrenDemo.m
+   Only in PsychDemos: FitGammaDemo.m
+   Only in PsychDemos: DKLDemo.m
+   Only in PsychFiles: ReadStructsFromText.m
+   Only in PsychFiles: WriteStructsToText.m
+   Only in PsychFiles: LiteralUnderscore.m
+   Only in PsychFiles: FindFolder.m
+   Only in PsychTests: FitCumNormYNTest.m
+   Only in PsychTests: FitWeibullTAFCTest.m
+   Only in PsychTests: FitWeibullYNTest.m
+   Only in PsychTests: LabLuvTest.m
+   Only in PsychTests: OSAUCSTest.m
+   Only in PsychTests: PupilDiameterTest.m
+   Only in PsychTests: StructsFileTest.m
+   Only in PsychTests: TrolandTest.m
+   Only in PsychTests: WavelengthSamplingTest.m
+
+
+From chrg at sas.upenn.edu  Fri Jul 28 18:29:10 2006
+From: chrg at sas.upenn.edu (Christopher Broussard)
+Date: Fri, 28 Jul 2006 12:29:10 -0400
+Subject: [Osxptb-dev] Updates from OS 9 version
+In-Reply-To: <A6DF9CCA-6C59-4B87-A504-958A83A27FAE@psych.upenn.edu>
+References: <A6DF9CCA-6C59-4B87-A504-958A83A27FAE@psych.upenn.edu>
+Message-ID: <44CA3B56.7010800@sas.upenn.edu>
+
+It looks like the svn server is completely full right now.  There were a 
+lot of posts about it in the Berlios bug tracker so I imagine they know 
+about it.  Anyway, David's updates won't be seen in the trunk until 
+Berlios gets everything straightened out, so if for any reason people 
+want those changes immediately, contact me and I can send you the files.
+
+    -Chris-
+
+David Brainard wrote:
+> 		
+> Hi,
+>
+> Chris B. and I have gone through with a file compare utility and  
+> moved a bunch of MATLAB code from the OS 9 version into the OS X  
+> version.  I think this gets most of the non-display stuff imported  
+> and up to date.  I am about to switch my OS/X machines over to point  
+> at the OS X version, so if there are any omissions that we use in our  
+> calculations we'll find them and fix them.  A list of the changes is  
+> below.  Chris will shortly move these into the trunk on Berlios (some  
+> are done already).  Then we'd like to push them over to the beta  
+> version.  I'll leave Chris and Mario to work out the protocol for  
+> doing that.
+>
+> I did notice going through that there are a lot of demos and tests  
+> that don't have corresponding entries in the Contents.m files.  I'd  
+> encourage anyone adding or subtracting files to try to keep the  
+> Contents files up to date -- they are very helpful in the long run,  
+> but less so if they are inaccurate.
+>
+> Denis, looking over the demo and test folders reinforces my  
+> enthusiasm for seeing if the core grant will spring for someone whose  
+> job is simply to convert, clean, and document demos and tests.
+>
+> Best,
+>
+> David
+>
+> **************
+>
+> Updated OSX version from OS9 by copying file over
+>    PsychOneLiners/AreStructsEqualOnFields.m
+>    PsychCal/CalibrateMonDrvr.m
+>    PsychColorimetric/ComputeDKL_M.m
+>    PsychColorimetric/SplineCmf.m
+>    PsychColorimetricData/PsychColorimetricMatFiles: Contents.m
+>    PsychColorimetricData/PsychColorimetric: Contents.m
+>
+> Added to OS/X version
+>    Only in PsychCal: DropCalBits.m
+>    Only in PsychColorimetricData/PsychColorimetricMatFiles: B_vrhel.mat
+>    Only in PsychColorimetricData/PsychColorimetricMatFiles:  
+> sur_vrhel.mat
+>
+> Deleted from OS/X version, don't need for new programs
+>    PsychCal/PsychCalObsolete
+>
+> Edited
+>    PsychDemos: Contents.m
+>    PsychDemos: StressQuickTimeOSX
+>    PsychFiles: Contents.m
+>    PsychTests: Contents.m
+>
+> Changed name
+>    PsychDemos: stressQuickTimeOSX -> StressQuickTimeOSX
+>
+> Added to OS/X version
+>    Only in PsychDemos: IsomerizationsInDishDemo.m
+>    Only in PsychDemos: IsomerizationsInEyeDemo.m
+>    Only in PsychDemos: NomogramDemo.m
+>    Only in PsychDemos: ValetonVanNorrenDemo.m
+>    Only in PsychDemos: FitGammaDemo.m
+>    Only in PsychDemos: DKLDemo.m
+>    Only in PsychFiles: ReadStructsFromText.m
+>    Only in PsychFiles: WriteStructsToText.m
+>    Only in PsychFiles: LiteralUnderscore.m
+>    Only in PsychFiles: FindFolder.m
+>    Only in PsychTests: FitCumNormYNTest.m
+>    Only in PsychTests: FitWeibullTAFCTest.m
+>    Only in PsychTests: FitWeibullYNTest.m
+>    Only in PsychTests: LabLuvTest.m
+>    Only in PsychTests: OSAUCSTest.m
+>    Only in PsychTests: PupilDiameterTest.m
+>    Only in PsychTests: StructsFileTest.m
+>    Only in PsychTests: TrolandTest.m
+>    Only in PsychTests: WavelengthSamplingTest.m
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://bat.berlios.de/mailman/listinfo/osxptb-dev
+>
+>   
+
+

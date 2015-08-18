@@ -1,0 +1,44 @@
+From levy at nmr.mgh.harvard.edu  Mon Sep 24 19:38:04 2007
+From: levy at nmr.mgh.harvard.edu (Robert Levy)
+Date: Mon, 24 Sep 2007 13:38:04 -0400
+Subject: [Osxptb-dev] OS-X Psychtoolbox and realtime operation for EEG
+	acquisition
+Message-ID: <46F7F5FC.2000303@nmr.mgh.harvard.edu>
+
+Hello,
+
+This question is for people who have used the Matlab psychtoolbox in EEG 
+and/or MEG (requiring accuracy in the range of milliseconds.)
+
+The document below indicates that if used correctly, Mac-OSX can achieve 
+realtime uninterupted operation at millisecond-scale accuracy, even 
+though the system is not designed for hard realtime operation.
+
+http://www.kyb.tuebingen.mpg.de/bu/people/kleinerm/ptbosx/ptbdocu-1.0.5MK4R1.html 
+<http://www.kyb.tuebingen.mpg.de/bu/people/kleinerm/ptbosx/ptbdocu-1.0.5MK4R1.html>
+
+My question is, as EEG users of Psychtoolbox, have you encountered any 
+difficult problems in getting realtime performance?  Did you find it 
+worked well and reliably?
+
+Thanks,
+Rob
+
+-- 
+
+Robert P. Levy, B.A.
+Research Assistant, Manoach Lab
+Massachusetts General Hospital
+Charlestown Navy Yard
+149 13th St., Room 2611
+Charlestown, MA 02129
+email: levy at nmr.mgh.harvard.edu
+phone: 617-726-1908
+fax: 617-726-4078
+
+http://nmr.mgh.harvard.edu/manoachlab
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20070924/e450a667/attachment.html>
+

@@ -1,0 +1,140 @@
+From mario.kleiner at tuebingen.mpg.de  Fri Apr  7 13:06:43 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 07 Apr 2006 13:06:43 +0200
+Subject: [Osxptb-dev] Possible bugfix for crashes in PsychHID / DAQ-Toolbox...
+Message-ID: <web-18587565@tuebingen.mpg.de>
+
+Hi all,
+
+using the old libHIDUtils.a that Allen sent me, i was able
+to rebuild the (hopefully) bug-fixed version of PsychHID
+that should be hopefully less crash-prone when using
+PsychHID('GetReports') and friends (e.g., DAQ toolbox).
+
+I don't have a DAQ (and i'm lazy), could therefore only do
+very basic testing, so its your turn. Attached is the new
+PsychHID to replace the PsychHID.mexmac in
+Psychtoolbox/PsychHardware/
+
+Please test and give feedback asap, so i can merge it into
+'beta' and 'stable' soon if it is an improvement.
+
+best,
+-mario
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: PsychHID.mexmac
+Type: application/octet-stream
+Size: 364416 bytes
+Desc: not available
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060407/e9525186/attachment.obj>
+
+From f.w.cornelissen at rug.nl  Fri Apr 28 11:05:39 2006
+From: f.w.cornelissen at rug.nl (Frans Cornelissen)
+Date: Fri, 28 Apr 2006 11:05:39 +0200
+Subject: [Osxptb-dev] just an idea
+Message-ID: <D950FF3F-789D-4219-B4AF-8794495F52CC@rug.nl>
+
+Hi Mario,
+
+Just occured to me, since a lot of messages on the PTB are about the  
+"warning sign".
+
+Why not actually include a message like this one (approx. your words  
+of message #4432) as part of the warning:
+
+"This warning is meant to direct your attention to
+the output in the Matlab window because some (potentially serious)
+display timing problem was detected."
+
+
+Or perhaps (or additional) direct user to a web page that explains  
+all the intricate details of timing, warnings, etc.
+Might save a lot of frustration and typing the same responses over  
+and over again.
+
+
+
+gr.
+frans
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060428/bf8e23c7/attachment.html>
+
+From mario.kleiner at tuebingen.mpg.de  Fri Apr 28 16:03:39 2006
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 28 Apr 2006 16:03:39 +0200
+Subject: [Osxptb-dev] just an idea
+In-Reply-To: <D950FF3F-789D-4219-B4AF-8794495F52CC@rug.nl>
+References: <D950FF3F-789D-4219-B4AF-8794495F52CC@rug.nl>
+Message-ID: <445220BB.3000400@tuebingen.mpg.de>
+
+I thought about disabling the whole light-show, but i'm not sure... It 
+mostly seems to create confusion and is not that useful. I already 
+disabled the flicker-test sheet on dual-disp. setups and replaced it by 
+the PerceptualVLBSyncTest.m file. The main reason there isn't any text 
+message instead of the warning sign is because we cannot call 'DrawText' 
+from inside PTBs code the way it is implemented at the moment, so 
+outputting text is difficult, unless i change the drawtext implementation.
+
+Otoh one should expect people to read output in the Matlab window, but 
+then the output is a bit to verbose to be read all the time...
+
+Thanks for the suggestion.
+
+I made another attempt in fixing MorphDemo for your hardware. Could you 
+update your beta and try again? If it works now then it wasn't a bug (by 
+the strict definition of bug) in OS-X, but just pretty bad system design 
+by Apple ;)
+
+gr.
+mario
+
+
+Frans Cornelissen wrote:
+> Hi Mario,
+> 
+> Just occured to me, since a lot of messages on the PTB are about the 
+> "warning sign".
+> 
+> Why not actually include a message like this one (approx. your words of 
+> message #4432) as part of the warning:
+> 
+> "This warning is meant to direct your attention to
+> the output in the Matlab window because some (potentially serious)
+> display timing problem was detected."
+> 
+> 
+> Or perhaps (or additional) direct user to a web page that explains all 
+> the intricate details of timing, warnings, etc.
+> Might save a lot of frustration and typing the same responses over and 
+> over again.
+> 
+> 
+> 
+> gr.
+> frans
+> 
+
+
+-- 
+*********************************************************************
+Mario Kleiner
+Max Planck Institute for Biological Cybernetics
+Spemannstr. 38
+72076 Tuebingen
+Germany
+
+e-mail: mario.kleiner at tuebingen.mpg.de
+office: +49 (0)7071/601-742
+fax:    +49 (0)7071/601-616
+www:    http://www.kyb.tuebingen.mpg.de/~kleinerm
+*********************************************************************
+"Debugging is twice as hard as writing the code in the first place.
+Therefore, if you write the code as cleverly as possible, you are,
+by definition, not smart enough to debug it." - Brian W. Kernighan
+
+
+
+

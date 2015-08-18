@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Eyelink Toolbox
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Eyelink%20Toolbox&In-Reply-To=%3C764e38540512091200o4e02cb22uc3f0fb72c1d44738%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000010.html">
+   <LINK REL="Next"  HREF="000012.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Eyelink Toolbox</H1>
+    <B>Chris Burns</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Eyelink%20Toolbox&In-Reply-To=%3C764e38540512091200o4e02cb22uc3f0fb72c1d44738%40mail.gmail.com%3E"
+       TITLE="[Osxptb-dev] Eyelink Toolbox">chris.d.burns at gmail.com
+       </A><BR>
+    <I>Fri Dec  9 21:00:14 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000010.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+        <LI>Next message: <A HREF="000012.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I would like to propose a short-term solution for Eyelink Toolbox
+development.  In a previous discussion, Mario proposed exposing some of the
+PTB functionality externally, so other projects, like an ETB project could
+use the PTB but without being part of the PTB project.  This is a great
+idea, but in the near-term, Frans, Daniel and I would like to continue with
+the OSX port of the ETB.  If it's ok by the group, I'd like for us to
+continue to piggy-back on the PTB project.
+
+Here's what I propose:  I'll create a new branch off the trunk, an Eyelink
+branch.  This branch would ONLY contain the Eyelink source files and a copy
+of the PsychToolbox.xcodeproj file, which includes the Eyelink target.  All
+of the PTB source files are linked to the new branch, so this does not
+create duplicate copies of the source.  Then we can continue with the ETB
+development, merging in PTB updates to benefit from bug-fixes and feature
+upgrades, but continue on a separate development path which would not affect
+the PTB.  At a later date, we could break the ETB off into a separate
+project or merge it back into the PTB.  Either would be easily doable.
+
+Feedback?
+
+chris
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051209/82e0b1d8/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051209/82e0b1d8/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000010.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+	<LI>Next message: <A HREF="000012.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#11">[ date ]</a>
+              <a href="thread.html#11">[ thread ]</a>
+              <a href="subject.html#11">[ subject ]</a>
+              <a href="author.html#11">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

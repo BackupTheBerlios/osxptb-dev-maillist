@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Possible bugfix for crashes in PsychHID / DAQ-Toolbox...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-April/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Possible%20bugfix%20for%20crashes%20in%20PsychHID%20/%20DAQ-Toolbox...&In-Reply-To=%3Cweb-18587565%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000037.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Possible bugfix for crashes in PsychHID / DAQ-Toolbox...</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Possible%20bugfix%20for%20crashes%20in%20PsychHID%20/%20DAQ-Toolbox...&In-Reply-To=%3Cweb-18587565%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Possible bugfix for crashes in PsychHID / DAQ-Toolbox...">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Apr  7 13:06:43 CEST 2006</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000037.html">[Osxptb-dev] just an idea
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi all,
+
+using the old libHIDUtils.a that Allen sent me, i was able
+to rebuild the (hopefully) bug-fixed version of PsychHID
+that should be hopefully less crash-prone when using
+PsychHID('GetReports') and friends (e.g., DAQ toolbox).
+
+I don't have a DAQ (and i'm lazy), could therefore only do
+very basic testing, so its your turn. Attached is the new
+PsychHID to replace the PsychHID.mexmac in
+Psychtoolbox/PsychHardware/
+
+Please test and give feedback asap, so i can merge it into
+'beta' and 'stable' soon if it is an improvement.
+
+best,
+-mario
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: PsychHID.mexmac
+Type: application/octet-stream
+Size: 364416 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060407/e9525186/attachment.obj">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060407/e9525186/attachment.obj</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000037.html">[Osxptb-dev] just an idea
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#36">[ date ]</a>
+              <a href="thread.html#36">[ thread ]</a>
+              <a href="subject.html#36">[ subject ]</a>
+              <a href="author.html#36">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] scripts in psychtb project
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20scripts%20in%20psychtb%20project&In-Reply-To=%3C40A69274-58FE-4D01-8485-3EC8FF847E25%40mac.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000066.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] scripts in psychtb project</H1>
+    <B>Allen W. Ingling</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20scripts%20in%20psychtb%20project&In-Reply-To=%3C40A69274-58FE-4D01-8485-3EC8FF847E25%40mac.com%3E"
+       TITLE="[Osxptb-dev] scripts in psychtb project">allen_ingling at mac.com
+       </A><BR>
+    <I>Fri Jun 30 05:52:07 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000066.html">[Osxptb-dev] scripts in psychtb project
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>
+On Jun 29, 2006, at 3:36 PM, Frans Cornelissen wrote:
+
+&gt;<i> Is there a particular reason for the copy scripts to work the way  
+</I>&gt;<i> to do now?
+</I>
+Hi Frans,
+
+I configured the Xcode project to copy mex files under /Applications/ 
+Psychtoolbox/ before we began using Subversion.  So there was no  
+consideration of how to handle having multiple Psychtoolbox forks  
+installed on the same system.  With only one fork, placing the .mex  
+build under /Applications/Psychtoolbox was fine.
+
+
+&gt;<i> Wouldn't it make much more sense that the script copies the  
+</I>&gt;<i> compiled target into the PsychToolbox directory that is part of my  
+</I>&gt;<i> working copy of trunk?
+</I>
+Three applications operate on mex files and each has its own notion  
+of where they are.  Those are Xcode, Subversion and MATLAB. The  
+present arrangement automatically enforces consistency between them.   
+The path settings are automatically consistent between applications  
+because they are constant, always under /Applications/Psychtoolbox.   
+That is a benefit of the present arrangement, that I can leave MATLAB  
+path settings the same and also always invoke Subversion from the  
+same directory, /Applications/Psychtoolbox.  I can trust that what I  
+compiled is what MATLAB sees without checking, and trust that when I  
+invoke svn in the Psychtoolbox directory that I am always in the  
+right Psychtoolbox directory.  I  switch between Psychoolbox forks  
+with just &quot;svn switch&quot; and &quot;svn info&quot; tells me which I have.  Works  
+great for me.
+
+If you want to keep two Psychtoolbox forks on your computer and  
+switch between them by changing the MATLAB path instead of using 'svn  
+switch' then what you suggest might be the best arrangement.  There  
+is reason to do that if you need to change between forks before a  
+commit.
+
+Not sure what works best for others, what's the consensus?
+
+- Allen
+
+
+On Jun 29, 2006, at 3:36 PM, Frans Cornelissen wrote:
+
+&gt;<i>
+</I>&gt;<i> the psychtoolbox projects (the targets in it, that is) contain a  
+</I>&gt;<i> 'script' that copies the target from the build directory to a  
+</I>&gt;<i> particular psychtoolbox directory in /Applications/Psychtoolbox/  
+</I>&gt;<i> (e.g. Screen.mexmac goes to PsychBasic).
+</I>&gt;<i>
+</I>&gt;<i> Although potentially a nice feature, it works out a bit odd, at  
+</I>&gt;<i> least in my case.
+</I>&gt;<i>
+</I>&gt;<i> I am keeping my &quot;production grade/safe&quot; psychtoolbox version in the  
+</I>&gt;<i> Applications directory (as per recommendation of  
+</I>&gt;<i> DownloadPsychToolbox). But during development, I prefer to use the  
+</I>&gt;<i> one that is part of the 'trunk'.
+</I>&gt;<i>
+</I>&gt;<i> Wouldn't it make much more sense that the script copies the  
+</I>&gt;<i> compiled target into the PsychToolbox directory that is part of my  
+</I>&gt;<i> working copy of trunk?
+</I>&gt;<i>
+</I>&gt;<i> (Of course, I can make it work like that by changing the different  
+</I>&gt;<i> versions' locations , but it just doesn't seem entirely &quot;appropriate&quot;.
+</I>&gt;<i>
+</I>&gt;<i> Is there a particular reason for the copy scripts to work the way  
+</I>&gt;<i> to do now?
+</I>&gt;<i> Can they be changed to copy the targets into the appropriate trunk  
+</I>&gt;<i> directories?
+</I>&gt;<i>
+</I>&gt;<i> Gr.
+</I>&gt;<i> Frans
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> ---------------------------------------------------------------------- 
+</I>&gt;<i> -------------------------------------------
+</I>&gt;<i> Laboratory of Experimental Ophthalmology &amp; BCN NeuroImaging Centre,  
+</I>&gt;<i> School of Behavioural and Cognitive Neurosciences, University  
+</I>&gt;<i> Medical Centre Groningen,
+</I>&gt;<i> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+</I>&gt;<i> Email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060629/0fd442b9/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060629/0fd442b9/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000066.html">[Osxptb-dev] scripts in psychtb project
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#67">[ date ]</a>
+              <a href="thread.html#67">[ thread ]</a>
+              <a href="subject.html#67">[ subject ]</a>
+              <a href="author.html#67">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

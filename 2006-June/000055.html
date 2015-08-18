@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] building targets of PTB
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20building%20targets%20of%20PTB&In-Reply-To=%3C5C776C44-9F9B-4AC1-8419-7AB03833964A%40uni-potsdam.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000041.html">
+   <LINK REL="Next"  HREF="000056.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] building targets of PTB</H1>
+    <B>Jochen Laubrock</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20building%20targets%20of%20PTB&In-Reply-To=%3C5C776C44-9F9B-4AC1-8419-7AB03833964A%40uni-potsdam.de%3E"
+       TITLE="[Osxptb-dev] building targets of PTB">laubrock at uni-potsdam.de
+       </A><BR>
+    <I>Fri Jun 23 12:18:07 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000041.html">[Osxptb-dev] building targets of PTB
+</A></li>
+        <LI>Next message: <A HREF="000056.html">[Osxptb-dev] building targets of PTB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear Frans,
+
+apparently you are making good progress on the Eyelink Toolbox for  
+Mac OS X. Congratulations and sorry that I did not find the time to  
+look at the ptb code in more detail (for a novice, it takes some time  
+to familiarize with the ptb paradigm).
+
+In your recent forum post, you mention some current limitations of  
+the eyelink toolbox.
+&gt;<i> -does not run in dummy mode, so no point in trying without an  
+</I>&gt;<i> actual eyelink
+</I> From the manual:
+The link connection can be simulated for early development work, or  
+when the EyeLink tracker is not available.  By calling  
+open_eyelink_connection() with an argument of 1 instead of 0, your  
+program will not attempt to connect to the EyeLink tracker, but  
+simply initializes the eyelink_core library.
+
+&gt;<i> -does not show an eye image on subject pc
+</I>&gt;<i> -no (or at least no functional) communication from the subject  
+</I>&gt;<i> (i.e. mac) keyboard with
+</I>&gt;<i> the operator Eyelink PC
+</I>
+In my C code for eyelink experiments using a combination of SDL and  
+OpenGL on OS X, I have written some eyelink callback functions (&quot;hook  
+functions&quot;) that implement this functionality. I guess that it would  
+not be too difficult to adapt them if you're familiar with ptb  
+programming (in fact, some of the code is taken from Mario's source).  
+For example, there is a version of the camera display callback  
+allowing to show an eye image on the subject pc (which is beta  
+quality, but quite useful in developing eyelink applications, and can  
+be used in research). The files are attached--If you are interested,  
+feel free to use these.
+
+Regards,
+Jochen
+
+
+&#65532;&#65532;&#65532;&#65532;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: do_drift_corr_GL.c
+Type: application/octet-stream
+Size: 2762 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.obj">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment.obj</A>&gt;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: do_drift_corr_GL.h
+Type: application/octet-stream
+Size: 1349 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.obj">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0001.obj</A>&gt;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: myhookfcns.cpp
+Type: application/octet-stream
+Size: 8682 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.obj">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0002.obj</A>&gt;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.html</A>&gt;
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: myhookfcns.h
+Type: application/octet-stream
+Size: 609 bytes
+Desc: not available
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.obj">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0003.obj</A>&gt;
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0004.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060623/6d489d41/attachment-0004.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000041.html">[Osxptb-dev] building targets of PTB
+</A></li>
+	<LI>Next message: <A HREF="000056.html">[Osxptb-dev] building targets of PTB
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#55">[ date ]</a>
+              <a href="thread.html#55">[ thread ]</a>
+              <a href="subject.html#55">[ subject ]</a>
+              <a href="author.html#55">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Re: Eyelink Toolbox
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox&In-Reply-To=%3C439A075C.5040204%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000012.html">
+   <LINK REL="Next"  HREF="000014.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Re: Eyelink Toolbox</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox&In-Reply-To=%3C439A075C.5040204%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Re: Eyelink Toolbox">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Dec  9 23:38:20 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000012.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+        <LI>Next message: <A HREF="000014.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi,
+
+the only interfacing that is needed between ETB and PTB is the ability 
+of ETB to draw into a PTB onscreen window for eyeimage preview. If you'd 
+just need this, short term you get it for free: After calling any Screen 
+command, e.g. Screen('DrawingFinished', win); the OpenGL context of 
+onscreen window 'win' is ready for drawing by e.g., ETB drawing code -- 
+this is a side effect of the implementation and as such, coding mistakes 
+in ETB's drawing code can affect PTB's behaviour. But i can add the 
+&quot;proper&quot; interface code with child-protection quickly (this weekend) if 
+you want...
+
+If you want to take advantage of more PTB features, e.g., the nice 
+Psychscripting-Glue implementation for interfacing with Matlab, then 
+your approach is good.
+
+But if you want to check-in ETB into the Berlios Psychtoolbox repository 
+anyway (Which would make it automatically Open-Source under GPL 
+license!), you could just add the Eyelink.mexmac target to the standard 
+Psychtoolbox source-tree. Just add it to 'trunk' - No need to create 
+another branch. The different Mex targets don't interact with each other 
+and i don't see how adding an Eyelink prototype to the 'trunk' could 
+affect the stability of PTB. It also doesn't affect development of other 
+parts of PTB, as long as nobody except you tries to compile the Eyelink 
+target.
+
+So simple solution: Chris adds the current Eyelink-Target to PTB's 
+'trunk'. Daniel and Frans get a PTB developer account for the PTB 
+project (with the help of Chris and David Brainard). Frans &amp; Daniel 
+check out the SVN source tree and we can continue developing both in 
+parallel with minimal maintenance &amp; synchronization overhead :)
+
+What do you think?
+-mario
+
+
+Frans W. Cornelissen wrote:
+&gt;<i> Chris,
+</I>&gt;<i> 
+</I>&gt;<i> This sounds like an excellent (intermediate) solution. It would be nice 
+</I>&gt;<i> if you could, at some point, provide some details as on how to get code 
+</I>&gt;<i> and submit revised code.
+</I>&gt;<i> Mario has provided some simple scripts for PTB download, but I haven't 
+</I>&gt;<i> yet figured out how to get actual code.
+</I>&gt;<i> 
+</I>&gt;<i> Gr.
+</I>&gt;<i> Frans
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> Op 9-dec-05 om 21:00 heeft Chris Burns het volgende geschreven:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> I would like to propose a short-term solution for Eyelink Toolbox 
+</I>&gt;&gt;<i> development.  In a previous discussion, Mario proposed exposing some 
+</I>&gt;&gt;<i> of the PTB functionality externally, so other projects, like an ETB 
+</I>&gt;&gt;<i> project could use the PTB but without being part of the PTB project.  
+</I>&gt;&gt;<i> This is a great idea, but in the near-term, Frans, Daniel and I would 
+</I>&gt;&gt;<i> like to continue with the OSX port of the ETB.  If it's ok by the 
+</I>&gt;&gt;<i> group, I'd like for us to continue to piggy-back on the PTB project.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Here's what I propose:  I'll create a new branch off the trunk, an 
+</I>&gt;&gt;<i> Eyelink branch.  This branch would ONLY contain the Eyelink source 
+</I>&gt;&gt;<i> files and a copy of the PsychToolbox.xcodeproj file, which includes 
+</I>&gt;&gt;<i> the Eyelink target.  All of the PTB source files are linked to the new 
+</I>&gt;&gt;<i> branch, so this does not create duplicate copies of the source.  Then 
+</I>&gt;&gt;<i> we can continue with the ETB development, merging in PTB updates to 
+</I>&gt;&gt;<i> benefit from bug-fixes and feature upgrades, but continue on a 
+</I>&gt;&gt;<i> separate development path which would not affect the PTB.  At a later 
+</I>&gt;&gt;<i> date, we could break the ETB off into a separate project or merge it 
+</I>&gt;&gt;<i> back into the PTB.  Either would be easily doable.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Feedback?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> chris
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> --------------------------------------------------------
+</I>&gt;<i> Frans W.Cornelissen
+</I>&gt;<i> Laboratory for Experimental Ophthalmology
+</I>&gt;<i>     &amp; BCN Neuro-imaging Center
+</I>&gt;<i> School of Behavioural and Cognitive Neurosciences
+</I>&gt;<i> University Medical Center Groningen
+</I>&gt;<i> University of Groningen
+</I>&gt;<i> PO Box 30.001
+</I>&gt;<i> 9700 RB Groningen
+</I>&gt;<i> Nederland
+</I>&gt;<i> 
+</I>&gt;<i> email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+</I>&gt;<i> Tel. LEO: +31 50 3614173 / 2510
+</I>&gt;<i> Tel. NIC: +31 50 363 8801 / 5111
+</I>&gt;<i> 
+</I>&gt;<i> <A HREF="http://franswcornelissen.webhop.org/">http://franswcornelissen.webhop.org/</A>
+</I>&gt;<i> 
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Osxptb-dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/osxptb-de">http://lists.berlios.de/mailman/listinfo/osxptb-de</A>
+</I>&gt;<i> v
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000012.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+	<LI>Next message: <A HREF="000014.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#13">[ date ]</a>
+              <a href="thread.html#13">[ thread ]</a>
+              <a href="subject.html#13">[ subject ]</a>
+              <a href="author.html#13">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

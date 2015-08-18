@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Re: Eyelink Toolbox checked in
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox%20checked%20in&In-Reply-To=%3C764e38540601022009mc28e6cfkcd1eff25ef669f1%40mail.gmail.com%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000026.html">
+   <LINK REL="Next"  HREF="000031.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Re: Eyelink Toolbox checked in</H1>
+    <B>Chris Burns</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox%20checked%20in&In-Reply-To=%3C764e38540601022009mc28e6cfkcd1eff25ef669f1%40mail.gmail.com%3E"
+       TITLE="[Osxptb-dev] Re: Eyelink Toolbox checked in">chris.d.burns at gmail.com
+       </A><BR>
+    <I>Tue Jan  3 05:09:33 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000026.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+        <LI>Next message: <A HREF="000031.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dan,
+
+You want to double-click on the PsychToolbox.xcodeproj file itself,
+don't traverse into that directory, those files are handled by XCode. 
+In the Finder window, (or Open Dialog) the *.xcodeproj files should
+have the XCode icon, blue-sheet with the pencil and ruler.
+
+Chris
+
+On 1/2/06, Daniel Sperka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">djsperka at ucdavis.edu</A>&gt; wrote:
+&gt;<i> Pardon the question - I'm fairly new to xcode. This old dog can learn
+</I>&gt;<i> new tricks, but sometimes I'm a little slow on the uptake.
+</I>&gt;<i>
+</I>&gt;<i> I checked out the ptb source from berlios last week - Thanks, Chris.
+</I>&gt;<i>
+</I>&gt;<i> I cannot seem to open the xcode project!?!
+</I>&gt;<i>
+</I>&gt;<i> I'm assuming that the xcode proiject file is in
+</I>&gt;<i> PsychSourceGL/Projects/MacOSX/PsychToolbox/PsychToolbox.xcodeproj/project.pbxproj
+</I>&gt;<i>
+</I>&gt;<i> If I double click on this file in Finder then XCode starts, but there is
+</I>&gt;<i> no evidence that I've opened the project. For example under the Project
+</I>&gt;<i> tab all options (including &quot;Show Project&quot;) are gray. I've fumbled
+</I>&gt;<i> around, read docs, googled but all docs seem to assume that a developer
+</I>&gt;<i> will know how to open the project. Forgive me, I just don't know ......
+</I>&gt;<i>
+</I>&gt;<i> Can anyone take a minute and set me straight?
+</I>&gt;<i>
+</I>&gt;<i> Thanks,
+</I>&gt;<i>
+</I>&gt;<i> Dan
+</I>&gt;<i>
+</I>&gt;<i> Chris Burns wrote:
+</I>&gt;<i>
+</I>&gt;<i> &gt;Dan and Frans,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;I just checked in my source for the Eyelink Toolbox.  I did not have
+</I>&gt;<i> &gt;access to the experiment machine I orginally set this up on, so I had
+</I>&gt;<i> &gt;to start over from my backups on a new machine... unfortunately I ran
+</I>&gt;<i> &gt;into several problems with XCode.  The Eyelink Target, as checked in
+</I>&gt;<i> &gt;does not compile!  For whatever reason, XCode cannot find the Eyelink
+</I>&gt;<i> &gt;Header file, eyelink.h.  I've included the eyelink_core.framework, and
+</I>&gt;<i> &gt;I don't see any differences between the checked-in project and my
+</I>&gt;<i> &gt;original project.  I'm at a loss.  XCode is very different than VC++,
+</I>&gt;<i> &gt;and I'm still not up to speed on it's use of frameworks.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Some Hacks I used:
+</I>&gt;<i> &gt;- Somewhere in the PsychToolbox.xcodeproj the Matlab directory is
+</I>&gt;<i> &gt;assigned, but I can't find where.  grepping the file it's set to
+</I>&gt;<i> &gt;MATLAB704.  I'm using vertion 7.1, so I created a symbolic link in
+</I>&gt;<i> &gt;Applications directory for 7.04 to point to 7.1
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;- On my experiment machine, XCode couldn't find Frameworks outside of
+</I>&gt;<i> &gt;the System folder, so I copied
+</I>&gt;<i> &gt;/Library/Frameworks/eyelink_core.framework to
+</I>&gt;<i> &gt;/System/Library/Frameworks/eyelink_core.framework.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Sorry, I hate checking in code that doesn't compile, but hopefully
+</I>&gt;<i> &gt;it's a simple fix that will be obvious to someone else.  And I ran out
+</I>&gt;<i> &gt;of time to work on this as I'm heading out of town for the week.  I'll
+</I>&gt;<i> &gt;be back next week and can help more with it then.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Below is a copy of the email Frans sent me that includes the original
+</I>&gt;<i> &gt;OSX port of the Eyelink Toolbox.  Much of the source can probably be
+</I>&gt;<i> &gt;included in the project as is, but you'd want to give it a once-over.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Good Luck!
+</I>&gt;<i> &gt;Chris
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;-----------------------------------------------------------------
+</I>&gt;<i> &gt;Dear all,
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;There seems to be a growing interest in getting an OSX version of the
+</I>&gt;<i> &gt;Eyelinktoolbox.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Quite a while ago (2 years?) we (Enno Peters that is) started working
+</I>&gt;<i> &gt;on a version but were sort of stopped by the lack of a stable
+</I>&gt;<i> &gt;psychtoolbox. I call this our early alpha version. It actually worked
+</I>&gt;<i> &gt;to some extent. I haven't gotten back to it yet, due mainly to a lack
+</I>&gt;<i> &gt;of time (and Enno leaving for a proper job).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Here's (a copy of) a message I wrote a while to another  wannabe
+</I>&gt;<i> &gt;Eyelink porter (Daniel Sperka):
+</I>&gt;<i> &gt;---------------------------------------------------------
+</I>&gt;<i> &gt;It would be timely if an OSX version of the Eyelink TB would come out
+</I>&gt;<i> &gt;now. In my view the PTB is becoming really useful now, especially after
+</I>&gt;<i> &gt;the improvements Mario Kleiner has been making.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;I believe a few months would be quite sufficient to get a working
+</I>&gt;<i> &gt;version (like I mentioned, there is an early version that has some
+</I>&gt;<i> &gt;functions working).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;There's a couple of things that I think need to be changed/improved:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;1. Update to newest XCode/Matlab/PTB source code. Shouldn't be much of
+</I>&gt;<i> &gt;an issue, but still.
+</I>&gt;<i> &gt;2. Check for updates in code with SR Research.
+</I>&gt;<i> &gt;3. Make sure we do not use any graphics other than via PTB (there is a
+</I>&gt;<i> &gt;problem with the 'eye' graphic during calibration).
+</I>&gt;<i> &gt;4. Seperate out functions from 'shell' very much like current PTB does.
+</I>&gt;<i> &gt;This is not an absolute necessity, but using the same methods as the
+</I>&gt;<i> &gt;current PTB presumably would make things easier to maintain in the long
+</I>&gt;<i> &gt;run.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;5. Update many of the .m files to use e.g. new graphics calls of PTB.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;6. Test everything for speed, delays, etc.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;7. provide some support/updates.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;The OS9 code can be downloaded from
+</I>&gt;<i> &gt;<A HREF="http://www.psychtoolbox.org/eyelinktoolbox/downloads/">http://www.psychtoolbox.org/eyelinktoolbox/downloads/</A>
+</I>&gt;<i> &gt;EyelinkToolbox_C_code_1.4.sit
+</I>&gt;<i> &gt; I believe this is the most recent OS9 code.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;I've traced some OSX code for you.  I am not entirely sure if it is
+</I>&gt;<i> &gt;complete. Enno Peters wasn't a superbly organised programmer, and I
+</I>&gt;<i> &gt;haven't looked at this project for quite a while.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Download from
+</I>&gt;<i> &gt;<A HREF="http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19-10">http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19-10</A>
+</I>&gt;<i> &gt;-05.zip
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;In principle I am very much open to a collaboration.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;--------------------
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Here's a plan:
+</I>&gt;<i> &gt;I am offering our code as a starter. If someone with a little time on
+</I>&gt;<i> &gt;their hands (Chris?) would check the OSX source code into the/some CVS
+</I>&gt;<i> &gt;server and do #1 on the list, that would be a step forward. (Then
+</I>&gt;<i> &gt;please tell all other interested in development how to get to it.)
+</I>&gt;<i> &gt;PTB in my view is about collaboration, rather than people reinventing
+</I>&gt;<i> &gt;wheels (or even 30% of them). So, be fair and please use the head start
+</I>&gt;<i> &gt;and collaborative opportunities available to create a full working
+</I>&gt;<i> &gt;version of the ETB.
+</I>&gt;<i> &gt;Also, it be nice if a reasonable degree of backward compatibility with
+</I>&gt;<i> &gt;the OS9 version is maintained.
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;My proposal is that those interested in Eyelink TB programming reply to
+</I>&gt;<i> &gt;me, so that we continue the discussion in that group (and decide where
+</I>&gt;<i> &gt;to do this). I can tell a bit more also about our ideas back then about
+</I>&gt;<i> &gt;what ETB should be doing (and what not).
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;Gr.
+</I>&gt;<i> &gt;Frans
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;On 12/14/05, Daniel Sperka &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">djsperka at ucdavis.edu</A>&gt; wrote:
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;&gt;Any chance yet to check in the code? I don't want to be a pest, so
+</I>&gt;<i> &gt;&gt;please understand. We're just eager. Thanks in advance.
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;Dan
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;&gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i> &gt;
+</I>&gt;<i>
+</I>&gt;<i> --
+</I>&gt;<i> =======================================================================
+</I>&gt;<i>
+</I>&gt;<i> Daniel J. Sperka, Ph. D.
+</I>&gt;<i> Software Developer/Analyst
+</I>&gt;<i> Center for Neuroscience
+</I>&gt;<i> University of California, Davis
+</I>&gt;<i>
+</I>&gt;<i> =======================================================================
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000026.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+	<LI>Next message: <A HREF="000031.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

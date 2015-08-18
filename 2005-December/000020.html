@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Re: Eyelink Toolbox and other stuff...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-December/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox%20and%20other%20stuff...&In-Reply-To=%3C43A1F67E.5050208%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000019.html">
+   <LINK REL="Next"  HREF="000021.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Re: Eyelink Toolbox and other stuff...</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20Eyelink%20Toolbox%20and%20other%20stuff...&In-Reply-To=%3C43A1F67E.5050208%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Re: Eyelink Toolbox and other stuff...">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Dec 16 00:04:30 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000019.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+        <LI>Next message: <A HREF="000021.html">[Osxptb-dev] [Fwd: Re: psychtoolbox] OpenGL stuff...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Chris,
+
+please don't forget - before committing to subversion - to run the 
+scripts in /trunk/managementtools/convertlinefeeds.sh shell script over 
+the Eyelink-Sourcecode. You see usage info at top of the script. It 
+replaces all CRLF (old style OS-9) linefeeds by LF linefeeds, in order 
+to be able to display the source code properly in other text editors 
+than XCode and to make Subversion happy.
+
+Everybody developing for PTB should also set the setting in 
+XCode-&gt;Preferences-&gt;Editor-Tab for linefeed handling to &quot;Unix&quot; (LF) 
+style for old and new files!
+
+Without this, most useful text processing tools, scripts and Subversion 
+will screw up!
+
+Oh and for Frans, Allen, Denis and Daniel: Maybe you should also 
+subscribe to the osxptb-dev mailinglist on Berlios, so we save each 
+other typing all these many e-mail adresses and can document our 
+technical discussions as Denis suggested.
+
+Btw. Allen could you send me the missing CocoaBundle binary for 
+inclusion? A working GetChar would probably make all those poor FORP and 
+fMRI scanner users a lot more happy, given that some keyboard-triggers 
+and the FORP don't work well with KbCheck/KbWait?
+
+Oh and there's good news for potential users of 3D OpenGL. Richard 
+Murray and Christopher Taylor have started something intersting:A 
+minimalistic low-level wrapper that exposes all OpenGL low-level calls 
+to Matlab by a thin wrapper layer. The nice thing: With the proposed 
+support for interaction between PTB and external OpenGL rendering 
+mexfiles, we will be able to incorporate the low-level wrapper &quot;as is&quot;.
+
+So users can use PTB as they are used to, but at the same time by use of 
+that mexfile can acess low-level OpenGL drawing functions in a safe way 
+(safe for the users and PTB) -- we'll get free support for 3D stimuli 
+drawing. Well at least if they are really brave enough to wrap a 
+significant subset of the &gt; 200 OpenGL functions ;-)
+
+I'll forward the e-mail...
+
+Btw., this:
+
+&lt;<A HREF="http://developer.berlios.de/docman/display_doc.php?docid=31&amp;group_id=2">http://developer.berlios.de/docman/display_doc.php?docid=31&amp;group_id=2</A>&gt;
+
+is recommended. It safes you from typing your password over and over 
+again when working with Subversion, at least if you are (like me) using 
+svn from the command-line...
+
+-mario
+
+
+Chris Burns wrote:
+&gt;<i> Not yet, I've scheduled it for tomorrow.  I'll email as soon as it's in.
+</I>&gt;<i> 
+</I>&gt;<i> Chris
+</I>&gt;<i> 
+</I>&gt;<i> 
+</I>&gt;<i> On 12/14/05, *Daniel Sperka* &lt; <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">djsperka at ucdavis.edu</A> 
+</I>&gt;<i> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">djsperka at ucdavis.edu</A>&gt;&gt; wrote:
+</I>&gt;<i> 
+</I>&gt;<i>     Any chance yet to check in the code? I don't want to be a pest, so
+</I>&gt;<i>     please understand. We're just eager. Thanks in advance.
+</I>&gt;<i> 
+</I>&gt;<i>     Dan
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000019.html">[Osxptb-dev] Re: Eyelink Toolbox
+</A></li>
+	<LI>Next message: <A HREF="000021.html">[Osxptb-dev] [Fwd: Re: psychtoolbox] OpenGL stuff...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#20">[ date ]</a>
+              <a href="thread.html#20">[ thread ]</a>
+              <a href="subject.html#20">[ subject ]</a>
+              <a href="author.html#20">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

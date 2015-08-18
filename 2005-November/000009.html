@@ -1,0 +1,259 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Re: VBL retrace? A temporary solution that works...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-November/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20VBL%20retrace%3F%20A%20temporary%20solution%20that%20works...&In-Reply-To=%3C43874D71.8090807%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000008.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Re: VBL retrace? A temporary solution that works...</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20VBL%20retrace%3F%20A%20temporary%20solution%20that%20works...&In-Reply-To=%3C43874D71.8090807%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Re: VBL retrace? A temporary solution that works...">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Fri Nov 25 18:44:17 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000008.html">[Osxptb-dev] Re: VBL retrace? First Iteration on solution...
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Ok, thanks for testing.
+
+I assume you made sure that you were really running the Screen.mexmac i 
+sent you. The results look exactly the same, so no way of enforcing 
+consistent Nvidia==ATI behaviour.
+
+Doesn't matter. I will modify the algorithms of PTB appropriately to 
+handle the ATI stereo-case in a consistent fashion. I'll probably 
+contact you sometime next week to test-run the new Screen.mexmac and 
+then release an update to PTB if it works out.
+
+Anyway, just run your stuff with the Screen('Preference', 
+'SkipSyncTests', 1) setting until then and you'll be fine. All other 
+values and the test results look very well for your setup. Your machines 
+gfx-card syncs stimulus onset to the VBL with sub-microsecond accuracy 
+(as any properly working gfx-card does -- flip is implemented in 
+hardware, not software -- a big advantage with respect to the old 
+OS9/Win-Psychtoolboxes), and the timing chart tells me that even 
+Matlab's execution is synced to VBL with a timing-jitter of less than 30 
+microseconds.
+
+Have a nice weekend!
+-mario
+
+Kevin J. MacKenzie wrote:
+&gt;<i> Hi Mario,
+</I>&gt;<i> 
+</I>&gt;<i> I have attached the results from the VBLSynctests using the  
+</I>&gt;<i> Screen.mexmac function you sent me.  The second test did give me a  
+</I>&gt;<i> warning - the blue screen with an exclamation mark.  I will run my  
+</I>&gt;<i> existing code with Screen('Preference', 'SkipSyncTests', 1) enabled.
+</I>&gt;<i> 
+</I>&gt;<i> Your solution below makes sense, I will try it out today with the  code 
+</I>&gt;<i> that I have.  At this point I am not as concerned as I was 2  days ago, 
+</I>&gt;<i> as I have been getting a stereo signal successfully using a  front/back 
+</I>&gt;<i> buffer flip mode.  I will change this to use the methods  outlined in 
+</I>&gt;<i> Stereodemo.m and report back to you if anything goes  awry.  Although, I 
+</I>&gt;<i> am confident that it should work.
+</I>&gt;<i> 
+</I>&gt;<i> Thanks for all of the help!
+</I>&gt;<i> 
+</I>&gt;<i> Cheers
+</I>&gt;<i> 
+</I>&gt;<i> Kevin
+</I>&gt;<i> 
+</I>&gt;<i> On 24-Nov-05, at 9:55 PM, Mario Kleiner wrote:
+</I>&gt;<i> 
+</I>&gt;&gt;<i> Hi Kevin
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> No problem. But the short story is that your gfx-card works
+</I>&gt;&gt;<i> perfectly well in Stereomode and also syncs properly to the
+</I>&gt;&gt;<i> VBL. Its just that the sync-test that's run as part of
+</I>&gt;&gt;<i> Screen('OpenWindow') detects a problem -- false alarm.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The reason is that the NVidia and ATI gfx cards behave
+</I>&gt;&gt;<i> differently when flipp'ing a stereo display:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> A NVidia card when asked to flip at next VBL, really flips
+</I>&gt;&gt;<i> at the next VBL -- behaves as in mono display mode.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Your ATI card when in stereo mode flips only every 2nd VBL,
+</I>&gt;&gt;<i> so it basically makes sure that each of the two stereo
+</I>&gt;&gt;<i> images was on view for at least one refresh cycle before
+</I>&gt;&gt;<i> flipping it away.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Both behaviours are &quot;correct&quot; because it is not clearly
+</I>&gt;&gt;<i> defined (by the OpenGL spec) when to swap image buffers in
+</I>&gt;&gt;<i> stereo mode on flip request, if the image actually consists
+</I>&gt;&gt;<i> of two temporally interleaved images. Its just unfortunate
+</I>&gt;&gt;<i> that NVidia &amp; ATI decided to implement different solutions
+</I>&gt;&gt;<i> :(
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> As the stereo-code was developed &amp; tested on NVidia only,
+</I>&gt;&gt;<i> it makes the assumption that when it Flips as fast as
+</I>&gt;&gt;<i> possible, the time between two flips should equal the
+</I>&gt;&gt;<i> monitor refresh rate (120 Hz ---&gt; 8.333 ms). NVidia does so
+</I>&gt;&gt;<i> in mono and stereo. ATI does 8.3333 in mono, but 2*8.3333 =
+</I>&gt;&gt;<i> 16.6666 in stereo --&gt; Expectation violated --&gt; OpenWindow
+</I>&gt;&gt;<i> detects trouble and aborts.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> So your short-term solution will be to add the
+</I>&gt;&gt;<i> Screen('Preference', 'SkipSyncTests', 1) call at the
+</I>&gt;&gt;<i> beginning of your script to disable this &quot;abort on trouble&quot;
+</I>&gt;&gt;<i> behaviour and continue with a computed value of 8.3333 ms.
+</I>&gt;&gt;<i> This way, timing control of stimulus onset ('when' argument
+</I>&gt;&gt;<i> of Flip), syncing to VBL and the reported timestamps of
+</I>&gt;&gt;<i> Flip should be correct. The automatic detection code for
+</I>&gt;&gt;<i> skipped frames will report bogus results though...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> My solution will be to find out, if i can force the ATI
+</I>&gt;&gt;<i> driver to behave like NVidia (that's the test i sent you).
+</I>&gt;&gt;<i> If this isn't possible, i need to think about a clever way
+</I>&gt;&gt;<i> for the sync-test and other timing related tests to take
+</I>&gt;&gt;<i> this difference NVidia/ATI into account and then release an
+</I>&gt;&gt;<i> updated version of the Psychtoolbox.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In any case, the stimulus-onset on flip-frame stereo
+</I>&gt;&gt;<i> displays is not very well defined, given the differences in
+</I>&gt;&gt;<i> driver behaviour and the nature of this temporally
+</I>&gt;&gt;<i> interleaved stimuli. So one probably shouldn't do studies
+</I>&gt;&gt;<i> with this stereo mode where frame accurate onset time is
+</I>&gt;&gt;<i> crucial - at least not without using photo-diode + oszi for
+</I>&gt;&gt;<i> indpendent timing checks. Luckily other stereo algorithms
+</I>&gt;&gt;<i> don't have this problem -- i'm working on additional
+</I>&gt;&gt;<i> algorithms for anaglyph red-green stereo and such...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Awaiting your results. I'll update the forum as soon as we
+</I>&gt;&gt;<i> have the final results...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> good night,
+</I>&gt;&gt;<i> -mario
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Thu, 24 Nov 2005 20:59:02 -0500
+</I>&gt;&gt;<i>  &quot;Kevin J. MacKenzie&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">kjmacken at yorku.ca</A>&gt; wrote:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Hello Mario,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I just got home from work, so won't be able to get to it
+</I>&gt;&gt;&gt;<i> tonight.  I will do
+</I>&gt;&gt;&gt;<i> that first thing in the morning and send you the results.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Cheers,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Kevin
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 11/24/05 7:25 PM, &quot;Mario Kleiner&quot;
+</I>&gt;&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>&gt; wrote:
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Hello Kevin,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> could you repeat the exactly same tests quickly and
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> send me
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> the results, but with the attached Screen.mexmac file?
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I don't expect any difference but we'll see. I think i
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> know
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> what's going wrong and the VBL sync failure is a false
+</I>&gt;&gt;&gt;&gt;<i> alarm...
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> -mario
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> On Thu, 24 Nov 2005 16:41:38 -0500
+</I>&gt;&gt;&gt;&gt;<i>  &quot;Kevin J. MacKenzie&quot; &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">kjmacken at yorku.ca</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Hi Mario,
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Thanks again for the work with respect to this!
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> I have attached the results of Fig 1 and Fig 3 for the
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> 2
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> tests.  The  files are named according to the figure
+</I>&gt;&gt;&gt;&gt;&gt;<i> number, and the test  paramaters with:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> On 24-Nov-05, at 3:52 PM, Mario Kleiner wrote:
+</I>&gt;&gt;&gt;&gt;&gt;<i> Test1 being :
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ATIVBLSyncTest(1000, 0, 0, 0, 0, 1, 0);
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> and test 2 being:
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;&gt;<i> ATIVBLSyncTest(1000, 0, 0, 0, 1, 1, 0)
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> There is only one blue peak at the initiation of the
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> test
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> for the  first run.  I didn't zoom into the figure, as
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> it
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> lost the peak value  of this function.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> If you need anymore info please let me know.
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Thanks a lot!
+</I>&gt;&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;&gt;<i> Kevin MacKenzie????
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;<i> 
+</I>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000008.html">[Osxptb-dev] Re: VBL retrace? First Iteration on solution...
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

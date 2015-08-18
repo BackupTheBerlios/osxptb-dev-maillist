@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Initial port of OS-X Psychtoolbox to M$ Windows (nearly) ready...
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-January/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Initial%20port%20of%20OS-X%20Psychtoolbox%20to%20M%24%20Windows%20%28nearly%29%0A%20ready...&In-Reply-To=%3Cweb-16639343%40tuebingen.mpg.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000032.html">
+   <LINK REL="Next"  HREF="000029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Initial port of OS-X Psychtoolbox to M$ Windows (nearly) ready...</H1>
+    <B>Mario Kleiner</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Initial%20port%20of%20OS-X%20Psychtoolbox%20to%20M%24%20Windows%20%28nearly%29%0A%20ready...&In-Reply-To=%3Cweb-16639343%40tuebingen.mpg.de%3E"
+       TITLE="[Osxptb-dev] Initial port of OS-X Psychtoolbox to M$ Windows (nearly) ready...">mario.kleiner at tuebingen.mpg.de
+       </A><BR>
+    <I>Tue Jan  3 04:25:30 CET 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000032.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+        <LI>Next message: <A HREF="000029.html">[Osxptb-dev] Initial port of OS-X Psychtoolbox to M$ Windows (nearly) ready...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi everybody and happy new year!
+
+I spent some time porting OS-X PTB to Windows. It's not
+polished yet and has some limitation wrt. OS-X version
+(e.g, lack for multi-display support as i don't know how to
+enumerate displays on Windows, lack of Quicktime support, a
+few secondary commands don't work...), but it works already
+fairly well - i would say after fixing a few small glitches
+we could release it to users for cautious use. All
+PsychDemos work already...
+
+The current version is a hybrid of the OS-X toolbox and the
+old Windows PTB:
+
+* All M-Files identical to OS-X PTB, with some small
+modifications to KbName and AssertOpenGL and MaxPriority.
+
+* Screen.dll file is a ported version of OS-X OpenGL Screen
+
+* All other Mex DLL's stolen from old Windows PTB...
+
+I'll post you when it is ready for a first tryout, the
+latest build for Windows has some problem i'll need to
+resolve first, probably later this week. For now the code
+has been added to the trunk.
+
+Porting involved a some changes to the OSX parts of
+PsychSourceGL . I've verified that this didn't break
+anything in the OS-X branch. Read the Subversion log files
+for detailed explanation of the changes.
+
+The important thing: Update your working copies via the
+&quot;svn update&quot; command to the latest revision before
+continuing work!!! 
+
+I'll go home now, tired...
+
+ciao,
+-mario
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000032.html">[Osxptb-dev] Re: Eyelink Toolbox checked in
+</A></li>
+	<LI>Next message: <A HREF="000029.html">[Osxptb-dev] Initial port of OS-X Psychtoolbox to M$ Windows (nearly) ready...
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

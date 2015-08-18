@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] committing new material
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-June/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20committing%20new%20material&In-Reply-To=%3CACFD8165-531E-46A9-9DA6-064561A9F146%40rug.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000050.html">
+   <LINK REL="Next"  HREF="000060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] committing new material</H1>
+    <B>Frans Cornelissen</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20committing%20new%20material&In-Reply-To=%3CACFD8165-531E-46A9-9DA6-064561A9F146%40rug.nl%3E"
+       TITLE="[Osxptb-dev] committing new material">f.w.cornelissen at rug.nl
+       </A><BR>
+    <I>Tue Jun 27 00:16:49 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000050.html">[Osxptb-dev] committing new material related to eyelinktoolbox
+</A></li>
+        <LI>Next message: <A HREF="000060.html">[Osxptb-dev] committing new material
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Hi Mario et al.
+
+Thanks for this recipe. I have been trying to get it to work, but it  
+seems to fail at the commit stage.
+
+After svn commit,
+it starts to spit out a long list of added/changed files, creates a  
+scn-commit.tmp file in my working copy directory, but
+than nothing happens, except for about ten tildes '~' appearing over  
+the course of say 10 minutes.
+
+Terminal doesn't respond anymore, can only quit the terminal.
+
+Any idea what's going wrong?
+
+
+Frans
+
+
+Here's part of the content of the .tmp file:
+------------------------------------------------------
+
+--This line, and those below, will be ignored--
+
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkAcceptTrigger.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkMessage.c
+M    PsychSourceGL/Source/Common/Eyelink/RegisterProject.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkOpenFile.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkWaitForModeReady.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkCheckRecording.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkDriftCorrStart.c
+AM   PsychSourceGL/Source/Common/Eyelink/ 
+EyelinkNewFloatSampleAvailable.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyelinkEyeAvailable.c
+AM   PsychSourceGL/Source/Common/Eyelink/EyeLinkTargetCheck.c
+M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.c
+M    PsychSourceGL/Source/Common/Eyelink/EyelinkSynopsis.c
+M    PsychSourceGL/Source/Common/Eyelink/PsychEyelink.h
+
+.......
+
+
+
+Op 21-jun-2006, om 18:08 heeft Mario Kleiner het volgende geschreven:
+
+&gt;<i> Hi Frans,
+</I>&gt;<i>
+</I>&gt;<i> it goes like this:
+</I>&gt;<i>
+</I>&gt;<i> 1a. Check out your local working copy via:
+</I>&gt;<i>
+</I>&gt;<i> svn checkout svn+<A HREF="ssh://franswcorneliss@svn.berlios.de/svnroot/repos/">ssh://franswcorneliss@svn.berlios.de/svnroot/repos/</A> 
+</I>&gt;<i> osxptb/trunk /Users/frans/MyPsychtoolboxfolder
+</I>&gt;<i>
+</I>&gt;<i> -&gt; 1a is only done once in a life-time
+</I>&gt;<i> -&gt; If you didn't do 1a, you can always just do 1a and then manually  
+</I>&gt;<i> copy your new/modified files and folders from your current copy of  
+</I>&gt;<i> PTB into the newly checked out working copy.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Every day you start coding on PTB do:
+</I>&gt;<i>
+</I>&gt;<i> 1b.
+</I>&gt;<i>
+</I>&gt;<i> cd /Users/frans/MyPsychtoolboxfolder/trunk
+</I>&gt;<i> svn update
+</I>&gt;<i>
+</I>&gt;<i> 2. Make any modification &amp; addition you want to the copy in  
+</I>&gt;<i> MyPsychtoolboxfolder/trunk.
+</I>&gt;<i>
+</I>&gt;<i> 3a. If you want to add a single file, or a full new subdirectory,  
+</I>&gt;<i> including all contained directories and files, you just add it as  
+</I>&gt;<i> you would always do, then add it to Subversion via:
+</I>&gt;<i>
+</I>&gt;<i> svn add &lt;pathToTheNewFolderOrFileToAdd&gt;
+</I>&gt;<i>
+</I>&gt;<i> e.g.,
+</I>&gt;<i>
+</I>&gt;<i> svn add Psychtoolbox/PsychHardware/EyelinkToolbox
+</I>&gt;<i>
+</I>&gt;<i> to add EyelinkToolbox and all its subdirectories and files.
+</I>&gt;<i>
+</I>&gt;<i> 3b. There's also commands for removing files and folders...
+</I>&gt;<i>
+</I>&gt;<i> svn remove &lt;path&gt;
+</I>&gt;<i>
+</I>&gt;<i> ...or moving them (renaming or moving to a different location):
+</I>&gt;<i>
+</I>&gt;<i> 3c. svn mv &lt;oldnameOrLocation&gt; &lt;newNameOrLocation&gt;
+</I>&gt;<i>
+</I>&gt;<i> 4a. Finally you can inspect what you've modified, added or deleted  
+</I>&gt;<i> via:
+</I>&gt;<i>
+</I>&gt;<i> svn status
+</I>&gt;<i>
+</I>&gt;<i> -&gt; Shows a list of all files with status letters (A)dded, (D) 
+</I>&gt;<i> eleted, (M)odified (?) Unknown file, not belonging to Subversion  
+</I>&gt;<i> and therefore ignored.
+</I>&gt;<i>
+</I>&gt;<i> 4b. You can always review your changes, i.e., look what you've  
+</I>&gt;<i> actually changed with respect to the current state of trunk:
+</I>&gt;<i>
+</I>&gt;<i> svn diff &lt;PathOrFilename&gt;
+</I>&gt;<i>
+</I>&gt;<i> -&gt; Prints out all differing lines.
+</I>&gt;<i>
+</I>&gt;<i> 4c. You can undo changes, i.e., restore files to their state in trunk:
+</I>&gt;<i>
+</I>&gt;<i> svn revert &lt;PathOrFilename&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 4d. Or restore them to the state of a specific revision in trunk, via:
+</I>&gt;<i>
+</I>&gt;<i> svn update -r &lt;RequestedRevisionNumber&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> 5. When you're happy with the new state of the files in your  
+</I>&gt;<i> working copy, you can commit them to the database via:
+</I>&gt;<i>
+</I>&gt;<i> svn commit  &lt;--- Everything you did.
+</I>&gt;<i>
+</I>&gt;<i> svn commit &lt;PathToDirectoryOrFile&gt;  &lt;--- Only specific directories  
+</I>&gt;<i> (and their content) or files.
+</I>&gt;<i>
+</I>&gt;<i> 6. Done.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> If you don't want to retype your Berlios password all the time, you  
+</I>&gt;<i> can create a cryptographic key and upload it to Berlios, so your  
+</I>&gt;<i> machine can automatically authenticate you. See...
+</I>&gt;<i>
+</I>&gt;<i> &lt;<A HREF="http://developer.berlios.de/docman/display_doc.php?">http://developer.berlios.de/docman/display_doc.php?</A> 
+</I>&gt;<i> docid=31&amp;group_id=2&gt;
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Merging files from trunk into beta goes via svn merge. One usually  
+</I>&gt;<i> checks out a working copy of the trunk and one copy of beta, e.g.,  
+</I>&gt;<i> side-by-side:
+</I>&gt;<i>
+</I>&gt;<i> /Users/kleinerm/Psychtoolbox/trunk/
+</I>&gt;<i> /Users/kleinerm/Psychtoolbox/beta/
+</I>&gt;<i>
+</I>&gt;<i> and then one can do:
+</I>&gt;<i>
+</I>&gt;<i> 1. cd /Users/kleinerm/Psychtoolbox
+</I>&gt;<i> 2. svn merge -r &lt;revnumberOfLastMerge&gt;:HEAD trunk/ beta/
+</I>&gt;<i> 3. cd beta
+</I>&gt;<i> 4. svn commit
+</I>&gt;<i>
+</I>&gt;<i> But merging trunk-stuff into beta can also be done by me if you  
+</I>&gt;<i> just drop me an e-mail when you think that stuff in trunk is ready  
+</I>&gt;<i> for beta.
+</I>&gt;<i>
+</I>&gt;<i> Subversion has many more commands, but this is what one mostly  
+</I>&gt;<i> needs for day-to-day work. If you get used to it, it is a pretty  
+</I>&gt;<i> convenient way of backing up and organising data, keeping track of  
+</I>&gt;<i> changes and a great aid in debugging the more involved bugs.
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> I'd say your proposed placement of files makes sense to me.
+</I>&gt;<i>
+</I>&gt;<i> ciao,
+</I>&gt;<i> -mario
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> Frans Cornelissen wrote:
+</I>&gt;&gt;<i> Dear all,
+</I>&gt;&gt;<i> I am fairly new to these versioning systems.
+</I>&gt;&gt;<i> Could someone be as kind as to point to or write a short 'fool/non- 
+</I>&gt;&gt;<i> unix geek proof&quot; recipe for committing (that's the word right) new  
+</I>&gt;&gt;<i> stuff? (I don't want to appear lazy, but I am very time pressed  
+</I>&gt;&gt;<i> and prefer to spend my time on coding rather than figuring out  
+</I>&gt;&gt;<i> what is presumably very obvious to some of you already).
+</I>&gt;&gt;<i> I have the following material related to the eyelinktoolbox that  
+</I>&gt;&gt;<i> needs to be added (to trunk):
+</I>&gt;&gt;<i> 1. updated and new c-code
+</I>&gt;&gt;<i> 2. lot's of m-code
+</I>&gt;&gt;<i> 3. adapted main project file (because of the new c-code)
+</I>&gt;&gt;<i> If the're no objections, in my view, the most consistent would be  
+</I>&gt;&gt;<i> if the m-code and main eyelink mexmac file would go in a new  
+</I>&gt;&gt;<i> directory in PsychHardware/EyelinkToolbox, with various further  
+</I>&gt;&gt;<i> subdirectories such as EyelinkBasic, EyelinkDemos etc.
+</I>&gt;&gt;<i> (so I need some info on how to create such new directories as well  
+</I>&gt;&gt;<i> if this is not handled transparently).
+</I>&gt;&gt;<i> Gr.
+</I>&gt;&gt;<i> Frans
+</I>&gt;&gt;<i> --------------------------------------------------------------------- 
+</I>&gt;&gt;<i> --------------------------------------------
+</I>&gt;&gt;<i> Laboratory of Experimental Ophthalmology &amp; BCN NeuroImaging  
+</I>&gt;&gt;<i> Centre, School of Behavioural and Cognitive Neurosciences,  
+</I>&gt;&gt;<i> University Medical Centre Groningen,
+</I>&gt;&gt;<i> PO Box 30.001, Groningen 9700 RB, The Netherlands,
+</I>&gt;&gt;<i> Email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A> &lt;mailto:<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>&gt;
+</I>&gt;&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> -- 
+</I>&gt;<i> *********************************************************************
+</I>&gt;<i> Mario Kleiner
+</I>&gt;<i> Max Planck Institute for Biological Cybernetics
+</I>&gt;<i> Spemannstr. 38
+</I>&gt;<i> 72076 Tuebingen
+</I>&gt;<i> Germany
+</I>&gt;<i>
+</I>&gt;<i> e-mail: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>
+</I>&gt;<i> office: +49 (0)7071/601-742
+</I>&gt;<i> fax:    +49 (0)7071/601-616
+</I>&gt;<i> www:    <A HREF="http://www.kyb.tuebingen.mpg.de/~kleinerm">http://www.kyb.tuebingen.mpg.de/~kleinerm</A>
+</I>&gt;<i> *********************************************************************
+</I>&gt;<i> &quot;Debugging is twice as hard as writing the code in the first place.
+</I>&gt;<i> Therefore, if you write the code as cleverly as possible, you are,
+</I>&gt;<i> by definition, not smart enough to debug it.&quot; - Brian W. Kernighan
+</I>&gt;<i>
+</I>&gt;<i>
+</I>&gt;<i> _______________________________________________
+</I>&gt;<i> Osxptb-dev mailing list
+</I>&gt;<i> <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">Osxptb-dev at lists.berlios.de</A>
+</I>&gt;<i> <A HREF="http://lists.berlios.de/mailman/listinfo/osxptb-dev">http://lists.berlios.de/mailman/listinfo/osxptb-dev</A>
+</I>
+------------------------------------------------------------------------ 
+-----------------------------------------
+Laboratory of Experimental Ophthalmology &amp; BCN NeuroImaging Centre,  
+School of Behavioural and Cognitive Neurosciences, University Medical  
+Centre Groningen,
+PO Box 30.001, Groningen 9700 RB, The Netherlands,
+Email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+
+
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: &lt;<A HREF="https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/df68fc09/attachment.html">https://lists.berlios.de/pipermail/osxptb-dev/attachments/20060627/df68fc09/attachment.html</A>&gt;
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000050.html">[Osxptb-dev] committing new material related to eyelinktoolbox
+</A></li>
+	<LI>Next message: <A HREF="000060.html">[Osxptb-dev] committing new material
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] threading in Matlab
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2006-July/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20threading%20in%20Matlab&In-Reply-To=%3C44BD2DE8.8040805%40sas.upenn.edu%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000075.html">
+   <LINK REL="Next"  HREF="000077.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] threading in Matlab</H1>
+    <B>Christopher Broussard</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20threading%20in%20Matlab&In-Reply-To=%3C44BD2DE8.8040805%40sas.upenn.edu%3E"
+       TITLE="[Osxptb-dev] threading in Matlab">chrg at sas.upenn.edu
+       </A><BR>
+    <I>Tue Jul 18 20:52:24 CEST 2006</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000075.html">[Osxptb-dev] new developer
+</A></li>
+        <LI>Next message: <A HREF="000077.html">[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>I was curious about how successful people were creating new threads from 
+within a mex function.  About 3 or 4 months back I experimented with 
+this on a Windows machine and found that trying to do multi-threading 
+within a mex function caused unpredictable results.  My contact with 
+Matlab support and looking up other developer's experiences on the 
+internet resulted in finding out that Matlab wants to remain single 
+threaded.  That said, I was looking over some of the C code to become 
+more familiar with it and noticed that there were pthread calls.  Has 
+this been stable on OS X, and what have people found to be threading 
+limitations in Matlab.
+
+    Thanks,
+    Chris Broussard
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000075.html">[Osxptb-dev] new developer
+</A></li>
+	<LI>Next message: <A HREF="000077.html">[Osxptb-dev] osxptb -- Do not run the convertlinefeeds script	again!!!
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#76">[ date ]</a>
+              <a href="thread.html#76">[ thread ]</a>
+              <a href="subject.html#76">[ subject ]</a>
+              <a href="author.html#76">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>

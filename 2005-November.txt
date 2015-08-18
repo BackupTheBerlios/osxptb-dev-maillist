@@ -1,0 +1,1500 @@
+From mario.kleiner at tuebingen.mpg.de  Thu Nov 24 00:46:44 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 24 Nov 2005 00:46:44 +0100
+Subject: [Osxptb-dev] Testmail Nr. 1
+Message-ID: <4384FF64.1050709@tuebingen.mpg.de>
+
+...ja ja...
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Thu Nov 24 02:40:49 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 24 Nov 2005 02:40:49 +0100
+Subject: [Osxptb-dev] Proposal: Interface to 3rd party mexfiles & OSX Eyelink Toolbox
+Message-ID: <web-15882573@tuebingen.mpg.de>
+
+
+
+Just to get this started...
+
+  --- the forwarded message follows ---
+-------------- next part --------------
+An embedded message was scrubbed...
+From: "Mario Kleiner" <mario.kleiner at tuebingen.mpg.de>
+Subject: Re: OSX Eyelink Toolbox
+Date: Thu, 24 Nov 2005 02:25:20 +0100
+Size: 9005
+URL: <https://lists.berlios.de/pipermail/osxptb-dev/attachments/20051124/2ab025c9/attachment.mht>
+
+From mario.kleiner at tuebingen.mpg.de  Thu Nov 24 02:43:56 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 24 Nov 2005 02:43:56 +0100
+Subject: [Osxptb-dev] Info about capabilities of different Mac graphics cards...
+Message-ID: <web-15882601@tuebingen.mpg.de>
+
+Very useful link for a quick overview over supported
+extensions and features:
+
+<http://homepage.mac.com/arekkusu/bugs/GLInfo.html>
+
+-mario
+
+
+From chris.d.burns at gmail.com  Thu Nov 24 03:13:29 2005
+From: chris.d.burns at gmail.com (Chris Burns)
+Date: Wed, 23 Nov 2005 18:13:29 -0800
+Subject: [Osxptb-dev] Re: OSX Eyelink Toolbox
+In-Reply-To: <web-15882453@tuebingen.mpg.de>
+References: <764e38540511221709y6cc2a8dcsaf9dd2a25592e0f1@mail.gmail.com>
+	 <web-15882453@tuebingen.mpg.de>
+Message-ID: <764e38540511231813k220d4592o47347ec3ae3cb245@mail.gmail.com>
+
+osxptb-dev,
+
+This sounds like a good idea and certainly Screen and PTB are already
+quite large.  We should think through what should and should not be
+included in the project.  My apologies for lumping the Eyelink Toolbox
+and Psych Toolboxes together, I tend to see them in the same realm. 
+(CoderGuy, not VisionGuy.)  Frans should weigh in on this and David
+brought up some very good points also.
+
+You are correct on the ETB interface requirements to PTB.  However,
+the PTB has a lot of really useful wrappers around the Matlab
+routines.  I've developed a few Mex functions in the past, Matlab is a
+temper-mental beast, the PTB made coding very easy!  The PsychError,
+PsychHelp, PsychScripting... all very nice to work with.  So, could
+this be folded into a PsychFramework?
+
+Mario, regarding that ETB interface... I'm in a VSS-abstract crunch
+right now and have all but one of the eyelink functions I need working
+in a PTB Target.  I have no problem keeping this out of the repository
+until we sort out it's proper place, but I need this working asap...
+can you give me some pointers on gaining access to the Screen/Window
+interface?   Given the window index, I need access to that GLContext. 
+I'm looking at WindowBank.h now, what else do I need?
+
+chris
+
+On 11/23/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+> Hi,
+>
+> in what sense does the Eyelink toolbox need to interface
+> with the PTB? Am i correct that the only connection is the
+> need to display live-video from the eye-camera in a PTB
+> Onscreen window, e.g., for tracker setup and calibration?
+>
+> In that case, i'd suggest doing the following to interface
+> with Screen, allowing for maximum flexibility and minimum
+> dependence:
+>
+> We create a few new PTB Screen - functions that allow 3rd
+> party mex-files, e.g., the Eyelink mexfile to safely
+> interface with the OpenGL core of Screen.
+>
+> Something like:
+>
+> Screen('BeginOpenGLOps', windowPtr);
+> -> This would tell PTB that some 3rd party mexfile would
+> like to perform OpenGL rendering into the PTB onscreen
+> window 'windowPtr'. PTB would activate the OpenGL context
+> associated with window windowPtr and make an internal
+> backup of all relevant OpenGL state (matrices, attributes).
+>
+> Then an external mexfile with arbitrary OpenGL code in it
+> could query the properties of the onscreen window and its
+> context, do arbitrary OpenGL rendering into the window...
+>
+> After this, one would call
+> Screen('EndOpenGLOps', windowPtr);
+> -> This would restore the state of windowPtr's OpenGL
+> context from the backup made by the preceding
+> 'BeginExter......' call.
+>
+> The Begin... and End... Screen-calls are basically a way to
+> give external files convenient acess to all OpenGL features
+> of a PTB window and at the same time to protect PTB's
+> internal working from buggy/misbehaving 3rd party code - or
+> at least to safely detect such harmful interactions...
+>
+> By binding the OpenGL default texture 0 or by
+> creating/managing own textures, such a file can manage its
+> own textures+state isolated from PTB's textures. E.g.
+> Eyelink.mex could use texture 0 as scratchpad for drawing
+> the current live-image from the trackercamera...
+>
+> If we provide two more Screen calls to directly manipulate
+> or retrieve infos stored in PTB's internal texture arrays,
+> we can allow a safe interaction between 3rd party .mexfiles
+> and PTB's texture drawing functions...
+>
+> I think this would not only solve interfacing between
+> Eyelink and PTB in an elegant way, but would also allow
+> quick integration of 3rd party OpenGL routines as separate
+> mex files. We wouldn't need to maintain/debug those files
+> as PTB is protected from their possible misbehaviour. The
+> files wouldn't need to know much about PTB's internal
+> structure, except for the proper use of the few well
+> defined Screen interface functions. The mex-files itself
+> would only consist of fully portable ANSI-C and OpenGL code
+> because all the tricky and OS dependent stuff like window
+> management, timed flipp'ing, timing, I/O and such is done
+> by PTB.
+>
+> I plan to extend PTB's current 2D drawing functions to 3D
+> in a limited/conservative fashion that allows to do some
+> basic 3D drawing in the way PTB users are naturally used to
+> from 2D, with integrated child-protection to protect the
+> users from the complexity and PTB from the users ;-)
+>
+> But unlocking more of OpenGL's features (high perf
+> rendering, lighting, GL-Shading language, reading and
+> manipulating 3D geometry from standard graphics packages
+> like 3D-StudioMAX, Maya, Blender) would be beneficial esp.
+> for research in high-level vision, e.g, object recognition,
+> and i don't think this should go into the Screen command -
+> would make Screen too complex and too bloated and too hard
+> to maintain. Separate mex files otoh would be a perfect
+> place for this kind of stuff.
+>
+> Given that PTB is now GPL, we can also easily interface
+> with other GPL'd LGPL'd code...
+>
+> What do you think?
+>
+> best,
+> -mario
+>
+>
+> On Tue, 22 Nov 2005 17:09:46 -0800
+>  Chris Burns <chris.d.burns at gmail.com> wrote:
+> > Frans,
+> >
+> > Thanks for the code update!  I've been using your
+> > previous version, in
+> > a cut-and-paste fashion, updated to the new PTB
+> > functions.  This
+> > version should help speed up that work.  (And so far,
+> > Enno's code
+> > looks pretty good.)
+> >
+> > I need to get this working for our lab, so I'll get the
+> > ball rolling
+> > and check it into the server.  We use a small subset of
+> > the Eyelink
+> > Toolbox functionality though, and I'll be focusing on
+> > that in the
+> > near-term.  But I'll check in a working version and
+> > figure out an
+> > elegant way to check in this other code so that it can be
+> > used in
+> > future porting.  I'll send out a notice after the first
+> > check in.
+> >
+> > I do have one question:  I'm not clear on how the
+> > graphics should work
+> > in the  eyelink('initwindow') function.  Generally, how
+> > to render the
+> > camera images received on the ethernet port to the
+> > display.  Anything
+> > pointers on how to do this?
+> >
+> >
+> > chris
+> >
+> >
+> > On 11/22/05, Frans W. Cornelissen
+> > <f.w.cornelissen at rug.nl> wrote:
+> > > Dear all,
+> > >
+> > > There seems to be a growing interest in getting an OSX
+> > version of the
+> > > Eyelinktoolbox.
+> > >
+> > > Quite a while ago (2 years?) we (Enno Peters that is)
+> > started working
+> > > on a version but were sort of stopped by the lack of a
+> > stable
+> > > psychtoolbox. I call this our early alpha version. It
+> > actually worked
+> > > to some extent. I haven't gotten back to it yet, due
+> > mainly to a lack
+> > > of time (and Enno leaving for a proper job).
+> > >
+> > > Here's (a copy of) a message I wrote a while to another
+> >  wannabe
+> > > Eyelink porter (Daniel Sperka):
+> > >
+> > ---------------------------------------------------------
+> > > It would be timely if an OSX version of the Eyelink TB
+> > would come out
+> > > now. In my view the PTB is becoming really useful now,
+> > especially after
+> > > the improvements Mario Kleiner has been making.
+> > >
+> > > I believe a few months would be quite sufficient to get
+> > a working
+> > > version (like I mentioned, there is an early version
+> > that has some
+> > > functions working).
+> > >
+> > > There's a couple of things that I think need to be
+> > changed/improved:
+> > >
+> > > 1. Update to newest XCode/Matlab/PTB source code.
+> > Shouldn't be much of
+> > > an issue, but still.
+> > > 2. Check for updates in code with SR Research.
+> > > 3. Make sure we do not use any graphics other than via
+> > PTB (there is a
+> > > problem with the 'eye' graphic during calibration).
+> > > 4. Seperate out functions from 'shell' very much like
+> > current PTB does.
+> > > This is not an absolute necessity, but using the same
+> > methods as the
+> > > current PTB presumably would make things easier to
+> > maintain in the long
+> > > run.
+> > >
+> > > 5. Update many of the .m files to use e.g. new graphics
+> > calls of PTB.
+> > >
+> > > 6. Test everything for speed, delays, etc.
+> > >
+> > > 7. provide some support/updates.
+> > >
+> > > The OS9 code can be downloaded from
+> > >  http://www.psychtoolbox.org/eyelinktoolbox/downloads/
+> > > EyelinkToolbox_C_code_1.4.sit
+> > >   I believe this is the most recent OS9 code.
+> > >
+> > > I've traced some OSX code for you.  I am not entirely
+> > sure if it is
+> > > complete. Enno Peters wasn't a superbly organised
+> > programmer, and I
+> > > haven't looked at this project for quite a while.
+> > >
+> > > Download from
+> > >
+> >
+>  http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19-10
+> > > -05.zip
+> > >
+> > > In principle I am very much open to a collaboration.
+> > >
+> > > --------------------
+> > >
+> > >
+> > > Here's a plan:
+> > > I am offering our code as a starter. If someone with a
+> > little time on
+> > > their hands (Chris?) would check the OSX source code
+> > into the/some CVS
+> > > server and do #1 on the list, that would be a step
+> > forward. (Then
+> > > please tell all other interested in development how to
+> > get to it.)
+> > > PTB in my view is about collaboration, rather than
+> > people reinventing
+> > > wheels (or even 30% of them). So, be fair and please
+> > use the head start
+> > > and collaborative opportunities available to create a
+> > full working
+> > > version of the ETB.
+> > > Also, it be nice if a reasonable degree of backward
+> > compatibility with
+> > > the OS9 version is maintained.
+> > >
+> > > My proposal is that those interested in Eyelink TB
+> > programming reply to
+> > > me, so that we continue the discussion in that group
+> > (and decide where
+> > > to do this). I can tell a bit more also about our ideas
+> > back then about
+> > > what ETB should be doing (and what not).
+> > >
+> > > Gr.
+> > > Frans
+> > >
+>
+>
+
+
+From mario.kleiner at tuebingen.mpg.de  Thu Nov 24 03:19:14 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 24 Nov 2005 03:19:14 +0100
+Subject: [Osxptb-dev] Mailing lists and FORP's
+Message-ID: <web-15882904@tuebingen.mpg.de>
+
+Hi Frans,
+
+we have a new mailing-list for developer discussion on
+Berlios, i thought maybe you're interested in subscribing:
+
+<http://developer.berlios.de/mail/?group_id=5064>
+
+Regarding your FORP bug. Michael Silver had the same issue.
+I suspect that its not a bug in KbCheck but correct
+behaviour with respect to a device that advertises itself
+as a regular keyboard but doesn't behave like a regular
+keyboard.
+
+(Completely unverified) Theory goes like this:
+
+A normal keyboard sends a "key pressed" event to the OS
+when a key is pressed down. It sends a "key released"
+event, when the key is finally released . The OS detects
+any temporal sequence of "key X pressed" followed by "key X
+released" as a single key stroke, maps it into the
+corresponding character and stores it in the event queue.
+This event queue is queried/polled by all normal
+applications like the Matlab command window or text
+editors, as well as the GetChar command of PTB.
+KbCheck/KbWait otoh always report the *current* state of
+all keys at query-time. So a key is reported as "down" in
+the time interval between the arrival of the "key pressed"
+event and the "key released" event.
+
+My assumption is that the FORP - on detection of a key
+press - sends a "key pressed" event, immediately followed
+by a "key released" event. It doesn't send the "key
+released" event when the key is really released, but
+before. This is convenient for a response button box to
+have this "debouncing mechanism" and should be handled
+properly by GetChar or Matlab or text editors, but KbCheck
+would pretty likely miss the short time-window between "key
+press" and "key release"...
+
+If this is really the case then KbCheck works properly
+although not as expected and GetChar should solve the FORP
+issue.
+
+So solution would be either:
+a) Use GetChar instead of KbCheck -- when GetChar works
+again.
+or
+b) Ask the manufacterer of FORP to extend their Firmware
+with a new mode of  operation to make FORP really behave
+like a keyboard.
+
+
+From mario.kleiner at tuebingen.mpg.de  Thu Nov 24 03:59:55 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Thu, 24 Nov 2005 03:59:55 +0100
+Subject: [Osxptb-dev] Re: OSX Eyelink Toolbox
+In-Reply-To: <764e38540511231813k220d4592o47347ec3ae3cb245@mail.gmail.com>
+Message-ID: <web-15883248@tuebingen.mpg.de>
+
+If we create new mex-targets (in PTB source tree or
+externally) we certainly should try to use the wrappers
+like PsychError, PsychHelp - the whole PsychScriptingGlue.
+Allen has done a tremendeously good job at creating this
+architecture and my hope is that it will allow in the
+future to create not only a Windows-port of PTB but i'd
+love to see a port to GNU/Octave as well at some point - i
+think it would be a pretty good Matlab replacement for many
+purposes - and a cheap 0$ license cost one as well! I had a
+look at their plugin interface layer. Its called OCT
+interface and very similar to Matlabs MEX interface - C++
+style class oriented, but extending PsychScriptingGlue to
+support this should be rather straightforward...
+
+Where things should go is not really my business, i'm also
+only "coder-guy" after all this is Denis/Davids/Allens
+baby. But Frans has to decide on the GPL licensing issue
+before Eyelink-Code can go into the Berlios SVN, regardless
+if this is just a temporary solution or permanent hosting!
+Just the conceptual separation into different
+mex-files/targets with well defined PTB vs. "Rest of OpenGL
+World" interface is useful, so people outside the PTB
+environment can easily create mexfile - "plugins" for it
+regardless if they choose to use PsychScriptingGlue or just
+plain Matlab mex-interface. People have to be aware though
+that use of Psychtoolbox code == Their C code is GPL!
+
+I can create the proper interfaces as proposed in my
+earlier mail in the next couple of days.
+
+If you just want a quick start for eyelink video output:
+
+1. After calling *any* Screen function, the OpenGL
+rendering context of the last used onscreen-window is
+already active - OpenGL is a state machine, it keeps
+settings until explicitely changed and Matlab doesn't mess
+with OpenGL afaik. So after Screen('OpenWindow') or
+Screen('Flip') OpenGL is already ready... The propsed
+'BeginOpenGLOps' call is more about PTB doing backups of
+internal state and such, so if you don't mess up, you can
+do without it for a quick start...
+
+2. Regarding texture. Just
+glBindTexture(GL_TEXTURE_RECTANGLE_EXT, 0) and use the
+other setup calls for textures. Texture 0 is special in the
+sense that it isn't used at all by any other PTB functions
+and it is the OpenGL default texture -- like a scratchpad.
+But you can also generate an own texture id with
+glGenTextures -- as long as you don't need PTB to use this
+texture, it can happily co-exist with PTBs own textures.
+
+3. Render the texture to a quad, similar to the texture
+code in PsychBlitTextureToDisplay() in
+PsychTextureSupport.c
+
+4. Disable what you've enabled in step 2.
+
+This should get you up and running.
+
+Need to get some sleep now.
+
+ciao,
+-mario
+
+
+On Wed, 23 Nov 2005 18:13:29 -0800
+ Chris Burns <chris.d.burns at gmail.com> wrote:
+> osxptb-dev,
+> 
+> This sounds like a good idea and certainly Screen and PTB
+> are already
+> quite large.  We should think through what should and
+> should not be
+> included in the project.  My apologies for lumping the
+> Eyelink Toolbox
+> and Psych Toolboxes together, I tend to see them in the
+> same realm. 
+> (CoderGuy, not VisionGuy.)  Frans should weigh in on this
+> and David
+> brought up some very good points also.
+> 
+> You are correct on the ETB interface requirements to PTB.
+>  However,
+> the PTB has a lot of really useful wrappers around the
+> Matlab
+> routines.  I've developed a few Mex functions in the
+> past, Matlab is a
+> temper-mental beast, the PTB made coding very easy!  The
+> PsychError,
+> PsychHelp, PsychScripting... all very nice to work with.
+>  So, could
+> this be folded into a PsychFramework?
+> 
+> Mario, regarding that ETB interface... I'm in a
+> VSS-abstract crunch
+> right now and have all but one of the eyelink functions I
+> need working
+> in a PTB Target.  I have no problem keeping this out of
+> the repository
+> until we sort out it's proper place, but I need this
+> working asap...
+> can you give me some pointers on gaining access to the
+> Screen/Window
+> interface?   Given the window index, I need access to
+> that GLContext. 
+> I'm looking at WindowBank.h now, what else do I need?
+> 
+> chris
+> 
+> On 11/23/05, Mario Kleiner
+> <mario.kleiner at tuebingen.mpg.de> wrote:
+> > Hi,
+> >
+> > in what sense does the Eyelink toolbox need to
+> interface
+> > with the PTB? Am i correct that the only connection is
+> the
+> > need to display live-video from the eye-camera in a PTB
+> > Onscreen window, e.g., for tracker setup and
+> calibration?
+> >
+> > In that case, i'd suggest doing the following to
+> interface
+> > with Screen, allowing for maximum flexibility and
+> minimum
+> > dependence:
+> >
+> > We create a few new PTB Screen - functions that allow
+> 3rd
+> > party mex-files, e.g., the Eyelink mexfile to safely
+> > interface with the OpenGL core of Screen.
+> >
+> > Something like:
+> >
+> > Screen('BeginOpenGLOps', windowPtr);
+> > -> This would tell PTB that some 3rd party mexfile
+> would
+> > like to perform OpenGL rendering into the PTB onscreen
+> > window 'windowPtr'. PTB would activate the OpenGL
+> context
+> > associated with window windowPtr and make an internal
+> > backup of all relevant OpenGL state (matrices,
+> attributes).
+> >
+> > Then an external mexfile with arbitrary OpenGL code in
+> it
+> > could query the properties of the onscreen window and
+> its
+> > context, do arbitrary OpenGL rendering into the
+> window...
+> >
+> > After this, one would call
+> > Screen('EndOpenGLOps', windowPtr);
+> > -> This would restore the state of windowPtr's OpenGL
+> > context from the backup made by the preceding
+> > 'BeginExter......' call.
+> >
+> > The Begin... and End... Screen-calls are basically a
+> way to
+> > give external files convenient acess to all OpenGL
+> features
+> > of a PTB window and at the same time to protect PTB's
+> > internal working from buggy/misbehaving 3rd party code
+> - or
+> > at least to safely detect such harmful interactions...
+> >
+> > By binding the OpenGL default texture 0 or by
+> > creating/managing own textures, such a file can manage
+> its
+> > own textures+state isolated from PTB's textures. E.g.
+> > Eyelink.mex could use texture 0 as scratchpad for
+> drawing
+> > the current live-image from the trackercamera...
+> >
+> > If we provide two more Screen calls to directly
+> manipulate
+> > or retrieve infos stored in PTB's internal texture
+> arrays,
+> > we can allow a safe interaction between 3rd party
+> .mexfiles
+> > and PTB's texture drawing functions...
+> >
+> > I think this would not only solve interfacing between
+> > Eyelink and PTB in an elegant way, but would also allow
+> > quick integration of 3rd party OpenGL routines as
+> separate
+> > mex files. We wouldn't need to maintain/debug those
+> files
+> > as PTB is protected from their possible misbehaviour.
+> The
+> > files wouldn't need to know much about PTB's internal
+> > structure, except for the proper use of the few well
+> > defined Screen interface functions. The mex-files
+> itself
+> > would only consist of fully portable ANSI-C and OpenGL
+> code
+> > because all the tricky and OS dependent stuff like
+> window
+> > management, timed flipp'ing, timing, I/O and such is
+> done
+> > by PTB.
+> >
+> > I plan to extend PTB's current 2D drawing functions to
+> 3D
+> > in a limited/conservative fashion that allows to do
+> some
+> > basic 3D drawing in the way PTB users are naturally
+> used to
+> > from 2D, with integrated child-protection to protect
+> the
+> > users from the complexity and PTB from the users ;-)
+> >
+> > But unlocking more of OpenGL's features (high perf
+> > rendering, lighting, GL-Shading language, reading and
+> > manipulating 3D geometry from standard graphics
+> packages
+> > like 3D-StudioMAX, Maya, Blender) would be beneficial
+> esp.
+> > for research in high-level vision, e.g, object
+> recognition,
+> > and i don't think this should go into the Screen
+> command -
+> > would make Screen too complex and too bloated and too
+> hard
+> > to maintain. Separate mex files otoh would be a perfect
+> > place for this kind of stuff.
+> >
+> > Given that PTB is now GPL, we can also easily interface
+> > with other GPL'd LGPL'd code...
+> >
+> > What do you think?
+> >
+> > best,
+> > -mario
+> >
+> >
+> > On Tue, 22 Nov 2005 17:09:46 -0800
+> >  Chris Burns <chris.d.burns at gmail.com> wrote:
+> > > Frans,
+> > >
+> > > Thanks for the code update!  I've been using your
+> > > previous version, in
+> > > a cut-and-paste fashion, updated to the new PTB
+> > > functions.  This
+> > > version should help speed up that work.  (And so far,
+> > > Enno's code
+> > > looks pretty good.)
+> > >
+> > > I need to get this working for our lab, so I'll get
+> the
+> > > ball rolling
+> > > and check it into the server.  We use a small subset
+> of
+> > > the Eyelink
+> > > Toolbox functionality though, and I'll be focusing on
+> > > that in the
+> > > near-term.  But I'll check in a working version and
+> > > figure out an
+> > > elegant way to check in this other code so that it
+> can be
+> > > used in
+> > > future porting.  I'll send out a notice after the
+> first
+> > > check in.
+> > >
+> > > I do have one question:  I'm not clear on how the
+> > > graphics should work
+> > > in the  eyelink('initwindow') function.  Generally,
+> how
+> > > to render the
+> > > camera images received on the ethernet port to the
+> > > display.  Anything
+> > > pointers on how to do this?
+> > >
+> > >
+> > > chris
+> > >
+> > >
+> > > On 11/22/05, Frans W. Cornelissen
+> > > <f.w.cornelissen at rug.nl> wrote:
+> > > > Dear all,
+> > > >
+> > > > There seems to be a growing interest in getting an
+> OSX
+> > > version of the
+> > > > Eyelinktoolbox.
+> > > >
+> > > > Quite a while ago (2 years?) we (Enno Peters that
+> is)
+> > > started working
+> > > > on a version but were sort of stopped by the lack
+> of a
+> > > stable
+> > > > psychtoolbox. I call this our early alpha version.
+> It
+> > > actually worked
+> > > > to some extent. I haven't gotten back to it yet,
+> due
+> > > mainly to a lack
+> > > > of time (and Enno leaving for a proper job).
+> > > >
+> > > > Here's (a copy of) a message I wrote a while to
+> another
+> > >  wannabe
+> > > > Eyelink porter (Daniel Sperka):
+> > > >
+> > >
+> ---------------------------------------------------------
+> > > > It would be timely if an OSX version of the Eyelink
+> TB
+> > > would come out
+> > > > now. In my view the PTB is becoming really useful
+> now,
+> > > especially after
+> > > > the improvements Mario Kleiner has been making.
+> > > >
+> > > > I believe a few months would be quite sufficient to
+> get
+> > > a working
+> > > > version (like I mentioned, there is an early
+> version
+> > > that has some
+> > > > functions working).
+> > > >
+> > > > There's a couple of things that I think need to be
+> > > changed/improved:
+> > > >
+> > > > 1. Update to newest XCode/Matlab/PTB source code.
+> > > Shouldn't be much of
+> > > > an issue, but still.
+> > > > 2. Check for updates in code with SR Research.
+> > > > 3. Make sure we do not use any graphics other than
+> via
+> > > PTB (there is a
+> > > > problem with the 'eye' graphic during calibration).
+> > > > 4. Seperate out functions from 'shell' very much
+> like
+> > > current PTB does.
+> > > > This is not an absolute necessity, but using the
+> same
+> > > methods as the
+> > > > current PTB presumably would make things easier to
+> > > maintain in the long
+> > > > run.
+> > > >
+> > > > 5. Update many of the .m files to use e.g. new
+> graphics
+> > > calls of PTB.
+> > > >
+> > > > 6. Test everything for speed, delays, etc.
+> > > >
+> > > > 7. provide some support/updates.
+> > > >
+> > > > The OS9 code can be downloaded from
+> > > >
+>  http://www.psychtoolbox.org/eyelinktoolbox/downloads/
+> > > > EyelinkToolbox_C_code_1.4.sit
+> > > >   I believe this is the most recent OS9 code.
+> > > >
+> > > > I've traced some OSX code for you.  I am not
+> entirely
+> > > sure if it is
+> > > > complete. Enno Peters wasn't a superbly organised
+> > > programmer, and I
+> > > > haven't looked at this project for quite a while.
+> > > >
+> > > > Download from
+> > > >
+> > >
+> >
+>
+ http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19-10
+> > > > -05.zip
+> > > >
+> > > > In principle I am very much open to a
+> collaboration.
+> > > >
+> > > > --------------------
+> > > >
+> > > >
+> > > > Here's a plan:
+> > > > I am offering our code as a starter. If someone
+> with a
+> > > little time on
+> > > > their hands (Chris?) would check the OSX source
+> code
+> > > into the/some CVS
+> > > > server and do #1 on the list, that would be a step
+> > > forward. (Then
+> > > > please tell all other interested in development how
+> to
+> > > get to it.)
+> > > > PTB in my view is about collaboration, rather than
+> > > people reinventing
+> > > > wheels (or even 30% of them). So, be fair and
+> please
+> > > use the head start
+> > > > and collaborative opportunities available to create
+> a
+> > > full working
+> > > > version of the ETB.
+> > > > Also, it be nice if a reasonable degree of backward
+> > > compatibility with
+> > > > the OS9 version is maintained.
+> > > >
+> > > > My proposal is that those interested in Eyelink TB
+> > > programming reply to
+> > > > me, so that we continue the discussion in that
+> group
+> > > (and decide where
+> > > > to do this). I can tell a bit more also about our
+> ideas
+> > > back then about
+> > > > what ETB should be doing (and what not).
+> > > >
+> > > > Gr.
+> > > > Frans
+> > > >
+> >
+> >
+> _______________________________________________
+> Osxptb-dev mailing list
+> Osxptb-dev at lists.berlios.de
+> http://lists.berlios.de/mailman/listinfo/osxptb-dev
+
+
+
+From f.w.cornelissen at rug.nl  Thu Nov 24 06:55:50 2005
+From: f.w.cornelissen at rug.nl (Frans W. Cornelissen)
+Date: Thu, 24 Nov 2005 06:55:50 +0100
+Subject: [Osxptb-dev] Re: OSX Eyelink Toolbox
+In-Reply-To: <764e38540511231813k220d4592o47347ec3ae3cb245@mail.gmail.com>
+References: <764e38540511221709y6cc2a8dcsaf9dd2a25592e0f1@mail.gmail.com> <web-15882453@tuebingen.mpg.de> <764e38540511231813k220d4592o47347ec3ae3cb245@mail.gmail.com>
+Message-ID: <F77FE242-5CAE-11DA-B580-000393D48314@rug.nl>
+
+Dear all,
+
+I'm occupied with other things right now but here some short answers:
+
+1. Eyelink should best be a different project. Makes it easier to  
+manage/develop, etc. It's really only using a few interface functions  
+from PTB (and of course should interface seamlessly with the graphics).
+
+2. No problem with it becoming open source (officially). I always  
+considered it that way anyway.
+
+>>> Am i correct that the only connection is the
+>>> need to display live-video from the eye-camera in a PTB
+>>> Onscreen window, e.g., for tracker setup and calibration?
+
+3. Getting access to the onscreen window is indeed the only thing that  
+is needed. At least that was our goal with the new version (the old  
+version used many routines of the videotoolbox that were also  
+hard-linked into the code. Not ideal)
+
+Our idea was that eyelink would fill some buffer with the  
+eye/calibration-image data, and that we would use Screen's 'putimage'  
+function to display this matrix as an image. This would remove need for  
+any actual graphics routines in eyelink.
+
+hope this helps for now. back Friday afternoon.
+
+gr.
+frans
+
+
+
+Op 24-nov-05 om 3:13 heeft Chris Burns het volgende geschreven:
+
+> osxptb-dev,
+>
+> This sounds like a good idea and certainly Screen and PTB are already
+> quite large.  We should think through what should and should not be
+> included in the project.  My apologies for lumping the Eyelink Toolbox
+> and Psych Toolboxes together, I tend to see them in the same realm.
+> (CoderGuy, not VisionGuy.)  Frans should weigh in on this and David
+> brought up some very good points also.
+>
+> You are correct on the ETB interface requirements to PTB.  However,
+> the PTB has a lot of really useful wrappers around the Matlab
+> routines.  I've developed a few Mex functions in the past, Matlab is a
+> temper-mental beast, the PTB made coding very easy!  The PsychError,
+> PsychHelp, PsychScripting... all very nice to work with.  So, could
+> this be folded into a PsychFramework?
+>
+> Mario, regarding that ETB interface... I'm in a VSS-abstract crunch
+> right now and have all but one of the eyelink functions I need working
+> in a PTB Target.  I have no problem keeping this out of the repository
+> until we sort out it's proper place, but I need this working asap...
+> can you give me some pointers on gaining access to the Screen/Window
+> interface?   Given the window index, I need access to that GLContext.
+> I'm looking at WindowBank.h now, what else do I need?
+>
+> chris
+>
+> On 11/23/05, Mario Kleiner <mario.kleiner at tuebingen.mpg.de> wrote:
+>> Hi,
+>>
+>> in what sense does the Eyelink toolbox need to interface
+>> with the PTB? Am i correct that the only connection is the
+>> need to display live-video from the eye-camera in a PTB
+>> Onscreen window, e.g., for tracker setup and calibration?
+>>
+>> In that case, i'd suggest doing the following to interface
+>> with Screen, allowing for maximum flexibility and minimum
+>> dependence:
+>>
+>> We create a few new PTB Screen - functions that allow 3rd
+>> party mex-files, e.g., the Eyelink mexfile to safely
+>> interface with the OpenGL core of Screen.
+>>
+>> Something like:
+>>
+>> Screen('BeginOpenGLOps', windowPtr);
+>> -> This would tell PTB that some 3rd party mexfile would
+>> like to perform OpenGL rendering into the PTB onscreen
+>> window 'windowPtr'. PTB would activate the OpenGL context
+>> associated with window windowPtr and make an internal
+>> backup of all relevant OpenGL state (matrices, attributes).
+>>
+>> Then an external mexfile with arbitrary OpenGL code in it
+>> could query the properties of the onscreen window and its
+>> context, do arbitrary OpenGL rendering into the window...
+>>
+>> After this, one would call
+>> Screen('EndOpenGLOps', windowPtr);
+>> -> This would restore the state of windowPtr's OpenGL
+>> context from the backup made by the preceding
+>> 'BeginExter......' call.
+>>
+>> The Begin... and End... Screen-calls are basically a way to
+>> give external files convenient acess to all OpenGL features
+>> of a PTB window and at the same time to protect PTB's
+>> internal working from buggy/misbehaving 3rd party code - or
+>> at least to safely detect such harmful interactions...
+>>
+>> By binding the OpenGL default texture 0 or by
+>> creating/managing own textures, such a file can manage its
+>> own textures+state isolated from PTB's textures. E.g.
+>> Eyelink.mex could use texture 0 as scratchpad for drawing
+>> the current live-image from the trackercamera...
+>>
+>> If we provide two more Screen calls to directly manipulate
+>> or retrieve infos stored in PTB's internal texture arrays,
+>> we can allow a safe interaction between 3rd party .mexfiles
+>> and PTB's texture drawing functions...
+>>
+>> I think this would not only solve interfacing between
+>> Eyelink and PTB in an elegant way, but would also allow
+>> quick integration of 3rd party OpenGL routines as separate
+>> mex files. We wouldn't need to maintain/debug those files
+>> as PTB is protected from their possible misbehaviour. The
+>> files wouldn't need to know much about PTB's internal
+>> structure, except for the proper use of the few well
+>> defined Screen interface functions. The mex-files itself
+>> would only consist of fully portable ANSI-C and OpenGL code
+>> because all the tricky and OS dependent stuff like window
+>> management, timed flipp'ing, timing, I/O and such is done
+>> by PTB.
+>>
+>> I plan to extend PTB's current 2D drawing functions to 3D
+>> in a limited/conservative fashion that allows to do some
+>> basic 3D drawing in the way PTB users are naturally used to
+>> from 2D, with integrated child-protection to protect the
+>> users from the complexity and PTB from the users ;-)
+>>
+>> But unlocking more of OpenGL's features (high perf
+>> rendering, lighting, GL-Shading language, reading and
+>> manipulating 3D geometry from standard graphics packages
+>> like 3D-StudioMAX, Maya, Blender) would be beneficial esp.
+>> for research in high-level vision, e.g, object recognition,
+>> and i don't think this should go into the Screen command -
+>> would make Screen too complex and too bloated and too hard
+>> to maintain. Separate mex files otoh would be a perfect
+>> place for this kind of stuff.
+>>
+>> Given that PTB is now GPL, we can also easily interface
+>> with other GPL'd LGPL'd code...
+>>
+>> What do you think?
+>>
+>> best,
+>> -mario
+>>
+>>
+>> On Tue, 22 Nov 2005 17:09:46 -0800
+>>  Chris Burns <chris.d.burns at gmail.com> wrote:
+>>> Frans,
+>>>
+>>> Thanks for the code update!  I've been using your
+>>> previous version, in
+>>> a cut-and-paste fashion, updated to the new PTB
+>>> functions.  This
+>>> version should help speed up that work.  (And so far,
+>>> Enno's code
+>>> looks pretty good.)
+>>>
+>>> I need to get this working for our lab, so I'll get the
+>>> ball rolling
+>>> and check it into the server.  We use a small subset of
+>>> the Eyelink
+>>> Toolbox functionality though, and I'll be focusing on
+>>> that in the
+>>> near-term.  But I'll check in a working version and
+>>> figure out an
+>>> elegant way to check in this other code so that it can be
+>>> used in
+>>> future porting.  I'll send out a notice after the first
+>>> check in.
+>>>
+>>> I do have one question:  I'm not clear on how the
+>>> graphics should work
+>>> in the  eyelink('initwindow') function.  Generally, how
+>>> to render the
+>>> camera images received on the ethernet port to the
+>>> display.  Anything
+>>> pointers on how to do this?
+>>>
+>>>
+>>> chris
+>>>
+>>>
+>>> On 11/22/05, Frans W. Cornelissen
+>>> <f.w.cornelissen at rug.nl> wrote:
+>>>> Dear all,
+>>>>
+>>>> There seems to be a growing interest in getting an OSX
+>>> version of the
+>>>> Eyelinktoolbox.
+>>>>
+>>>> Quite a while ago (2 years?) we (Enno Peters that is)
+>>> started working
+>>>> on a version but were sort of stopped by the lack of a
+>>> stable
+>>>> psychtoolbox. I call this our early alpha version. It
+>>> actually worked
+>>>> to some extent. I haven't gotten back to it yet, due
+>>> mainly to a lack
+>>>> of time (and Enno leaving for a proper job).
+>>>>
+>>>> Here's (a copy of) a message I wrote a while to another
+>>>  wannabe
+>>>> Eyelink porter (Daniel Sperka):
+>>>>
+>>> ---------------------------------------------------------
+>>>> It would be timely if an OSX version of the Eyelink TB
+>>> would come out
+>>>> now. In my view the PTB is becoming really useful now,
+>>> especially after
+>>>> the improvements Mario Kleiner has been making.
+>>>>
+>>>> I believe a few months would be quite sufficient to get
+>>> a working
+>>>> version (like I mentioned, there is an early version
+>>> that has some
+>>>> functions working).
+>>>>
+>>>> There's a couple of things that I think need to be
+>>> changed/improved:
+>>>>
+>>>> 1. Update to newest XCode/Matlab/PTB source code.
+>>> Shouldn't be much of
+>>>> an issue, but still.
+>>>> 2. Check for updates in code with SR Research.
+>>>> 3. Make sure we do not use any graphics other than via
+>>> PTB (there is a
+>>>> problem with the 'eye' graphic during calibration).
+>>>> 4. Seperate out functions from 'shell' very much like
+>>> current PTB does.
+>>>> This is not an absolute necessity, but using the same
+>>> methods as the
+>>>> current PTB presumably would make things easier to
+>>> maintain in the long
+>>>> run.
+>>>>
+>>>> 5. Update many of the .m files to use e.g. new graphics
+>>> calls of PTB.
+>>>>
+>>>> 6. Test everything for speed, delays, etc.
+>>>>
+>>>> 7. provide some support/updates.
+>>>>
+>>>> The OS9 code can be downloaded from
+>>>>  http://www.psychtoolbox.org/eyelinktoolbox/downloads/
+>>>> EyelinkToolbox_C_code_1.4.sit
+>>>>   I believe this is the most recent OS9 code.
+>>>>
+>>>> I've traced some OSX code for you.  I am not entirely
+>>> sure if it is
+>>>> complete. Enno Peters wasn't a superbly organised
+>>> programmer, and I
+>>>> haven't looked at this project for quite a while.
+>>>>
+>>>> Download from
+>>>>
+>>>
+>>   
+>> http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19 
+>> -10
+>>>> -05.zip
+>>>>
+>>>> In principle I am very much open to a collaboration.
+>>>>
+>>>> --------------------
+>>>>
+>>>>
+>>>> Here's a plan:
+>>>> I am offering our code as a starter. If someone with a
+>>> little time on
+>>>> their hands (Chris?) would check the OSX source code
+>>> into the/some CVS
+>>>> server and do #1 on the list, that would be a step
+>>> forward. (Then
+>>>> please tell all other interested in development how to
+>>> get to it.)
+>>>> PTB in my view is about collaboration, rather than
+>>> people reinventing
+>>>> wheels (or even 30% of them). So, be fair and please
+>>> use the head start
+>>>> and collaborative opportunities available to create a
+>>> full working
+>>>> version of the ETB.
+>>>> Also, it be nice if a reasonable degree of backward
+>>> compatibility with
+>>>> the OS9 version is maintained.
+>>>>
+>>>> My proposal is that those interested in Eyelink TB
+>>> programming reply to
+>>>> me, so that we continue the discussion in that group
+>>> (and decide where
+>>>> to do this). I can tell a bit more also about our ideas
+>>> back then about
+>>>> what ETB should be doing (and what not).
+>>>>
+>>>> Gr.
+>>>> Frans
+>>>>
+>>
+>>
+>>
+--------------------------------------------------------
+Frans W.Cornelissen
+Laboratory for Experimental Ophthalmology
+	& BCN Neuro-imaging Center
+School of Behavioural and Cognitive Neurosciences
+University Medical Center Groningen
+University of Groningen
+PO Box 30.001
+9700 RB Groningen
+Nederland
+
+email: f.w.cornelissen at rug.nl
+Tel. LEO: +31 50 3614173 / 2510
+Tel. NIC: +31 50 363 8801 / 5111
+
+http://franswcornelissen.webhop.org/
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Nov 25 03:55:33 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 25 Nov 2005 03:55:33 +0100
+Subject: [Osxptb-dev] Re: VBL retrace? First Iteration on solution...
+In-Reply-To: <BFABDA16.3F13%kjmacken@yorku.ca>
+Message-ID: <web-15898149@tuebingen.mpg.de>
+
+Hi Kevin
+
+No problem. But the short story is that your gfx-card works
+perfectly well in Stereomode and also syncs properly to the
+VBL. Its just that the sync-test that's run as part of
+Screen('OpenWindow') detects a problem -- false alarm.
+
+The reason is that the NVidia and ATI gfx cards behave
+differently when flipp'ing a stereo display:
+
+A NVidia card when asked to flip at next VBL, really flips
+at the next VBL -- behaves as in mono display mode.
+
+Your ATI card when in stereo mode flips only every 2nd VBL,
+so it basically makes sure that each of the two stereo
+images was on view for at least one refresh cycle before
+flipping it away.
+
+Both behaviours are "correct" because it is not clearly
+defined (by the OpenGL spec) when to swap image buffers in
+stereo mode on flip request, if the image actually consists
+of two temporally interleaved images. Its just unfortunate
+that NVidia & ATI decided to implement different solutions
+:(
+
+As the stereo-code was developed & tested on NVidia only,
+it makes the assumption that when it Flips as fast as
+possible, the time between two flips should equal the
+monitor refresh rate (120 Hz ---> 8.333 ms). NVidia does so
+in mono and stereo. ATI does 8.3333 in mono, but 2*8.3333 =
+16.6666 in stereo --> Expectation violated --> OpenWindow
+detects trouble and aborts.
+
+So your short-term solution will be to add the
+Screen('Preference', 'SkipSyncTests', 1) call at the
+beginning of your script to disable this "abort on trouble"
+behaviour and continue with a computed value of 8.3333 ms.
+This way, timing control of stimulus onset ('when' argument
+of Flip), syncing to VBL and the reported timestamps of
+Flip should be correct. The automatic detection code for
+skipped frames will report bogus results though...
+
+My solution will be to find out, if i can force the ATI
+driver to behave like NVidia (that's the test i sent you).
+If this isn't possible, i need to think about a clever way
+for the sync-test and other timing related tests to take
+this difference NVidia/ATI into account and then release an
+updated version of the Psychtoolbox.
+
+In any case, the stimulus-onset on flip-frame stereo
+displays is not very well defined, given the differences in
+driver behaviour and the nature of this temporally
+interleaved stimuli. So one probably shouldn't do studies
+with this stereo mode where frame accurate onset time is
+crucial - at least not without using photo-diode + oszi for
+indpendent timing checks. Luckily other stereo algorithms
+don't have this problem -- i'm working on additional
+algorithms for anaglyph red-green stereo and such...
+
+Awaiting your results. I'll update the forum as soon as we
+have the final results...
+
+good night,
+-mario
+
+
+
+
+On Thu, 24 Nov 2005 20:59:02 -0500
+ "Kevin J. MacKenzie" <kjmacken at yorku.ca> wrote:
+> Hello Mario,
+> 
+> I just got home from work, so won't be able to get to it
+> tonight.  I will do
+> that first thing in the morning and send you the results.
+> 
+> Cheers,
+> 
+> Kevin
+> 
+> 
+> 
+> On 11/24/05 7:25 PM, "Mario Kleiner"
+> <mario.kleiner at tuebingen.mpg.de> wrote:
+> 
+> > Hello Kevin,
+> > 
+> > could you repeat the exactly same tests quickly and
+> send me
+> > the results, but with the attached Screen.mexmac file?
+> > 
+> > I don't expect any difference but we'll see. I think i
+> know
+> > what's going wrong and the VBL sync failure is a false
+> > alarm...
+> > 
+> > -mario
+> > 
+> > 
+> > 
+> > On Thu, 24 Nov 2005 16:41:38 -0500
+> >  "Kevin J. MacKenzie" <kjmacken at yorku.ca> wrote:
+> >> Hi Mario,
+> >> 
+> >> Thanks again for the work with respect to this!
+> >> 
+> >> I have attached the results of Fig 1 and Fig 3 for the
+> 2
+> >> tests.  The  files are named according to the figure
+> >> number, and the test  paramaters with:
+> >> 
+> >> On 24-Nov-05, at 3:52 PM, Mario Kleiner wrote:
+> >> Test1 being :
+> >> 
+> >>> ATIVBLSyncTest(1000, 0, 0, 0, 0, 1, 0);
+> >> 
+> >> and test 2 being:
+> >> 
+> >>> ATIVBLSyncTest(1000, 0, 0, 0, 1, 1, 0)
+> >> 
+> >> There is only one blue peak at the initiation of the
+> test
+> >> for the  first run.  I didn't zoom into the figure, as
+> it
+> >> lost the peak value  of this function.
+> >> 
+> >> If you need anymore info please let me know.
+> >> 
+> >> Thanks a lot!
+> >> 
+> >> Kevin MacKenzie????
+> > 
+> 
+> 
+
+
+
+From mario.kleiner at tuebingen.mpg.de  Fri Nov 25 18:44:17 2005
+From: mario.kleiner at tuebingen.mpg.de (Mario Kleiner)
+Date: Fri, 25 Nov 2005 18:44:17 +0100
+Subject: [Osxptb-dev] Re: VBL retrace? A temporary solution that works...
+In-Reply-To: <67EBFD66-4172-4DB8-8D69-09205EB2A8DE@yorku.ca>
+References: <web-15898149@tuebingen.mpg.de> <67EBFD66-4172-4DB8-8D69-09205EB2A8DE@yorku.ca>
+Message-ID: <43874D71.8090807@tuebingen.mpg.de>
+
+Ok, thanks for testing.
+
+I assume you made sure that you were really running the Screen.mexmac i 
+sent you. The results look exactly the same, so no way of enforcing 
+consistent Nvidia==ATI behaviour.
+
+Doesn't matter. I will modify the algorithms of PTB appropriately to 
+handle the ATI stereo-case in a consistent fashion. I'll probably 
+contact you sometime next week to test-run the new Screen.mexmac and 
+then release an update to PTB if it works out.
+
+Anyway, just run your stuff with the Screen('Preference', 
+'SkipSyncTests', 1) setting until then and you'll be fine. All other 
+values and the test results look very well for your setup. Your machines 
+gfx-card syncs stimulus onset to the VBL with sub-microsecond accuracy 
+(as any properly working gfx-card does -- flip is implemented in 
+hardware, not software -- a big advantage with respect to the old 
+OS9/Win-Psychtoolboxes), and the timing chart tells me that even 
+Matlab's execution is synced to VBL with a timing-jitter of less than 30 
+microseconds.
+
+Have a nice weekend!
+-mario
+
+Kevin J. MacKenzie wrote:
+> Hi Mario,
+> 
+> I have attached the results from the VBLSynctests using the  
+> Screen.mexmac function you sent me.  The second test did give me a  
+> warning - the blue screen with an exclamation mark.  I will run my  
+> existing code with Screen('Preference', 'SkipSyncTests', 1) enabled.
+> 
+> Your solution below makes sense, I will try it out today with the  code 
+> that I have.  At this point I am not as concerned as I was 2  days ago, 
+> as I have been getting a stereo signal successfully using a  front/back 
+> buffer flip mode.  I will change this to use the methods  outlined in 
+> Stereodemo.m and report back to you if anything goes  awry.  Although, I 
+> am confident that it should work.
+> 
+> Thanks for all of the help!
+> 
+> Cheers
+> 
+> Kevin
+> 
+> On 24-Nov-05, at 9:55 PM, Mario Kleiner wrote:
+> 
+>> Hi Kevin
+>>
+>> No problem. But the short story is that your gfx-card works
+>> perfectly well in Stereomode and also syncs properly to the
+>> VBL. Its just that the sync-test that's run as part of
+>> Screen('OpenWindow') detects a problem -- false alarm.
+>>
+>> The reason is that the NVidia and ATI gfx cards behave
+>> differently when flipp'ing a stereo display:
+>>
+>> A NVidia card when asked to flip at next VBL, really flips
+>> at the next VBL -- behaves as in mono display mode.
+>>
+>> Your ATI card when in stereo mode flips only every 2nd VBL,
+>> so it basically makes sure that each of the two stereo
+>> images was on view for at least one refresh cycle before
+>> flipping it away.
+>>
+>> Both behaviours are "correct" because it is not clearly
+>> defined (by the OpenGL spec) when to swap image buffers in
+>> stereo mode on flip request, if the image actually consists
+>> of two temporally interleaved images. Its just unfortunate
+>> that NVidia & ATI decided to implement different solutions
+>> :(
+>>
+>> As the stereo-code was developed & tested on NVidia only,
+>> it makes the assumption that when it Flips as fast as
+>> possible, the time between two flips should equal the
+>> monitor refresh rate (120 Hz ---> 8.333 ms). NVidia does so
+>> in mono and stereo. ATI does 8.3333 in mono, but 2*8.3333 =
+>> 16.6666 in stereo --> Expectation violated --> OpenWindow
+>> detects trouble and aborts.
+>>
+>> So your short-term solution will be to add the
+>> Screen('Preference', 'SkipSyncTests', 1) call at the
+>> beginning of your script to disable this "abort on trouble"
+>> behaviour and continue with a computed value of 8.3333 ms.
+>> This way, timing control of stimulus onset ('when' argument
+>> of Flip), syncing to VBL and the reported timestamps of
+>> Flip should be correct. The automatic detection code for
+>> skipped frames will report bogus results though...
+>>
+>> My solution will be to find out, if i can force the ATI
+>> driver to behave like NVidia (that's the test i sent you).
+>> If this isn't possible, i need to think about a clever way
+>> for the sync-test and other timing related tests to take
+>> this difference NVidia/ATI into account and then release an
+>> updated version of the Psychtoolbox.
+>>
+>> In any case, the stimulus-onset on flip-frame stereo
+>> displays is not very well defined, given the differences in
+>> driver behaviour and the nature of this temporally
+>> interleaved stimuli. So one probably shouldn't do studies
+>> with this stereo mode where frame accurate onset time is
+>> crucial - at least not without using photo-diode + oszi for
+>> indpendent timing checks. Luckily other stereo algorithms
+>> don't have this problem -- i'm working on additional
+>> algorithms for anaglyph red-green stereo and such...
+>>
+>> Awaiting your results. I'll update the forum as soon as we
+>> have the final results...
+>>
+>> good night,
+>> -mario
+>>
+>>
+>>
+>>
+>> On Thu, 24 Nov 2005 20:59:02 -0500
+>>  "Kevin J. MacKenzie" <kjmacken at yorku.ca> wrote:
+>>
+>>> Hello Mario,
+>>>
+>>> I just got home from work, so won't be able to get to it
+>>> tonight.  I will do
+>>> that first thing in the morning and send you the results.
+>>>
+>>> Cheers,
+>>>
+>>> Kevin
+>>>
+>>>
+>>>
+>>> On 11/24/05 7:25 PM, "Mario Kleiner"
+>>> <mario.kleiner at tuebingen.mpg.de> wrote:
+>>>
+>>>> Hello Kevin,
+>>>>
+>>>> could you repeat the exactly same tests quickly and
+>>>
+>>> send me
+>>>
+>>>> the results, but with the attached Screen.mexmac file?
+>>>>
+>>>> I don't expect any difference but we'll see. I think i
+>>>
+>>> know
+>>>
+>>>> what's going wrong and the VBL sync failure is a false
+>>>> alarm...
+>>>>
+>>>> -mario
+>>>>
+>>>>
+>>>>
+>>>> On Thu, 24 Nov 2005 16:41:38 -0500
+>>>>  "Kevin J. MacKenzie" <kjmacken at yorku.ca> wrote:
+>>>>
+>>>>> Hi Mario,
+>>>>>
+>>>>> Thanks again for the work with respect to this!
+>>>>>
+>>>>> I have attached the results of Fig 1 and Fig 3 for the
+>>>
+>>> 2
+>>>
+>>>>> tests.  The  files are named according to the figure
+>>>>> number, and the test  paramaters with:
+>>>>>
+>>>>> On 24-Nov-05, at 3:52 PM, Mario Kleiner wrote:
+>>>>> Test1 being :
+>>>>>
+>>>>>> ATIVBLSyncTest(1000, 0, 0, 0, 0, 1, 0);
+>>>>>
+>>>>>
+>>>>> and test 2 being:
+>>>>>
+>>>>>> ATIVBLSyncTest(1000, 0, 0, 0, 1, 1, 0)
+>>>>>
+>>>>>
+>>>>> There is only one blue peak at the initiation of the
+>>>
+>>> test
+>>>
+>>>>> for the  first run.  I didn't zoom into the figure, as
+>>>
+>>> it
+>>>
+>>>>> lost the peak value  of this function.
+>>>>>
+>>>>> If you need anymore info please let me know.
+>>>>>
+>>>>> Thanks a lot!
+>>>>>
+>>>>> Kevin MacKenzie????
+>>>>
+>>>>
+>>>
+>>>
+>>
+> 
+
+
+
+

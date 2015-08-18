@@ -1,0 +1,383 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Osxptb-dev] Re: OSX Eyelink Toolbox
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/osxptb-dev/2005-November/index.html" >
+   <LINK REL="made" HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20OSX%20Eyelink%20Toolbox&In-Reply-To=%3CF77FE242-5CAE-11DA-B580-000393D48314%40rug.nl%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000006.html">
+   <LINK REL="Next"  HREF="000004.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Osxptb-dev] Re: OSX Eyelink Toolbox</H1>
+    <B>Frans W. Cornelissen</B> 
+    <A HREF="mailto:osxptb-dev%40lists.berlios.de?Subject=Re%3A%20%5BOsxptb-dev%5D%20Re%3A%20OSX%20Eyelink%20Toolbox&In-Reply-To=%3CF77FE242-5CAE-11DA-B580-000393D48314%40rug.nl%3E"
+       TITLE="[Osxptb-dev] Re: OSX Eyelink Toolbox">f.w.cornelissen at rug.nl
+       </A><BR>
+    <I>Thu Nov 24 06:55:50 CET 2005</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000006.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+        <LI>Next message: <A HREF="000004.html">[Osxptb-dev] Mailing lists and FORP's
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Dear all,
+
+I'm occupied with other things right now but here some short answers:
+
+1. Eyelink should best be a different project. Makes it easier to  
+manage/develop, etc. It's really only using a few interface functions  
+from PTB (and of course should interface seamlessly with the graphics).
+
+2. No problem with it becoming open source (officially). I always  
+considered it that way anyway.
+
+&gt;&gt;&gt;<i> Am i correct that the only connection is the
+</I>&gt;&gt;&gt;<i> need to display live-video from the eye-camera in a PTB
+</I>&gt;&gt;&gt;<i> Onscreen window, e.g., for tracker setup and calibration?
+</I>
+3. Getting access to the onscreen window is indeed the only thing that  
+is needed. At least that was our goal with the new version (the old  
+version used many routines of the videotoolbox that were also  
+hard-linked into the code. Not ideal)
+
+Our idea was that eyelink would fill some buffer with the  
+eye/calibration-image data, and that we would use Screen's 'putimage'  
+function to display this matrix as an image. This would remove need for  
+any actual graphics routines in eyelink.
+
+hope this helps for now. back Friday afternoon.
+
+gr.
+frans
+
+
+
+Op 24-nov-05 om 3:13 heeft Chris Burns het volgende geschreven:
+
+&gt;<i> osxptb-dev,
+</I>&gt;<i>
+</I>&gt;<i> This sounds like a good idea and certainly Screen and PTB are already
+</I>&gt;<i> quite large.  We should think through what should and should not be
+</I>&gt;<i> included in the project.  My apologies for lumping the Eyelink Toolbox
+</I>&gt;<i> and Psych Toolboxes together, I tend to see them in the same realm.
+</I>&gt;<i> (CoderGuy, not VisionGuy.)  Frans should weigh in on this and David
+</I>&gt;<i> brought up some very good points also.
+</I>&gt;<i>
+</I>&gt;<i> You are correct on the ETB interface requirements to PTB.  However,
+</I>&gt;<i> the PTB has a lot of really useful wrappers around the Matlab
+</I>&gt;<i> routines.  I've developed a few Mex functions in the past, Matlab is a
+</I>&gt;<i> temper-mental beast, the PTB made coding very easy!  The PsychError,
+</I>&gt;<i> PsychHelp, PsychScripting... all very nice to work with.  So, could
+</I>&gt;<i> this be folded into a PsychFramework?
+</I>&gt;<i>
+</I>&gt;<i> Mario, regarding that ETB interface... I'm in a VSS-abstract crunch
+</I>&gt;<i> right now and have all but one of the eyelink functions I need working
+</I>&gt;<i> in a PTB Target.  I have no problem keeping this out of the repository
+</I>&gt;<i> until we sort out it's proper place, but I need this working asap...
+</I>&gt;<i> can you give me some pointers on gaining access to the Screen/Window
+</I>&gt;<i> interface?   Given the window index, I need access to that GLContext.
+</I>&gt;<i> I'm looking at WindowBank.h now, what else do I need?
+</I>&gt;<i>
+</I>&gt;<i> chris
+</I>&gt;<i>
+</I>&gt;<i> On 11/23/05, Mario Kleiner &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">mario.kleiner at tuebingen.mpg.de</A>&gt; wrote:
+</I>&gt;&gt;<i> Hi,
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> in what sense does the Eyelink toolbox need to interface
+</I>&gt;&gt;<i> with the PTB? Am i correct that the only connection is the
+</I>&gt;&gt;<i> need to display live-video from the eye-camera in a PTB
+</I>&gt;&gt;<i> Onscreen window, e.g., for tracker setup and calibration?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> In that case, i'd suggest doing the following to interface
+</I>&gt;&gt;<i> with Screen, allowing for maximum flexibility and minimum
+</I>&gt;&gt;<i> dependence:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> We create a few new PTB Screen - functions that allow 3rd
+</I>&gt;&gt;<i> party mex-files, e.g., the Eyelink mexfile to safely
+</I>&gt;&gt;<i> interface with the OpenGL core of Screen.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Something like:
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Screen('BeginOpenGLOps', windowPtr);
+</I>&gt;&gt;<i> -&gt; This would tell PTB that some 3rd party mexfile would
+</I>&gt;&gt;<i> like to perform OpenGL rendering into the PTB onscreen
+</I>&gt;&gt;<i> window 'windowPtr'. PTB would activate the OpenGL context
+</I>&gt;&gt;<i> associated with window windowPtr and make an internal
+</I>&gt;&gt;<i> backup of all relevant OpenGL state (matrices, attributes).
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Then an external mexfile with arbitrary OpenGL code in it
+</I>&gt;&gt;<i> could query the properties of the onscreen window and its
+</I>&gt;&gt;<i> context, do arbitrary OpenGL rendering into the window...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> After this, one would call
+</I>&gt;&gt;<i> Screen('EndOpenGLOps', windowPtr);
+</I>&gt;&gt;<i> -&gt; This would restore the state of windowPtr's OpenGL
+</I>&gt;&gt;<i> context from the backup made by the preceding
+</I>&gt;&gt;<i> 'BeginExter......' call.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> The Begin... and End... Screen-calls are basically a way to
+</I>&gt;&gt;<i> give external files convenient acess to all OpenGL features
+</I>&gt;&gt;<i> of a PTB window and at the same time to protect PTB's
+</I>&gt;&gt;<i> internal working from buggy/misbehaving 3rd party code - or
+</I>&gt;&gt;<i> at least to safely detect such harmful interactions...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> By binding the OpenGL default texture 0 or by
+</I>&gt;&gt;<i> creating/managing own textures, such a file can manage its
+</I>&gt;&gt;<i> own textures+state isolated from PTB's textures. E.g.
+</I>&gt;&gt;<i> Eyelink.mex could use texture 0 as scratchpad for drawing
+</I>&gt;&gt;<i> the current live-image from the trackercamera...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> If we provide two more Screen calls to directly manipulate
+</I>&gt;&gt;<i> or retrieve infos stored in PTB's internal texture arrays,
+</I>&gt;&gt;<i> we can allow a safe interaction between 3rd party .mexfiles
+</I>&gt;&gt;<i> and PTB's texture drawing functions...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I think this would not only solve interfacing between
+</I>&gt;&gt;<i> Eyelink and PTB in an elegant way, but would also allow
+</I>&gt;&gt;<i> quick integration of 3rd party OpenGL routines as separate
+</I>&gt;&gt;<i> mex files. We wouldn't need to maintain/debug those files
+</I>&gt;&gt;<i> as PTB is protected from their possible misbehaviour. The
+</I>&gt;&gt;<i> files wouldn't need to know much about PTB's internal
+</I>&gt;&gt;<i> structure, except for the proper use of the few well
+</I>&gt;&gt;<i> defined Screen interface functions. The mex-files itself
+</I>&gt;&gt;<i> would only consist of fully portable ANSI-C and OpenGL code
+</I>&gt;&gt;<i> because all the tricky and OS dependent stuff like window
+</I>&gt;&gt;<i> management, timed flipp'ing, timing, I/O and such is done
+</I>&gt;&gt;<i> by PTB.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> I plan to extend PTB's current 2D drawing functions to 3D
+</I>&gt;&gt;<i> in a limited/conservative fashion that allows to do some
+</I>&gt;&gt;<i> basic 3D drawing in the way PTB users are naturally used to
+</I>&gt;&gt;<i> from 2D, with integrated child-protection to protect the
+</I>&gt;&gt;<i> users from the complexity and PTB from the users ;-)
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> But unlocking more of OpenGL's features (high perf
+</I>&gt;&gt;<i> rendering, lighting, GL-Shading language, reading and
+</I>&gt;&gt;<i> manipulating 3D geometry from standard graphics packages
+</I>&gt;&gt;<i> like 3D-StudioMAX, Maya, Blender) would be beneficial esp.
+</I>&gt;&gt;<i> for research in high-level vision, e.g, object recognition,
+</I>&gt;&gt;<i> and i don't think this should go into the Screen command -
+</I>&gt;&gt;<i> would make Screen too complex and too bloated and too hard
+</I>&gt;&gt;<i> to maintain. Separate mex files otoh would be a perfect
+</I>&gt;&gt;<i> place for this kind of stuff.
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> Given that PTB is now GPL, we can also easily interface
+</I>&gt;&gt;<i> with other GPL'd LGPL'd code...
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> What do you think?
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> best,
+</I>&gt;&gt;<i> -mario
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i> On Tue, 22 Nov 2005 17:09:46 -0800
+</I>&gt;&gt;<i>  Chris Burns &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">chris.d.burns at gmail.com</A>&gt; wrote:
+</I>&gt;&gt;&gt;<i> Frans,
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> Thanks for the code update!  I've been using your
+</I>&gt;&gt;&gt;<i> previous version, in
+</I>&gt;&gt;&gt;<i> a cut-and-paste fashion, updated to the new PTB
+</I>&gt;&gt;&gt;<i> functions.  This
+</I>&gt;&gt;&gt;<i> version should help speed up that work.  (And so far,
+</I>&gt;&gt;&gt;<i> Enno's code
+</I>&gt;&gt;&gt;<i> looks pretty good.)
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I need to get this working for our lab, so I'll get the
+</I>&gt;&gt;&gt;<i> ball rolling
+</I>&gt;&gt;&gt;<i> and check it into the server.  We use a small subset of
+</I>&gt;&gt;&gt;<i> the Eyelink
+</I>&gt;&gt;&gt;<i> Toolbox functionality though, and I'll be focusing on
+</I>&gt;&gt;&gt;<i> that in the
+</I>&gt;&gt;&gt;<i> near-term.  But I'll check in a working version and
+</I>&gt;&gt;&gt;<i> figure out an
+</I>&gt;&gt;&gt;<i> elegant way to check in this other code so that it can be
+</I>&gt;&gt;&gt;<i> used in
+</I>&gt;&gt;&gt;<i> future porting.  I'll send out a notice after the first
+</I>&gt;&gt;&gt;<i> check in.
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> I do have one question:  I'm not clear on how the
+</I>&gt;&gt;&gt;<i> graphics should work
+</I>&gt;&gt;&gt;<i> in the  eyelink('initwindow') function.  Generally, how
+</I>&gt;&gt;&gt;<i> to render the
+</I>&gt;&gt;&gt;<i> camera images received on the ethernet port to the
+</I>&gt;&gt;&gt;<i> display.  Anything
+</I>&gt;&gt;&gt;<i> pointers on how to do this?
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> chris
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> On 11/22/05, Frans W. Cornelissen
+</I>&gt;&gt;&gt;<i> &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>&gt; wrote:
+</I>&gt;&gt;&gt;&gt;<i> Dear all,
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> There seems to be a growing interest in getting an OSX
+</I>&gt;&gt;&gt;<i> version of the
+</I>&gt;&gt;&gt;&gt;<i> Eyelinktoolbox.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Quite a while ago (2 years?) we (Enno Peters that is)
+</I>&gt;&gt;&gt;<i> started working
+</I>&gt;&gt;&gt;&gt;<i> on a version but were sort of stopped by the lack of a
+</I>&gt;&gt;&gt;<i> stable
+</I>&gt;&gt;&gt;&gt;<i> psychtoolbox. I call this our early alpha version. It
+</I>&gt;&gt;&gt;<i> actually worked
+</I>&gt;&gt;&gt;&gt;<i> to some extent. I haven't gotten back to it yet, due
+</I>&gt;&gt;&gt;<i> mainly to a lack
+</I>&gt;&gt;&gt;&gt;<i> of time (and Enno leaving for a proper job).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Here's (a copy of) a message I wrote a while to another
+</I>&gt;&gt;&gt;<i>  wannabe
+</I>&gt;&gt;&gt;&gt;<i> Eyelink porter (Daniel Sperka):
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i> ---------------------------------------------------------
+</I>&gt;&gt;&gt;&gt;<i> It would be timely if an OSX version of the Eyelink TB
+</I>&gt;&gt;&gt;<i> would come out
+</I>&gt;&gt;&gt;&gt;<i> now. In my view the PTB is becoming really useful now,
+</I>&gt;&gt;&gt;<i> especially after
+</I>&gt;&gt;&gt;&gt;<i> the improvements Mario Kleiner has been making.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I believe a few months would be quite sufficient to get
+</I>&gt;&gt;&gt;<i> a working
+</I>&gt;&gt;&gt;&gt;<i> version (like I mentioned, there is an early version
+</I>&gt;&gt;&gt;<i> that has some
+</I>&gt;&gt;&gt;&gt;<i> functions working).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> There's a couple of things that I think need to be
+</I>&gt;&gt;&gt;<i> changed/improved:
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 1. Update to newest XCode/Matlab/PTB source code.
+</I>&gt;&gt;&gt;<i> Shouldn't be much of
+</I>&gt;&gt;&gt;&gt;<i> an issue, but still.
+</I>&gt;&gt;&gt;&gt;<i> 2. Check for updates in code with SR Research.
+</I>&gt;&gt;&gt;&gt;<i> 3. Make sure we do not use any graphics other than via
+</I>&gt;&gt;&gt;<i> PTB (there is a
+</I>&gt;&gt;&gt;&gt;<i> problem with the 'eye' graphic during calibration).
+</I>&gt;&gt;&gt;&gt;<i> 4. Seperate out functions from 'shell' very much like
+</I>&gt;&gt;&gt;<i> current PTB does.
+</I>&gt;&gt;&gt;&gt;<i> This is not an absolute necessity, but using the same
+</I>&gt;&gt;&gt;<i> methods as the
+</I>&gt;&gt;&gt;&gt;<i> current PTB presumably would make things easier to
+</I>&gt;&gt;&gt;<i> maintain in the long
+</I>&gt;&gt;&gt;&gt;<i> run.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 5. Update many of the .m files to use e.g. new graphics
+</I>&gt;&gt;&gt;<i> calls of PTB.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 6. Test everything for speed, delays, etc.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> 7. provide some support/updates.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> The OS9 code can be downloaded from
+</I>&gt;&gt;&gt;&gt;<i>  <A HREF="http://www.psychtoolbox.org/eyelinktoolbox/downloads/">http://www.psychtoolbox.org/eyelinktoolbox/downloads/</A>
+</I>&gt;&gt;&gt;&gt;<i> EyelinkToolbox_C_code_1.4.sit
+</I>&gt;&gt;&gt;&gt;<i>   I believe this is the most recent OS9 code.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> I've traced some OSX code for you.  I am not entirely
+</I>&gt;&gt;&gt;<i> sure if it is
+</I>&gt;&gt;&gt;&gt;<i> complete. Enno Peters wasn't a superbly organised
+</I>&gt;&gt;&gt;<i> programmer, and I
+</I>&gt;&gt;&gt;&gt;<i> haven't looked at this project for quite a while.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Download from
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>   
+</I>&gt;&gt;<i> <A HREF="http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19">http://cornelis.med.rug.nl/pub/eyelinktoolbox/code/EyelinkOSXCode19</A> 
+</I>&gt;&gt;<i> -10
+</I>&gt;&gt;&gt;&gt;<i> -05.zip
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> In principle I am very much open to a collaboration.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> --------------------
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Here's a plan:
+</I>&gt;&gt;&gt;&gt;<i> I am offering our code as a starter. If someone with a
+</I>&gt;&gt;&gt;<i> little time on
+</I>&gt;&gt;&gt;&gt;<i> their hands (Chris?) would check the OSX source code
+</I>&gt;&gt;&gt;<i> into the/some CVS
+</I>&gt;&gt;&gt;&gt;<i> server and do #1 on the list, that would be a step
+</I>&gt;&gt;&gt;<i> forward. (Then
+</I>&gt;&gt;&gt;&gt;<i> please tell all other interested in development how to
+</I>&gt;&gt;&gt;<i> get to it.)
+</I>&gt;&gt;&gt;&gt;<i> PTB in my view is about collaboration, rather than
+</I>&gt;&gt;&gt;<i> people reinventing
+</I>&gt;&gt;&gt;&gt;<i> wheels (or even 30% of them). So, be fair and please
+</I>&gt;&gt;&gt;<i> use the head start
+</I>&gt;&gt;&gt;&gt;<i> and collaborative opportunities available to create a
+</I>&gt;&gt;&gt;<i> full working
+</I>&gt;&gt;&gt;&gt;<i> version of the ETB.
+</I>&gt;&gt;&gt;&gt;<i> Also, it be nice if a reasonable degree of backward
+</I>&gt;&gt;&gt;<i> compatibility with
+</I>&gt;&gt;&gt;&gt;<i> the OS9 version is maintained.
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> My proposal is that those interested in Eyelink TB
+</I>&gt;&gt;&gt;<i> programming reply to
+</I>&gt;&gt;&gt;&gt;<i> me, so that we continue the discussion in that group
+</I>&gt;&gt;&gt;<i> (and decide where
+</I>&gt;&gt;&gt;&gt;<i> to do this). I can tell a bit more also about our ideas
+</I>&gt;&gt;&gt;<i> back then about
+</I>&gt;&gt;&gt;&gt;<i> what ETB should be doing (and what not).
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;&gt;&gt;<i> Gr.
+</I>&gt;&gt;&gt;&gt;<i> Frans
+</I>&gt;&gt;&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>&gt;&gt;<i>
+</I>--------------------------------------------------------
+Frans W.Cornelissen
+Laboratory for Experimental Ophthalmology
+	&amp; BCN Neuro-imaging Center
+School of Behavioural and Cognitive Neurosciences
+University Medical Center Groningen
+University of Groningen
+PO Box 30.001
+9700 RB Groningen
+Nederland
+
+email: <A HREF="https://lists.berlios.de/mailman/listinfo/osxptb-dev">f.w.cornelissen at rug.nl</A>
+Tel. LEO: +31 50 3614173 / 2510
+Tel. NIC: +31 50 363 8801 / 5111
+
+<A HREF="http://franswcornelissen.webhop.org/">http://franswcornelissen.webhop.org/</A>
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000006.html">[Osxptb-dev] Re: OSX Eyelink Toolbox
+</A></li>
+	<LI>Next message: <A HREF="000004.html">[Osxptb-dev] Mailing lists and FORP's
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#7">[ date ]</a>
+              <a href="thread.html#7">[ thread ]</a>
+              <a href="subject.html#7">[ subject ]</a>
+              <a href="author.html#7">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/osxptb-dev">More information about the Osxptb-dev
+mailing list</a><br>
+</body></html>
